@@ -2,16 +2,22 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
-  name: String,
+  name: { type: String},
   email: { type: String, unique: true },
-  password: String,
+  password: { type: String },
   role: { type: String, enum: ['Patient', 'Provider', 'Employee', 'Manager', 'Admin'], required: true, default: 'Patient' },
-  dateOfBirth: Date,
-  phone: String,
-  address: String,
-  
+  phone: { type: String},
+  address: { type: String},
+  dateOfBirth: { type: Date},
+  gender: { type: { type: String}, enum: ['Male', 'Female', 'Other']},
+  employeeId: { type: String}, // For employees
+  providerId: { type: String}, // For providers
+  assignedPatients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // For providers
+}, {
+  timestamps: true
 });
 
+// Hash password before saving user
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
@@ -19,6 +25,7 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+// Method to compare password for authentication
 userSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
