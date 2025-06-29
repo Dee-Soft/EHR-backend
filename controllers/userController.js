@@ -1,6 +1,6 @@
-const User = require('./models/User');
-const AuditLog = require('./models/AuditLog');
-const { canRegister } = require('./utils/registrationRoles');
+const User = require('../models/User');
+const AuditLog = require('../models/AuditLog');
+const { canRegister } = require('../utils/registrationRoles');
 
 exports.registerUser = async (req, res) => {
   const creator = req.user;

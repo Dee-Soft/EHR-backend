@@ -1,6 +1,6 @@
-const User = require('./models/User');
-const { generateJWT } = require('./utils/jwtUtils');
-const AuditLog = require('./models/AuditLog');
+const User = require('../models/User');
+const { generateJWT } = require('../utils/jwtUtils');
+const AuditLog = require('../models/AuditLog');
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;

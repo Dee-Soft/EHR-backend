@@ -1,6 +1,6 @@
-const PatientRecord = require('./models/PatientRecord');
-const User = require('./models/User');
-const AuditLog = require('./models/AuditLog');
+const PatientRecord = require('../models/PatientRecord');
+const User = require('../models/User');
+const AuditLog = require('../models/AuditLog');
 const {
     canCreateRecord,
     canViewOwnRecord,
