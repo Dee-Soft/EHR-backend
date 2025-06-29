@@ -10,7 +10,7 @@ const {
 const { encryptAES, decryptAES } = require('../utils/aesUtils');
 
 // Function to create a new patient record
-exports.createPatientRecord = async (req, res) => {
+exports.createRecord = async (req, res) => {
     const { role, id: creatorId, aesKey } = req.user;
     const { patient, diagnosis, notes, medications, visitDate } = req.body;
 
