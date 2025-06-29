@@ -5,7 +5,7 @@ const patientRecordSchema = new mongoose.Schema({
   diagnosis: { type: String},
   notes: { type: String },
   medications: { type: [String]},
-  visitDate: { type: Date, default: Date.now, required: true },
+  visitDate: { type: Date, required: true },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   createdAt: { type: Date, default: Date.now },
 }, { timestamps: true });
