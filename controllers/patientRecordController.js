@@ -6,8 +6,8 @@ const {
     canViewOwnRecord,
     canViewRecordById,
     canViewAllRecords,  
-} = require('./utils/recordAccessRoles');
-const { encryptAES, decryptAES } = require('./utils/aesUtils');
+} = require('../utils/recordAccessRoles');
+const { encryptAES, decryptAES } = require('../utils/aesUtils');
 
 // Function to create a new patient record
 exports.createPatientRecord = async (req, res) => {
