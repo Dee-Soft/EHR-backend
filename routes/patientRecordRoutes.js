@@ -6,12 +6,11 @@ const {
     getRecordById
 } = require('../controllers/patientRecordController');
 const { authMiddleware } = require('../middlewares/authMiddleware');
-const dycrptAES = require('../middlewares/dycrptAES');
 
 const router = express.Router();
 
 // Create a new patient record
-router.post('/', authMiddleware, dycrptAES(['diagnosis','notes']), createRecord);
+router.post('/', authMiddleware, createRecord);
 
 // Get all patient records
 router.get('/', authMiddleware, getAllRecords);

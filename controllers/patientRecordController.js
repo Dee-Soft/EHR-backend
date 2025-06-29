@@ -7,10 +7,11 @@ const {
     canViewRecordById,
     canViewAllRecords,  
 } = require('./utils/recordAccessRoles');
+const { encryptAES, decryptAES } = require('./utils/aesUtils');
 
 // Function to create a new patient record
 exports.createPatientRecord = async (req, res) => {
-    const { role, id: creatorId } = req.user;
+    const { role, id: creatorId, aesKey } = req.user;
     const { patient, diagnosis, notes, medications, visitDate } = req.body;
 
     try {
@@ -32,8 +33,13 @@ exports.createPatientRecord = async (req, res) => {
             return res.status(403).json({ message: 'Provider can only create records for assigned patients' });
         }
 
+        // Encrypt sensitive data
+        const encryptedDiagnosis = encryptAES(diagnosis, aesKey);
+        const encryptedNotes = encryptAES(notes, aesKey);
+        const encryptedMedications = encryptAES(medications, aesKey);
+
         const record = await PatientRecord.create({
-            patient, diagnosis, notes, medications, visitDate,
+            patient, diagnosis: encryptedDiagnosis, notes: encryptedNotes, medications: encryptedMedications, visitDate,
             createdBy: creatorId,
         });
 
@@ -47,13 +53,13 @@ exports.createPatientRecord = async (req, res) => {
         return res.status(201).json({ message: 'Patient record created successfully' });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Record creation failed' });
+        return res.status(500).json({ message: 'Record creation failed', error: error.message });
     }
 };
 
 // Function to get all patient records
 exports.getAllRecords = async (req, res) => {
-    const { role, id} = req.user;
+    const { role, id, aesKey } = req.user;
     try {
         if (!canViewAllRecords(role)) {
             return res.status(403).json({ message: 'Access denied' });
@@ -63,7 +69,14 @@ exports.getAllRecords = async (req, res) => {
 
         const records = await PatientRecord.find(query)
             .populate('patient');
-        res.status(200).json(records);
+
+        const decryptedRecords = records.map(record => ({
+            ...record.toObject(),
+            diagnosis: decryptAES(record.diagnosis, aesKey),
+            notes: decryptAES(record.notes, aesKey),
+            medications: JSON.parse(decryptAES(record.medications, aesKey)),
+        }));
+        res.status(200).json(decryptedRecords);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Failed to retrieve records' });
@@ -72,8 +85,8 @@ exports.getAllRecords = async (req, res) => {
 
 // Function to get patient's own record
 exports.getMyRecord = async (req, res) => {
-    try{
-        const { id, role } = req.user;
+    try {
+        const { id, role, aesKey } = req.user;
 
         const record = await PatientRecord.find({ patient: id });
         if (!record.length) {
@@ -83,7 +96,14 @@ exports.getMyRecord = async (req, res) => {
         if (!canViewOwnRecord(role, id, id)) {
             return res.status(403).json({ message: 'Not authorized to view this record' });
         }
-        res.status(200).json(record);
+
+        const decryptedRecord = record.map(record => ({
+            ...record.toObject(),
+            diagnosis: decryptAES(record.diagnosis, aesKey),
+            notes: decryptAES(record.notes, aesKey),
+            medications: JSON.parse(decryptAES(record.medications, aesKey)),
+        }));
+        res.status(200).json(decryptedRecord);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Failed to retrieve record' });
@@ -93,23 +113,31 @@ exports.getMyRecord = async (req, res) => {
 // Function to get a specific patient record by ID
 exports.getRecordById = async (req, res) => {
     try {
-    const { role, id } = req.user;
-    const record = await PatientRecord.findById(req.params.id)
-        .populate('patient');
+        const { role, id: requesterId, aesKey } = req.user;
+        const record = await PatientRecord.findById(req.params.id)
+            .populate('patient');
 
     if (!record) {
         return res.status(404).json({ message: 'Record not found' });
     }
 
-    const allowed = canViewRecordById(role, id, record);
+    const allowed = canViewRecordById(role, requesterId, record);
     if (!allowed) {
         return res.status(403).json({ message: 'Not authorized to view this record' });
     }
 
+    // Decrypt sensitive data
+    const decryptedRecord = {
+        ...record.toObject(),
+        diagnosis: decryptAES(record.diagnosis, aesKey),
+        notes: decryptAES(record.notes, aesKey),
+        medications: JSON.parse(decryptAES(record.medications, aesKey)),
+    };
+
     // Log the access to the record
     await AuditLog.create({
         action: 'VIEW_RECORD',
-        actorId: id,
+        actorId: requesterId,
         targetId: record._id,
         targetType: 'PatientRecord',
         details: `Viewed record for patient ${record.patient._id}`,
