@@ -10,6 +10,6 @@ const router = express.Router();
 
 router.get('/audit-logs', authMiddleware, requiredRole('admin'), getAuditLogs);
 router.get('/audit-logs/export', authMiddleware, requiredRole('admin'), exportAuditLogs);
-router.get('/audit-logs/export/zip', authMiddleware, requireRole('admin'), exportAuditLogsZip);
+router.get('/audit-logs/export/zip', authMiddleware, requiredRole('admin'), exportAuditLogsZip);
 
 module.exports = router;
