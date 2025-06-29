@@ -11,8 +11,8 @@ exports.registerUser = async (req, res) => {
     employeeId, providerId
   } = req.body;
   try {
-    if (!canRegister[role]?.includes(role)) {
-      return res.status(403).json({ message: 'Not allowed to register this role' });
+    if (!canRegister[role]?.includes(creator.role)) {
+      return res.status(403).json({ message: `Not allowed to register this ${role}` });
     }
 
     const existingUser = await User.findOne({ email });
@@ -56,26 +56,53 @@ exports.updateUser = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     };
 
-    //Only allow updates to phone/address for self unless admin 
     const isSelf = requester.id === user.id;
     const isAdmin = requester.role === 'Admin';
+    const isManager = requester.role === 'Manager';
+    const isEmployee = requester.role === 'Employee';
 
-    if (!isSelf && !isAdmin) {
-      return res.status(403).json({ message: 'Not authorized to update this user' });
-    };
-
-
-    if(isSelf && ['Patient', 'Employee'].includes(user.role)) {
-      // Allow self to update phone/address only
-      const { phone, address } = req.body;
-      user.phone = phone || user.phone;
-      user.address = address || user.address;
+    //Patient can only update their own phone/address
+    if (user.role === 'Patient') {
+      if(isSelf) {
+        // Allow self to update phone/address only
+        const { phone, address } = req.body;
+        user.phone = phone || user.phone;
+        user.address = address || user.address;
+      }
+      else if (isAdmin ||isManager || isEmployee) {
+        // Allow admin/manager/employee to update any field
+        Object.assign(user, req.body);
+      }
+      else {
+        return res.status(403).json({ message: 'Not authorized to update this patient' });
+      }
     }
+    
 
-    // Admin can edit anyone's details
-    if (isAdmin) {
+    // Employee details can only be updated by Admin or Manager
+    else if (user.role === 'Employee') {
+      if (!(isAdmin || isManager)) {
+        return res.status(403).json({ message: 'Only admin or manager authorized to update this employee' });
+      }
       Object.assign(user, req.body);
     }
+
+    // Provider details can only be updated by Admin or Manager
+    else if (user.role === 'Provider') {
+      if (!(isAdmin || isManager)) {
+        return res.status(403).json({ message: 'Only admin or manager authorized to update this provider' });
+      }
+      Object.assign(user, req.body);
+    }
+
+    // Manager details can only be updated by Admin
+    else if (user.role === 'Manager') {
+      if (!(isAdmin)) {
+        return res.status(403).json({ message: 'Only admin authorized to update this manager' });
+      }
+      Object.assign(user, req.body);
+    }
+  
 
     await user.save();
 
@@ -84,14 +111,14 @@ exports.updateUser = async (req, res) => {
       actorId: requester.id,
       targetId: user._id,
       targetType: 'User',
-      details: `Updated user ${user.name}`
+      details: `Updated user ${user.name} with role ${user.role}`
     });
 
     res.json({
-      message: 'User updated successfully'
+      message: `User ${user.name} with role ${user.role} updated successfully`
     });
   } catch (err) {
-    res.status(500).json({ message: 'User update failed'
+    res.status(500).json({ message: 'User update failed', error: err.message
     });
   }
 };

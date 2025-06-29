@@ -1,13 +1,25 @@
 const express = require('express');
-const router = express.Router();
-const controller = require('../controllers/patientRecordController');
-const { verifyToken, permit } = require('../middlewares/authMiddleware');
+const { 
+    createRecord,
+    getAllRecords,
+    getMyRecord,
+    getRecordById
+} = require('../controllers/patientRecordController');
+const { authMiddleware } = require('../middlewares/authMiddleware');
+const dycrptAES = require('../middlewares/dycrptAES');
 
-// Admin, Manager, and Provider can create a patient record
-router.post('/', verifyToken, permit('Admin', 'Manager', 'Provider'), controller.createRecord);
-router.get('/', verifyToken, permit('Admin', 'Manager', 'Provider'), controller.getAllRecords);
-//Patient, and Provider can view records
-router.get('/:id', permit('Patient', 'Provider'), verifyToken, controller.getRecordById);
-// Admin, Manager, and Provider can update or delete any record
-router.put('/:id', verifyToken, permit('Admin', 'Manager', 'Provider'), controller.updateRecord);
-router.delete('/:id', verifyToken, permit('Admin', 'Manager', 'Provider'), controller.deleteRecord);
+const router = express.Router();
+
+// Create a new patient record
+router.post('/', authMiddleware, dycrptAES(['diagnosis','notes']), createRecord);
+
+// Get all patient records
+router.get('/', authMiddleware, getAllRecords);
+
+// Get my patient record
+router.get('/mine', authMiddleware, getMyRecord);
+
+// Get a patient record by ID
+router.get('/:id', authMiddleware, getRecordById);
+
+module.exports = router;
