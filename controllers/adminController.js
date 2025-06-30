@@ -3,6 +3,35 @@ const { Parser } = require('json2csv');
 const archiver = require('archiver');
 const crypto = require('crypto');
 
+const User = require('../models/User');
+
+// Function to assign a patient to a provider
+exports.assignPatientToProvider = async (req, res) => {
+  const { providerId, patientId } = req.body;
+
+  try {
+    const provider = await User.findById(providerId);
+    const patient = await User.findById(patientId);
+
+    if (!provider || provider.role !== 'Provider') {
+      return res.status(400).json({ message: 'Invalid provider' });
+    }
+
+    if (!patient || patient.role !== 'Patient') {
+      return res.status(400).json({ message: 'Invalid patient' });
+    }
+
+    if (!provider.assignedPatients.includes(patientId)) {
+      provider.assignedPatients.push(patientId);
+      await provider.save();
+    }
+
+    res.status(200).json({ message: 'Patient assigned to provider successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Assignment failed', error: err.message });
+  }
+};
+
 // Function to get audit logs
 exports.getAuditLogs = async (req, res) => {
     try {

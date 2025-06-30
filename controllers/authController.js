@@ -6,9 +6,15 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });
-        if (!user || !(await user.comparePassword(password))) {
+        console.log('Retrieved User:', user);
+
+        const isMatch = await user.comparePassword(password);
+        console.log('Password Match:', isMatch);
+        
+        if (!user || !isMatch) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
+
         const token = generateJWT(user);
 
         await AuditLog.create({
