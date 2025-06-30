@@ -14,7 +14,7 @@ const router = express.Router();
 router.post(
   '/assign-patient',
   authMiddleware,
-  requireRole('Admin', 'Manager'),
+  requiredRole('Admin', 'Manager'),
   assignPatientToProvider
 );
 
