@@ -13,14 +13,15 @@ const createAdmin = async () => {
       process.exit();
     }
 
-    const password = await bcrypt.hash('Secure@123', 10);
+    //const password = await bcrypt.hash('Secure@123', 10);
 
-    const admin = await User.create({
-      name: 'Initial Admin',
-      email: 'admin@ehr.com',
-      password,
-      role: 'Admin',
+    const admin = new User({
+        name: 'Initial Admin',
+        email: 'admin@ehr.com',
+        password: 'Secure@123', // plaintext password for hashing
+        role: 'Admin'
     });
+    await admin.save(); // triggers pre-save hook to hash password
 
     console.log('Admin created:', admin.email);
     process.exit();
