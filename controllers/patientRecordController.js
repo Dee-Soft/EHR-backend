@@ -1,5 +1,7 @@
 const PatientRecord = require('../models/PatientRecord');
 const User = require('../models/User');
+const { encryptWithPublicKey } = require('../utils/rsaUtils');
+const { generateAESKey } = require('../helpers/cryptoHelper');
 const AuditLog = require('../models/AuditLog');
 const {
     canCreateRecord,
@@ -11,11 +13,15 @@ const { encryptAES, decryptAES } = require('../utils/aesUtils');
 
 // Function to create a new patient record
 exports.createRecord = async (req, res) => {
-    const { role, id: creatorId, aesKey } = req.user;
+    const { role, id: creatorId } = req.user;
     const { patient, diagnosis, notes, medications, visitDate } = req.body;
+    const frontendPublicKey = req.headers['x-client-public-key']; // RSA public key (PEM string)
+
+    if (!frontendPublicKey) {
+      return res.status(400).json({ message: 'Client public RSA key missing in header' });
+    }
 
     
-
     try {
         if ( !canCreateRecord(role) ) {
             return res.status(403).json({ message: 'Only providers and managers can create patient records' });
@@ -44,6 +50,9 @@ exports.createRecord = async (req, res) => {
             return res.status(403).json({ message: 'Provider can only create records for assigned patients' });
         }
 
+        // Generate AES key
+        const aesKey = generateAESKey();
+
         const medsString = Array.isArray(medications) ? medications.join(', ') : '';
 
         // Encrypt sensitive data
@@ -57,6 +66,9 @@ exports.createRecord = async (req, res) => {
             medications: req.body.medications
         });
 
+        // Encrypt the AES key with the frontend public key
+        const encryptedAESKey = encryptWithPublicKey(aesKey, frontendPublicKey);
+        
 
         const record = await PatientRecord.create({
             patient, diagnosis: encryptedDiagnosis, notes: encryptedNotes, medications: encryptedMedications, visitDate,
@@ -70,7 +82,7 @@ exports.createRecord = async (req, res) => {
             userId: creatorId,
             details: `Created record for patient ${patient}`,
         });
-        return res.status(201).json({ message: 'Patient record created successfully' });
+        return res.status(201).json({ message: 'Patient record created successfully', encryptedAESKey });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Record creation failed', error: error.message });
