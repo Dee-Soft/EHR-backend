@@ -8,14 +8,15 @@ const authMiddleware = (req, res, next) => {
     return res.status(401).json({ message: 'Token is missing' });
   }
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET, (err) => {
-    if (err) {
-      return res.status(403).json({ message: 'Failed to authenticate token' });
-    }
-  });
-  console.log('Decoded JWT:', decoded);
-  req.user = decoded;
-  next();
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Decoded JWT:', decoded);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    console.error('JWT verification failed:', err.message);
+    return res.status(403).json({ message: 'Failed to authenticate token' });
+  }
 };
 
 const requiredRole = (...roles) => {

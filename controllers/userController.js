@@ -34,6 +34,11 @@ exports.registerUser = async (req, res) => {
 
     await user.save();
 
+    console.log('Creator role:', creator.role);
+    console.log('Target role:', role);
+    console.log('canRegister check:', canRegister[role]);
+
+
     await AuditLog.create({
       action: 'REGISTER_USER',
       actorId: creator.id,
