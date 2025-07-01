@@ -4,8 +4,7 @@ function generateJWT(user) {
     const payload = {
         id: user._id,
         role: user.role,
-        email: user.email,
-        aesKey: user.aesKey
+        email: user.email
     };
     const options = {
         expiresIn: '1h'

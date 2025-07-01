@@ -50,6 +50,9 @@ exports.createRecord = async (req, res) => {
             return res.status(403).json({ message: 'Provider can only create records for assigned patients' });
         }
 
+        console.log('Frontend public key received:', frontendPublicKey);
+
+
         // Generate AES key
         const aesKey = generateAESKey();
 
@@ -66,9 +69,10 @@ exports.createRecord = async (req, res) => {
             medications: req.body.medications
         });
 
+        const normalizedPublicKey = frontendPublicKey.replace(/\\n/g, '\n');
+        console.log("Normalized public key:", normalizedPublicKey);
         // Encrypt the AES key with the frontend public key
-        const encryptedAESKey = encryptWithPublicKey(aesKey, frontendPublicKey);
-        
+        const encryptedAESKey = encryptWithPublicKey(aesKey, normalizedPublicKey);
 
         const record = await PatientRecord.create({
             patient, diagnosis: encryptedDiagnosis, notes: encryptedNotes, medications: encryptedMedications, visitDate,
