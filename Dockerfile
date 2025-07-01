@@ -8,5 +8,7 @@ RUN npm install
 COPY . .
 COPY .env .env
 
+RUN chmod 600 config/keys/private.pem config/keys/public.pem
+
 EXPOSE 3001
 CMD ["npm", "start"]
