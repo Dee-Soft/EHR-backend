@@ -2,6 +2,8 @@ const User = require('../models/User');
 const AuditLog = require('../models/AuditLog');
 const { canRegister } = require('../utils/registrationRoles');
 
+const crypto = require('crypto');
+
 exports.registerUser = async (req, res) => {
   const creator = req.user;
 
@@ -20,8 +22,10 @@ exports.registerUser = async (req, res) => {
       return res.status(409).json({ message: 'User already exists' });
     }
 
+    const generatedAESKey = crypto.randomBytes(32).toString('hex');
+
     const user = new User({
-      name, email, password, role,
+      name, email, password, role, aesKey: generatedAESKey,
       phone, address, gender,
       dateOfBirth: role === 'Patient' ? dateOfBirth : undefined,
       employeeId: role === 'Employee' ? employeeId : undefined,

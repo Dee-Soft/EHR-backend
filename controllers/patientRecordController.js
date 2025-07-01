@@ -14,13 +14,24 @@ exports.createRecord = async (req, res) => {
     const { role, id: creatorId, aesKey } = req.user;
     const { patient, diagnosis, notes, medications, visitDate } = req.body;
 
+    
+
     try {
         if ( !canCreateRecord(role) ) {
             return res.status(403).json({ message: 'Only providers and managers can create patient records' });
         }
 
-        const today = new Date().toString().slice(0, 10);
-        if (visitDate.slice(0, 10) !== today) {
+        if (!diagnosis || !notes || !medications || !visitDate) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+
+        const today = new Date();
+        const tzOffsetMs = today.getTimezoneOffset() * 60 * 1000;
+        const localISO = new Date(today.getTime() - tzOffsetMs).toISOString().split('T')[0];
+
+
+        //const today = new Date().toString().slice(0, 10);
+        if (visitDate !== localISO) {
             return res.status(400).json({ message: 'Can only create records for today' });
         }
 
@@ -33,10 +44,19 @@ exports.createRecord = async (req, res) => {
             return res.status(403).json({ message: 'Provider can only create records for assigned patients' });
         }
 
+        const medsString = Array.isArray(medications) ? medications.join(', ') : '';
+
         // Encrypt sensitive data
         const encryptedDiagnosis = encryptAES(diagnosis, aesKey);
         const encryptedNotes = encryptAES(notes, aesKey);
-        const encryptedMedications = encryptAES(medications, aesKey);
+        const encryptedMedications = encryptAES(medsString, aesKey);
+
+        console.log("Encrypting record fields:", {
+            diagnosis: req.body.diagnosis,
+            notes: req.body.notes,
+            medications: req.body.medications
+        });
+
 
         const record = await PatientRecord.create({
             patient, diagnosis: encryptedDiagnosis, notes: encryptedNotes, medications: encryptedMedications, visitDate,

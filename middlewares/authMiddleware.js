@@ -8,18 +8,20 @@ const authMiddleware = (req, res, next) => {
     return res.status(401).json({ message: 'Token is missing' });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  const decoded = jwt.verify(token, process.env.JWT_SECRET, (err) => {
     if (err) {
       return res.status(403).json({ message: 'Failed to authenticate token' });
     }
-    req.user = decoded;
-    next();
   });
+  console.log('Decoded JWT:', decoded);
+  req.user = decoded;
+  next();
 };
 
 const requiredRole = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
+    console.log('User role:', req.user?.role);
+    if (!roles.includes(req.user?.role)) {
       return res.status(403).json({ message: 'Access denied' });
     }
     next();

@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
 
-function generateJWT(user, aesKey) {
+function generateJWT(user) {
     const payload = {
         id: user._id,
         role: user.role,
         email: user.email,
-        aesKey: aesKey
+        aesKey: user.aesKey
     };
     const options = {
         expiresIn: '1h'

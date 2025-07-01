@@ -6,6 +6,12 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: { type: String },
   role: { type: String, enum: ['Patient', 'Provider', 'Employee', 'Manager', 'Admin'], required: true, default: 'Patient' },
+  aesKey: {
+    type: String,
+    required: function () {
+      return ['Provider', 'Patient', 'Admin', 'Manager', 'Employee'].includes(this.role);
+    },
+  },
   phone: { type: String},
   address: { type: String},
   dateOfBirth: { type: Date},

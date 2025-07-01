@@ -19,7 +19,8 @@ const createAdmin = async () => {
         name: 'Initial Admin',
         email: 'admin@ehr.com',
         password: 'Secure@123', // plaintext password for hashing
-        role: 'Admin'
+        role: 'Admin',
+        aesKey,
     });
     await admin.save(); // triggers pre-save hook to hash password
 

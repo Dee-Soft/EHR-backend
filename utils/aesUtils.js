@@ -3,6 +3,13 @@ const crypto = require('crypto');
 const algorithm = 'aes-256-cbc';
 
 function encryptAES(data, key) {
+    if (!data || typeof data !== 'string') {
+        throw new Error('encryptAES expects a non-empty string as input');
+    }
+    if (!key || typeof key !== 'string') {
+    throw new Error('encryptAES: AES key missing or invalid');
+}
+
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv(algorithm, Buffer.from(key, 'hex'), iv);
     let encrypted = cipher.update(data, 'utf8', 'hex');
