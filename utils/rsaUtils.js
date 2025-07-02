@@ -1,11 +1,11 @@
 const crypto = require('crypto');
-const { publicKey, privateKey } = require('../config/keyManager');
+const { privateKey, publicKey } = require('../config/keyManager');
 
-// Encrypt AES key with client's public RSA key (frontend sends this)
-function encryptWithPublicKey(aesKey, clientPublicKey) {
+// Encrypt AES key with provided public key (frontend or backend)
+function encryptWithPublicKey(aesKey, customPublicKey = publicKey) {
   return crypto.publicEncrypt(
     {
-      key: clientPublicKey,
+      key: customPublicKey,
       padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
       oaepHash: 'sha256',
     },
@@ -13,15 +13,15 @@ function encryptWithPublicKey(aesKey, clientPublicKey) {
   ).toString('base64');
 }
 
-// Decrypt AES key (if frontend ever sends one encrypted to backend)
-function decryptWithPrivateKey(encryptedKeyBase64) {
+// Decrypt AES key with provided private key (defaults to backend)
+function decryptWithPrivateKey(encryptedBase64, customPrivateKey = privateKey) {
   return crypto.privateDecrypt(
     {
-      key: privateKey,
+      key: customPrivateKey,
       padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
       oaepHash: 'sha256',
     },
-    Buffer.from(encryptedKeyBase64, 'base64')
+    Buffer.from(encryptedBase64, 'base64')
   ).toString('utf8');
 }
 

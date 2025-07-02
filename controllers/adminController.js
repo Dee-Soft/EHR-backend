@@ -14,16 +14,23 @@ exports.assignPatientToProvider = async (req, res) => {
     const patient = await User.findById(patientId);
 
     if (!provider || provider.role !== 'Provider') {
-      return res.status(400).json({ message: 'Invalid provider' });
+      return res.status(400).json({ message: 'Provider not found or invalid role' });
     }
 
     if (!patient || patient.role !== 'Patient') {
-      return res.status(400).json({ message: 'Invalid patient' });
+      return res.status(400).json({ message: 'Patient not found or invalid role' });
     }
 
+    // Add patient to provider's assigned list
     if (!provider.assignedPatients.includes(patientId)) {
       provider.assignedPatients.push(patientId);
       await provider.save();
+    }
+
+    // Assign provider to patient
+    if (!patient.assignedProviderId || patient.assignedProviderId.toString() !== providerId) {
+      patient.assignedProviderId = providerId;
+      await patient.save();
     }
 
     res.status(200).json({ message: 'Patient assigned to provider successfully' });

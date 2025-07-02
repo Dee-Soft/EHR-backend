@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
   gender: { type: { type: String}, enum: ['Male', 'Female', 'Other']},
   employeeId: { type: String}, // For employees
   providerId: { type: String}, // For providers
+  assignedProviderId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // For patients
   assignedPatients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // For providers
 }, {
   timestamps: true

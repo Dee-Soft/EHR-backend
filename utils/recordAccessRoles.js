@@ -8,11 +8,17 @@ module.exports = {
     },
 
     canViewRecordById: (role, requesterId, record) => {
-        if (role === 'Patient' && requesterId === record.patient.toString()) {
+        if (role === 'Patient' && requesterId === record.patient._id.toString()) {
             return true;
         }
-        if (['Provider', 'Manager'].includes(role)) {
+
+        if (role === 'Manager') {
             return true;
         }
+        
+        if (role === 'Provider') {
+            return record.patient.assignedProviderId?.toString() === requesterId;
+        }
+        return false;
     }
 };
