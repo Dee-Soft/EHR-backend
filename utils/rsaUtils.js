@@ -1,31 +1,49 @@
 const crypto = require('crypto');
-const { privateKey, publicKey } = require('../config/keyManager');
+const {
+    backendPrivateKey,
+    backendPublicKey,
+    frontendTestPublicKey,
+} = require('../config/keyManager');
 
-// Encrypt AES key with provided public key (frontend or backend)
-function encryptWithPublicKey(aesKey, customPublicKey = publicKey) {
-  return crypto.publicEncrypt(
-    {
-      key: customPublicKey,
-      padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-      oaepHash: 'sha256',
-    },
-    Buffer.from(aesKey)
-  ).toString('base64');
+// Encrypt AES key with backend's public key during record creation
+function encryptWithBackendPubKey(aesKey) {
+    return crypto.publicEncrypt(
+        {
+            key: backendPublicKey,
+            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+            oaepHash: 'sha256'
+        },
+        Buffer.from(aesKey)
+    ).toString('base64');
 }
 
-// Decrypt AES key with provided private key (defaults to backend)
-function decryptWithPrivateKey(encryptedBase64, customPrivateKey = privateKey) {
-  return crypto.privateDecrypt(
-    {
-      key: customPrivateKey,
-      padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-      oaepHash: 'sha256',
-    },
-    Buffer.from(encryptedBase64, 'base64')
-  ).toString('utf8');
+// Decrypt AES key with backend's private key during record retrieval
+function decryptWithBackendPrvKey(encryptedAesKey) {
+    const buffer = Buffer.from(encryptedAesKey, 'base64');
+    return crypto.privateDecrypt(
+        {
+            key: backendPrivateKey,
+            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+            oaepHash: 'sha256'
+        },
+        buffer
+    ).toString();
+}
+
+// Re-encrypt AES key with frontend test public key before sending to client
+function reEncryptWithFrontPubKey(newAesKey) {
+    return crypto.publicEncrypt(
+        {
+            key: frontendTestPublicKey,
+            padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+            oaepHash: 'sha256'
+        },
+        Buffer.from(newAesKey)
+    ).toString('base64');
 }
 
 module.exports = {
-  encryptWithPublicKey,
-  decryptWithPrivateKey,
+    encryptWithBackendPubKey,
+    decryptWithBackendPrvKey,
+    reEncryptWithFrontPubKey
 };

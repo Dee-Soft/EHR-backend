@@ -1,6 +1,5 @@
 const PatientRecord = require('../models/PatientRecord');
 const User = require('../models/User');
-const { encryptWithPublicKey, decryptWithPrivateKey } = require('../utils/rsaUtils');
 const { generateAESKey } = require('../helpers/cryptoHelper');
 const AuditLog = require('../models/AuditLog');
 const {
@@ -9,107 +8,100 @@ const {
     canViewRecordById,
     canViewAllRecords,  
 } = require('../utils/recordAccessRoles');
-const { encryptAES, decryptAES } = require('../utils/aesUtils');
 
-const { privateKey: backendPrivateKey } = require('../config/keyManager');
+const { encryptWithBackendPubKey } = require('../utils/rsaUtils');
+const encryptFieldsAESMiddleware = require('../middlewares/encryptFieldsAESMiddleware');
+
 
 
 // Function to create a new patient record
-exports.createRecord = async (req, res) => {
-    const { role, id: creatorId } = req.user;
-    const { patient, diagnosis, notes, medications, visitDate } = req.body;
-    const frontendPublicKey = req.headers['x-client-public-key']; // RSA public key (PEM string)
+exports.createRecord = [
+    async (req, res, next) => {
+        const { role, id: creatorId } = req.user;
+        const { patient, diagnosis, notes, medications, visitDate } = req.body;
 
-    if (!frontendPublicKey) {
-      return res.status(400).json({ message: 'Client public RSA key missing in header' });
+        try {
+            if (!canCreateRecord(role)) {
+                return res.status(403).json({ message: 'Only providers and managers can create patient records' });
+            }
+
+            if (!diagnosis || !notes || !medications || !visitDate) {
+                return res.status(400).json({ message: 'All fields are required' });
+            }
+
+            const today = new Date();
+            const tzOffsetMs = today.getTimezoneOffset() * 60 * 1000;
+            const localISO = new Date(today.getTime() - tzOffsetMs).toISOString().split('T')[0];
+
+            if (visitDate !== localISO) {
+                return res.status(400).json({ message: 'Can only create records for today' });
+            }
+
+            const isAssigned = await User.exists({
+                _id: creatorId,
+                assignedPatients: patient
+            });
+
+            if (role === 'Provider' && !isAssigned) {
+                return res.status(403).json({ message: 'Provider can only create records for assigned patients' });
+            }
+
+            // Generate AES key and assign to request
+            const aesKey = generateAESKey();
+            req.aesKey = aesKey; // So middleware can use it
+
+            // Encrypt AES key with backend's public key
+            const encryptedAesKey = encryptWithBackendPubKey(aesKey);
+            req.encryptedAesKey = encryptedAesKey; // Save for DB later
+
+            console.log('Generated AES Key and encrypted with backend public key');
+
+            next(); // Proceed to encryption middleware
+        } catch (error) {
+            console.error('Pre-validation error in createRecord:', error);
+            return res.status(500).json({ message: 'Validation failed', error: error.message });
+        }
+    },
+
+    encryptFieldsAESMiddleware(['diagnosis', 'notes', 'medications']),
+
+    async (req, res) => {
+        const { patient, diagnosis, notes, medications, visitDate } = req.body;
+        const { id: creatorId } = req.user;
+
+        try {
+            // Save encrypted data and AES key to DB
+            const record = await PatientRecord.create({
+                patient,
+                diagnosis,
+                notes,
+                medications,
+                visitDate,
+                createdBy: creatorId,
+                encryptedAesKey: req.encryptedAesKey,
+            });
+
+            console.log('Patient record saved:', record._id);
+
+            await AuditLog.create({
+                action: 'CREATE_RECORD',
+                actorId: creatorId,
+                targetId: record._id,
+                targetType: 'PatientRecord',
+                details: `Created record for patient ${patient}`,
+            });
+
+            return res.status(201).json({
+                message: 'Patient record created successfully',
+                recordId: record._id,
+                encryptedAesKey: req.encryptedAesKey
+            });
+        } catch (error) {
+            console.error('Error saving record:', error);
+            return res.status(500).json({ message: 'Record creation failed', error: error.message });
+        }
     }
-
-    
-    try {
-        if ( !canCreateRecord(role) ) {
-            return res.status(403).json({ message: 'Only providers and managers can create patient records' });
-        }
-
-        if (!diagnosis || !notes || !medications || !visitDate) {
-            return res.status(400).json({ message: 'All fields are required' });
-        }
-
-        const today = new Date();
-        const tzOffsetMs = today.getTimezoneOffset() * 60 * 1000;
-        const localISO = new Date(today.getTime() - tzOffsetMs).toISOString().split('T')[0];
-
-
-        //const today = new Date().toString().slice(0, 10);
-        if (visitDate !== localISO) {
-            return res.status(400).json({ message: 'Can only create records for today' });
-        }
-
-        const isAssigned = await User.exists({
-            _id: creatorId,
-            assignedPatients: patient
-        });
-
-        if (role === 'provider' && !isAssigned) {
-            return res.status(403).json({ message: 'Provider can only create records for assigned patients' });
-        }
-
-        console.log('Frontend public key received:', frontendPublicKey);
-
-
-        // Generate AES key
-        const aesKey = generateAESKey();
-
-        const medsString = Array.isArray(medications) ? medications.join(', ') : '';
-
-        // Encrypt sensitive data
-        const encryptedDiagnosis = encryptAES(diagnosis, aesKey);
-        const encryptedNotes = encryptAES(notes, aesKey);
-        const encryptedMedications = encryptAES(medsString, aesKey);
-
-        console.log("Encrypting record fields:", {
-            diagnosis: req.body.diagnosis,
-            notes: req.body.notes,
-            medications: req.body.medications
-        });
-
-        const normalizedPublicKey = frontendPublicKey.replace(/\\n/g, '\n');
-        console.log("Normalized public key:", normalizedPublicKey);
-        // Encrypt the AES key with the frontend public key
-        const encryptedAesKey = encryptWithPublicKey(aesKey, normalizedPublicKey);
-
-        const record = await PatientRecord.create({
-            patient, diagnosis: encryptedDiagnosis, notes: encryptedNotes, medications: encryptedMedications, visitDate,
-            createdBy: creatorId,
-            encryptedAesKey,
-        });
-
-        console.log('Patient record inserted into MongoDB:', record);
-
-        const recordPayload = {
-            patient,
-            diagnosis: encryptedDiagnosis,
-            notes: encryptedNotes,
-            medications: encryptedMedications,
-            visitDate,
-            createdBy: creatorId,
-            encryptedAesKey,
-        };
-
-        console.log('Creating record with:', recordPayload);
-
-        await AuditLog.create({
-            action: 'create',
-            model: 'PatientRecord',
-            recordId: record._id,
-            userId: creatorId,
-            details: `Created record for patient ${patient}`,
-        });
-        return res.status(201).json({ message: 'Patient record created successfully', encryptedAesKey });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Record creation failed', error: error.message });
-    }
-};
+];
 
 // Function to get all patient records
 exports.getAllRecords = async (req, res) => {
@@ -232,15 +224,6 @@ exports.getRecordById = async (req, res) => {
       return res.status(400).json({ message: 'Missing x-client-public-key header' });
     }
 
-    function normalizePEMKey(key) {
-        if (key.includes('\\n')) {
-            return key.replace(/\\n/g, '\n');
-        }
-        return key;
-    }
-
-    const normalizedPublicKey = normalizePEMKey(frontendPublicKey);
-
     const aesKey = decryptWithPrivateKey(record.encryptedAesKey, backendPrivateKey);
 
     const plain = record.toObject();
@@ -253,7 +236,7 @@ exports.getRecordById = async (req, res) => {
     };
 
     const newAesKey = generateAESKey();
-    const newEncryptedAesKey = encryptWithPublicKey(newAesKey, normalizedPublicKey);
+    const newEncryptedAesKey = encryptWithPublicKey(newAesKey, frontendPublicKey);
 
     const reEncryptedRecord = {
       ...decryptedRecord,
