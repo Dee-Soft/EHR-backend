@@ -9,9 +9,11 @@ const {
     canViewAllRecords,  
 } = require('../utils/recordAccessRoles');
 
-const { encryptWithBackendPubKey } = require('../utils/rsaUtils');
+const { encryptWithBackendPubKey, reEncryptWithFrontPubKey} = require('../utils/rsaUtils');
 const encryptFieldsAESMiddleware = require('../middlewares/encryptFieldsAESMiddleware');
+const decryptFieldsAESMiddleware = require('../middlewares/decryptFieldsAESMiddleware');
 
+const { loadAESKey } = require('../middlewares/loadAESKey');
 
 
 // Function to create a new patient record
@@ -104,158 +106,240 @@ exports.createRecord = [
 ];
 
 // Function to get all patient records
-exports.getAllRecords = async (req, res) => {
-    const { role, id } = req.user;
+exports.getAllRecords = [
+    async (req, res, next) => {
+        const { role, id: requesterId } = req.user;
+        try {
+            if (!canViewAllRecords(role)) {
+                return res.status(403).json({ message: 'Only managers can view all records' });
+            }
 
-  try {
-    if (!canViewAllRecords(role)) {
-      return res.status(403).json({ message: 'Access denied' });
+            const records = await PatientRecord.find().populate({ path: 'patient' });
+            if (!records || records.length === 0) {
+                return res.status(404).json({ message: 'No records found' });
+            }
+
+            req.recordsWithKeys = records.map(record => ({
+                record,
+                aesKey: loadAESKey(record.encryptedAesKey)
+            }));
+
+            next();
+        } catch (error) {
+            console.error('Error pre-processing getAllRecords:', error);
+            return res.status(500).json({ message: 'Failed to retrieve records', error: error.message });
+        }
+    },
+
+    async (req, res, next) => {
+        try {
+            req.recordsWithKeys.forEach(({ record, aesKey }) => {
+                decryptFieldsAESMiddleware(req, ['diagnosis', 'notes', 'medications'], aesKey);
+            });
+            next();
+        } catch (error) {
+            console.error('Error decrypting records:', error);
+            return res.status(500).json({ message: 'Failed to decrypt records', error: error.message });
+        }
+    },
+
+    async (req, res) => {
+        try {
+            const processedRecords = req.recordsWithKeys.map(({ record }) => {
+                const decryptedRecord = record.toObject();
+
+                const newAesKey = generateAESKey();
+                const newEncryptedAesKey = reEncryptWithFrontPubKey(newAesKey);
+
+                encryptFieldsAESMiddleware(req, ['diagnosis', 'notes', 'medications'], newAesKey);
+
+                return {
+                    ...decryptedRecord,
+                    diagnosis: req.body.diagnosis,
+                    notes: req.body.notes,
+                    medications: req.body.medications,
+                    encryptedAesKey: newEncryptedAesKey
+                };
+            });
+
+            await AuditLog.create({
+                action: 'VIEW_ALL_RECORDS',
+                actorId: req.user.id,
+                targetType: 'PatientRecord',
+                details: `Manager viewed all patient records`,
+            });
+
+            res.status(200).json({
+                message: 'All records retrieved and re-encrypted successfully',
+                records: processedRecords
+            });
+        } catch (error) {
+            console.error('Error finalizing getAllRecords:', error);
+            return res.status(500).json({ message: 'Failed to finalize records response', error: error.message });
+        }
     }
-
-    const frontendPublicKey = req.headers['x-client-public-key'];
-    if (!frontendPublicKey) {
-      return res.status(400).json({ message: 'Missing x-client-public-key header' });
-    }
-    const normalizedPublicKey = frontendPublicKey.replace(/\\n/g, '\n');
-
-    const query = role === 'Provider'
-      ? { patient: { $in: (await User.findById(id).select('assignedPatients')).assignedPatients } }
-      : {};
-
-    const records = await PatientRecord.find(query).populate('patient');
-
-    const reEncryptedRecords = records.map(record => {
-      const aesKey = decryptWithPrivateKey(record.encryptedAesKey, backendPrivateKey);
-
-      const plain = record.toObject();
-
-      const decrypted = {
-        ...plain,
-        diagnosis: decryptAES(plain.diagnosis, aesKey),
-        notes: decryptAES(plain.notes, aesKey),
-        medications: plain.medications.map(m => decryptAES(m, aesKey)),
-      };
-
-      const newAesKey = generateAESKey();
-      const encryptedAesKey = encryptWithPublicKey(newAesKey, normalizedPublicKey);
-
-      return {
-        ...decrypted,
-        diagnosis: encryptAES(decrypted.diagnosis, newAesKey),
-        notes: encryptAES(decrypted.notes, newAesKey),
-        medications: decrypted.medications.map(m => encryptAES(m, newAesKey)),
-        encryptedAesKey,
-      };
-    });
-
-    res.status(200).json({ records: reEncryptedRecords });
-  } catch (error) {
-    console.error('Error retrieving records:', error);
-    res.status(500).json({ message: 'Failed to retrieve records', error: error.message });
-  }
-};
+];
 
 // Function to get patient's own record
-exports.getMyRecord = async (req, res) => {
-    const { role, id } = req.user;
+exports.getMyRecord = [
+  async (req, res, next) => {
+    const { role, id: requesterId } = req.user;
+    try {
+      const records = await PatientRecord.find({ patient: requesterId }).populate('patient');
+      if (!records || records.length === 0) {
+        return res.status(404).json({ message: 'No records found for this patient' });
+      }
 
-  try {
-    if (!canViewOwnRecord(role)) {
-      return res.status(403).json({ message: 'Access denied' });
+      if (role !== 'Patient') {
+        return res.status(403).json({ message: 'Only patients can view their own records' });
+      }
+
+      const allAllowed = records.every(record =>
+        canViewOwnRecord(role, requesterId, record)
+      );
+
+      if (!allAllowed) {
+          return res.status(403).json({ message: 'Not authorized to view this record' });
+      }
+
+      req.records = records; // Pass records to middleware
+
+      // Decrypt AES keys for each record
+      req.recordsWithKeys = records.map(record => {
+        const aesKey = loadAESKey(record.encryptedAesKey);
+        console.log(`Decrypted AES key for record ${record._id}:`, aesKey);
+        return { record, aesKey };
+      });
+
+      next(); // Go to decryption middleware
+    } catch (error) {
+      console.error('Error pre-processing getMyRecord:', error);
+      return res.status(500).json({ message: 'Failed to retrieve records', error: error.message });
     }
+  },
 
-    const frontendPublicKey = req.headers['x-client-public-key'];
-    if (!frontendPublicKey) {
-      return res.status(400).json({ message: 'Missing x-client-public-key header' });
+  async (req, res, next) => {
+    try {
+      // Decrypt fields for each record
+      req.recordsWithKeys.forEach(({ record, aesKey }) => {
+        decryptFieldsAESMiddleware(['diagnosis', 'notes', 'medications'], record, aesKey);
+      });
+      next();
+    } catch (error) {
+      console.error('Error decrypting fields in getMyRecord:', error);
+      return res.status(500).json({ message: 'Failed to decrypt records', error: error.message });
     }
-    const normalizedPublicKey = frontendPublicKey.replace(/\\n/g, '\n');
+  },
 
-    const records = await PatientRecord.find({ patient: id }).populate('patient');
+  async (req, res) => {
+    try {
+      // Prepare re-encrypted records
+      const reEncryptedRecords = req.recordsWithKeys.map(({ record }) => {
+        const newAesKey = generateAESKey();
+        const newEncryptedAesKey = reEncryptWithFrontPubKey(newAesKey);
 
-    const reEncryptedRecords = records.map(record => {
-      const aesKey = decryptWithPrivateKey(record.encryptedAesKey, backendPrivateKey);
-      const plain = record.toObject();
+        console.log(`Re-encrypted AES key for record ${record._id}:`, newEncryptedAesKey);
 
-      const decrypted = {
-        ...plain,
-        diagnosis: decryptAES(plain.diagnosis, aesKey),
-        notes: decryptAES(plain.notes, aesKey),
-        medications: plain.medications.map(m => decryptAES(m, aesKey)),
-      };
+        const reEncryptedFields = encryptFieldsAESMiddleware(['diagnosis', 'notes', 'medications'], record, newAesKey);
 
-      const newAesKey = generateAESKey();
-      const encryptedAesKey = encryptWithPublicKey(newAesKey, normalizedPublicKey);
+        return {
+          ...record.toObject(),
+          ...reEncryptedFields,
+          encryptedAesKey: newEncryptedAesKey
+        };
+      });
 
-      return {
-        ...decrypted,
-        diagnosis: encryptAES(decrypted.diagnosis, newAesKey),
-        notes: encryptAES(decrypted.notes, newAesKey),
-        medications: decrypted.medications.map(m => encryptAES(m, newAesKey)),
-        encryptedAesKey,
-      };
-    });
+      // Audit log
+      await AuditLog.create({
+        action: 'VIEW_RECORDS',
+        actorId: req.user.id,
+        targetType: 'PatientRecord',
+        details: `Viewed and re-encrypted all records for patient ${req.user.id}`,
+      });
 
-    res.status(200).json({ records: reEncryptedRecords });
-  } catch (error) {
-    console.error('Error retrieving own records:', error);
-    res.status(500).json({ message: 'Failed to retrieve your records', error: error.message });
+      res.status(200).json({
+        message: 'Records retrieved and re-encrypted successfully',
+        records: reEncryptedRecords
+      });
+    } catch (error) {
+      console.error('Error finalizing getMyRecord response:', error);
+      return res.status(500).json({ message: 'Failed to finalize records response', error: error.message });
+    }
   }
-};
+];
+
 
 // Function to get a specific patient record by ID
-exports.getRecordById = async (req, res) => {
-    try {
-    const { role, id: requesterId } = req.user;
+exports.getRecordById = [
+    async (req, res, next) => {
+        const { role, id: requesterId } = req.user;
+        try {
+            const record = await PatientRecord.findById(req.params.id)
+                .populate({ path: 'patient', select: 'assignedProviderId' });
 
-    const record = await PatientRecord.findById(req.params.id)
-      .populate({ path: 'patient', select: 'assignedProviderId' });
+            if (!record) {
+                return res.status(404).json({ message: 'Record not found' });
+            }
 
-    if (!record) {
-      return res.status(404).json({ message: 'Record not found' });
+            const allowed = canViewRecordById(role, requesterId, record);
+            if (!allowed) {
+                return res.status(403).json({ message: 'Not authorized to view this record' });
+            }
+
+            req.record = record; // Pass record to middleware
+
+            // Decrypt DB AES key using backend private key
+            req.aesKey = loadAESKey(record.encryptedAesKey);
+
+            console.log('Decrypted AES key from DB:', req.aesKey);
+
+            next(); // Go to decryption middleware
+        } catch (error) {
+            console.error('Error pre-processing getRecordById:', error);
+            return res.status(500).json({ message: 'Failed to retrieve record', error: error.message });
+        }
+    },
+
+    decryptFieldsAESMiddleware(['diagnosis', 'notes', 'medications']),
+
+    async (req, res) => {
+        try {
+            const decryptedRecord = req.record.toObject();
+
+            // Generate new AES key for re-encryption
+            const newAesKey = generateAESKey();
+
+            // Encrypt new AES key with frontend test public key
+            const newEncryptedAesKey = reEncryptWithFrontPubKey(newAesKey);
+
+            console.log('Re-encrypted AES key for frontend:', newEncryptedAesKey);
+
+            // Re-encrypt fields with new AES key
+            encryptFieldsAESMiddleware(req, ['diagnosis', 'notes', 'medications'], newAesKey);
+
+            // Replace decrypted fields with re-encrypted ones
+            decryptedRecord.diagnosis = req.body.diagnosis;
+            decryptedRecord.notes = req.body.notes;
+            decryptedRecord.medications = req.body.medications;
+            decryptedRecord.encryptedAesKey = newEncryptedAesKey;
+
+            // Audit log
+            await AuditLog.create({
+                action: 'VIEW_RECORD',
+                actorId: req.user.id,
+                targetId: req.record._id,
+                targetType: 'PatientRecord',
+                details: `Viewed and re-encrypted record for patient ${req.record.patient._id}`,
+            });
+
+            res.status(200).json({
+                message: 'Record retrieved and re-encrypted successfully',
+                record: decryptedRecord,
+                encryptedAesKey: newEncryptedAesKey
+            });
+        } catch (error) {
+            console.error('Error in final getRecordById handler:', error);
+            return res.status(500).json({ message: 'Failed to process record', error: error.message });
+        }
     }
-
-    const allowed = canViewRecordById(role, requesterId, record);
-    if (!allowed) {
-      return res.status(403).json({ message: 'Not authorized to view this record' });
-    }
-
-    const frontendPublicKey = req.headers['x-client-public-key'];
-    if (!frontendPublicKey) {
-      return res.status(400).json({ message: 'Missing x-client-public-key header' });
-    }
-
-    const aesKey = decryptWithPrivateKey(record.encryptedAesKey, backendPrivateKey);
-
-    const plain = record.toObject();
-
-    const decryptedRecord = {
-      ...plain,
-      diagnosis: decryptAES(plain.diagnosis, aesKey),
-      notes: decryptAES(plain.notes, aesKey),
-      medications: plain.medications.map(m => decryptAES(m, aesKey)),
-    };
-
-    const newAesKey = generateAESKey();
-    const newEncryptedAesKey = encryptWithPublicKey(newAesKey, frontendPublicKey);
-
-    const reEncryptedRecord = {
-      ...decryptedRecord,
-      diagnosis: encryptAES(decryptedRecord.diagnosis, newAesKey),
-      notes: encryptAES(decryptedRecord.notes, newAesKey),
-      medications: decryptedRecord.medications.map(m => encryptAES(m, newAesKey)),
-    };
-
-    await AuditLog.create({
-      action: 'VIEW_RECORD',
-      actorId: requesterId,
-      targetId: record._id,
-      targetType: 'PatientRecord',
-      details: `Viewed record for patient ${record.patient._id}`,
-    });
-
-    res.status(200).json({ record: reEncryptedRecord, encryptedAesKey: newEncryptedAesKey });
-  } catch (error) {
-    console.error('Error retrieving record by ID:', error);
-    res.status(500).json({ message: 'Failed to retrieve record', error: error.message });
-  }
-};
+];

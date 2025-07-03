@@ -1,21 +1,20 @@
 const { decryptWithBackendPrvKey } = require('../utils/rsaUtils');
 
-module.exports = async function loadAESKey(req, res, next) {
-  try {
-    const encryptedAesKey = req.record?.encryptedAesKey || req.headers['x-encrypted-aes-key'];
+function loadAESKey(encryptedAesKey) {
     if (!encryptedAesKey) {
-      return res.status(400).json({ message: 'Missing encrypted AES key in record or headers' });
+        throw new Error('Encrypted AES key is missing');
     }
 
-    const aesKey = decryptWithBackendPrvKey(encryptedAesKey);
-    if (!aesKey) {
-      return res.status(500).json({ message: 'Failed to decrypt AES key' });
+    try {
+        const aesKey = decryptWithBackendPrvKey(encryptedAesKey);
+        if (!aesKey) {
+            throw new Error('Decryption returned no key');
+        }
+        return aesKey;
+    } catch (error) {
+        console.error('loadAESKey error:', error.message);
+        throw new Error('Failed to load AES key: ' + error.message);
     }
+}
 
-    req.aesKey = aesKey;
-    next();
-  } catch (error) {
-    console.error('loadAESKey error:', error.message);
-    res.status(500).json({ message: 'Failed to load AES key', error: error.message });
-  }
-};
+module.exports = { loadAESKey };
