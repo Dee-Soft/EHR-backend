@@ -21,6 +21,9 @@ const { fetchFrontendPublicKey, sendBackendPublicKey } = require('../middlewares
 // Function to create a new patient record
 exports.createRecord = [
     sendBackendPublicKey, // Ensure keys are exchanged before processing
+
+    loadAESKey, // decrypt AES key from header
+    
     async (req, res, next) => {
         const { role, id: creatorId } = req.user;
         const { patient, diagnosis, notes, medications, visitDate } = req.body;
@@ -51,16 +54,6 @@ exports.createRecord = [
                 return res.status(403).json({ message: 'Provider can only create records for assigned patients' });
             }
 
-            // Generate AES key and assign to request
-            const aesKey = generateAESKey();
-            req.aesKey = aesKey; // So middleware can use it
-
-            // Encrypt AES key with backend's public key
-            const encryptedAesKey = encryptWithBackendPubKey(aesKey);
-            req.encryptedAesKey = encryptedAesKey; // Save for DB later
-
-            console.log('Generated AES Key and encrypted with backend public key');
-
             next(); // Proceed to encryption middleware
         } catch (error) {
             console.error('Pre-validation error in createRecord:', error);
@@ -83,7 +76,7 @@ exports.createRecord = [
                 medications,
                 visitDate,
                 createdBy: creatorId,
-                encryptedAesKey: req.encryptedAesKey,
+                encryptedAesKey: req.encryptedAesKey, // store encrypted key from frontend
             });
 
             console.log('Patient record saved:', record._id);
@@ -98,8 +91,7 @@ exports.createRecord = [
 
             return res.status(201).json({
                 message: 'Patient record created successfully',
-                recordId: record._id,
-                encryptedAesKey: req.encryptedAesKey
+                recordId: record._id
             });
         } catch (error) {
             console.error('Error saving record:', error);
