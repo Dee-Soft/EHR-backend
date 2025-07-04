@@ -5,14 +5,18 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/db');
 
-// cron job for key rotation
-const startKeyRotation = require('./cron/keyRotateCron');
+// cron jobs auto loader
+const startAllCrons = require('./crons');
 
 //routes
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const patientRecordRoutes = require('./routes/patientRecordRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+
+const keyExchangeRoutes = require('./routes/keyExchangeRoutes');
+app.use('/api/key-exchange', keyExchangeRoutes);
+
 
 const app = express();
 

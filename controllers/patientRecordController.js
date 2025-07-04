@@ -15,9 +15,12 @@ const decryptFieldsAESMiddleware = require('../middlewares/decryptFieldsAESMiddl
 
 const { loadAESKey } = require('../middlewares/loadAESKey');
 
+const { fetchFrontendPublicKey, sendBackendPublicKey } = require('../middlewares/keyExchangeMiddleware');
+
 
 // Function to create a new patient record
 exports.createRecord = [
+    sendBackendPublicKey, // Ensure keys are exchanged before processing
     async (req, res, next) => {
         const { role, id: creatorId } = req.user;
         const { patient, diagnosis, notes, medications, visitDate } = req.body;
@@ -107,6 +110,7 @@ exports.createRecord = [
 
 // Function to get all patient records
 exports.getAllRecords = [
+    fetchFrontendPublicKey, // Ensure keys are exchanged before processing
     async (req, res, next) => {
         const { role, id: requesterId } = req.user;
         try {
@@ -182,6 +186,7 @@ exports.getAllRecords = [
 
 // Function to get patient's own record
 exports.getMyRecord = [
+  fetchFrontendPublicKey, // Ensure keys are exchanged before processing
   async (req, res, next) => {
     const { role, id: requesterId } = req.user;
     try {
@@ -271,6 +276,7 @@ exports.getMyRecord = [
 
 // Function to get a specific patient record by ID
 exports.getRecordById = [
+    fetchFrontendPublicKey, // Ensure keys are exchanged before processing
     async (req, res, next) => {
         const { role, id: requesterId } = req.user;
         try {
