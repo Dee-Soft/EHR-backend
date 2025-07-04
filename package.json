@@ -11,6 +11,7 @@
   "description": "EHR backend server using Express.js and MongoDB",
   "dependencies": {
     "archiver": "^7.0.1",
+    "axios": "^1.10.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",

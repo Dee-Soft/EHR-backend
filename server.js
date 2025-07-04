@@ -15,7 +15,6 @@ const patientRecordRoutes = require('./routes/patientRecordRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 
 const keyExchangeRoutes = require('./routes/keyExchangeRoutes');
-app.use('/api/key-exchange', keyExchangeRoutes);
 
 
 const app = express();
@@ -40,8 +39,7 @@ app.use('/api/patient-records', patientRecordRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 
-// start key rotation cron job
-startKeyRotation();
+app.use('/api/key-exchange', keyExchangeRoutes);
 
 // start server
 const PORT = process.env.PORT;
