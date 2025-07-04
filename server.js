@@ -5,6 +5,9 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/db');
 
+// cron job for key rotation
+const startKeyRotation = require('./cron/keyRotateCron');
+
 //routes
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
@@ -32,6 +35,9 @@ app.use('/api/users', userRoutes);
 app.use('/api/patient-records', patientRecordRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
+
+// start key rotation cron job
+startKeyRotation();
 
 // start server
 const PORT = process.env.PORT;
