@@ -20,13 +20,15 @@ const { fetchFrontendPublicKey, sendBackendPublicKey } = require('../middlewares
 
 // Function to create a new patient record
 exports.createRecord = [
-    sendBackendPublicKey, // Ensure keys are exchanged before processing
+    //sendBackendPublicKey, // Ensure keys are exchanged before processing
 
     loadAESKey, // decrypt AES key from header
+    decryptFieldsAESMiddleware(['diagnosis', 'notes', 'medications']),
     
     async (req, res, next) => {
         const { role, id: creatorId } = req.user;
         const { patient, diagnosis, notes, medications, visitDate } = req.body;
+        const frontendPublicKey = req.headers['x-client-public-key']
 
         try {
             if (!canCreateRecord(role)) {
@@ -54,7 +56,14 @@ exports.createRecord = [
                 return res.status(403).json({ message: 'Provider can only create records for assigned patients' });
             }
 
+            // Generate new AES key for DB storage
+            const dbAESKey = generateAESKey();
+
+            // Attach DB AES key to request for encryption middleware
+            req.aesKey = dbAESKey;
+
             next(); // Proceed to encryption middleware
+
         } catch (error) {
             console.error('Pre-validation error in createRecord:', error);
             return res.status(500).json({ message: 'Validation failed', error: error.message });
@@ -66,9 +75,13 @@ exports.createRecord = [
     async (req, res) => {
         const { patient, diagnosis, notes, medications, visitDate } = req.body;
         const { id: creatorId } = req.user;
+        const frontendPublicKey = req.headers['x-client-public-key'];
 
         try {
-            // Save encrypted data and AES key to DB
+            // Encrypt DB AES key with frontend public key
+            const encryptedDbAESKey = reEncryptWithFrontPubKey(req.aesKey, frontendPublicKey);
+
+            // Save encrypted fields and encrypted AES key in DB
             const record = await PatientRecord.create({
                 patient,
                 diagnosis,
@@ -76,10 +89,8 @@ exports.createRecord = [
                 medications,
                 visitDate,
                 createdBy: creatorId,
-                encryptedAesKey: req.encryptedAesKey, // store encrypted key from frontend
+                encryptedAesKey: encryptedDbAESKey
             });
-
-            console.log('Patient record saved:', record._id);
 
             await AuditLog.create({
                 action: 'CREATE_RECORD',
@@ -90,7 +101,7 @@ exports.createRecord = [
             });
 
             return res.status(201).json({
-                message: 'Patient record created successfully',
+                message: 'Record created successfully',
                 recordId: record._id
             });
         } catch (error) {

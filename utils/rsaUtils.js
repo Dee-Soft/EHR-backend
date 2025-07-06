@@ -13,7 +13,7 @@ function encryptWithBackendPubKey(aesKey) {
             padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
             oaepHash: 'sha256'
         },
-        Buffer.from(aesKey)
+        Buffer.from(aesKey, 'hex') // AES key should be passed as raw bytes, not UTF-8 string
     ).toString('base64');
 }
 
@@ -27,7 +27,7 @@ function decryptWithBackendPrvKey(encryptedAesKey) {
             oaepHash: 'sha256'
         },
         buffer
-    ).toString();
+    ).toString('hex'); // Return AES key as hex string
 }
 
 // Re-encrypt AES key with frontend test public key before sending to client

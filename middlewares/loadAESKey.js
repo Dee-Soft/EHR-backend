@@ -7,6 +7,12 @@ function loadAESKey(req, res, next) {
             return res.status(400).json({ message: 'Missing encrypted AES key in headers' });
         }
         const aesKey = decryptWithBackendPrvKey(encryptedAesKey);
+
+        console.log('Decrypted frontend AES key (hex):', aesKey);
+
+        if (aesKey.length !== 64) {
+            throw new Error(`Invalid AES key length: ${aesKey.length} hex chars`);
+        }
         
         req.aesKey = aesKey;
         next();
