@@ -1,0 +1,14 @@
+{
+  "message": "Record created successfully",
+  "recordId": "686b4a96cf110964d86bad87",
+  "record": {
+    "patient": "6863d3923b3b66d0520f2fbd",
+    "diagnosis": "680706711f7484f40c82f3e6890f815a:5b4074507ee6bba03b622f584a1e3a3df61ccf31a43ee5834a751ba57908d670",
+    "notes": "5949c2fbd1c8717b5ef9ded088ab4942:c2324ed45757511de1bab1d85e66d5834c6d706896e5a1a96c3e6f4025384749ddd5e0e352f762a980c3725814c34026718bee327ba732f2231eea781c629e9b",
+    "medications": [
+      "637c011a61f5d9cb276f6c5c1f341837:d9bc1a6e34fe2e3b55972f1ed001352a6360fc00e6659b2ed89cf4677aa5be88"
+    ],
+    "visitDate": "2025-07-07T00:00:00.000Z",
+    "encryptedAesKey": "Y2wfUUtR6Bpy3sIlUlr38MVgkgrxIMmd0KqoWaddQTYa/X9L01ekIAq7Q4bzKfo9K2E0uY/e+rVx7+33M2jOD9eMR11rgP2Z+jSFB/Hib3Z1xyk9KuCNpD2Wdv1wNN5jwzDGjHDh/lUv+WcyCRTBpBtn5SMsCdnCVcpkWz7t7jx4Xku/YEDE4qZPh8uwaLJYKEwjZkTHAOcuA6dNnHGXmBw/ww5inEwigLU6xqVJav0ll9I4D/qJ2GbMGRm35sh20kR5Gca4HpPJmfCmU1smPmP35jkPvfKw5FwCENB4fVQLz8k0CAeaUQa9cXAA0XO8KgbSq4pDXqG6izS6z0YYrQ=="
+  }
+}

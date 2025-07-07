@@ -31,14 +31,14 @@ function decryptWithBackendPrvKey(encryptedAesKey) {
 }
 
 // Re-encrypt AES key with frontend test public key before sending to client
-function reEncryptWithFrontPubKey(newAesKey) {
+function reEncryptWithFrontPubKey(newAesKey, frontendPublicKey) {
     return crypto.publicEncrypt(
         {
-            key: frontendTestPublicKey,
+            key: frontendPublicKey,
             padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
             oaepHash: 'sha256'
         },
-        Buffer.from(newAesKey)
+        Buffer.from(newAesKey, 'hex')
     ).toString('base64');
 }
 

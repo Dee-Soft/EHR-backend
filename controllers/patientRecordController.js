@@ -75,7 +75,11 @@ exports.createRecord = [
     async (req, res) => {
         const { patient, diagnosis, notes, medications, visitDate } = req.body;
         const { id: creatorId } = req.user;
-        const frontendPublicKey = req.headers['x-client-public-key'];
+        //const frontendPublicKey = req.headers['x-client-public-key'];
+
+        const frontendPublicKeyBase64 = req.headers['x-client-public-key'];
+        const frontendPublicKey = Buffer.from(frontendPublicKeyBase64, 'base64').toString('utf8').replace(/\r?\n/g, '\n');
+
 
         try {
             // Encrypt DB AES key with frontend public key
@@ -102,8 +106,16 @@ exports.createRecord = [
 
             return res.status(201).json({
                 message: 'Record created successfully',
-                recordId: record._id
-            });
+                recordId: record._id,
+                record: {
+                patient: record.patient,
+                diagnosis: record.diagnosis,
+                notes: record.notes,
+                medications: record.medications,
+                visitDate: record.visitDate,
+                encryptedAesKey: record.encryptedAesKey
+            }
+        });
         } catch (error) {
             console.error('Error saving record:', error);
             return res.status(500).json({ message: 'Record creation failed', error: error.message });
