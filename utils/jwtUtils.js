@@ -7,7 +7,7 @@ function generateJWT(user) {
         email: user.email
     };
     const options = {
-        expiresIn: '1h'
+        expiresIn: '1day' // Token will expire in 1 day
     };
     return jwt.sign(payload, process.env.JWT_SECRET, options);
 };

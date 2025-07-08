@@ -8,6 +8,9 @@ const connectDB = require('./config/db');
 // cron jobs auto loader
 const startAllCrons = require('./crons');
 
+const cookieParser = require('cookie-parser');
+
+
 //routes
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
@@ -21,6 +24,7 @@ const app = express();
 
 // middleware
 app.use(helmet());
+app.use(cookieParser());
 app.use(cors());
 app.use(rateLimit({ 
   windowMs: 15 * 60 * 1000, // 15 minutes
