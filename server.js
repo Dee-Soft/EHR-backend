@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/db');
+const openbaoConfig = require('./config/openbao.config');
 
 // cron jobs auto loader
 const startAllCrons = require('./crons');
@@ -35,9 +36,20 @@ app.use(rateLimit({
 }));
 app.use(express.json());
 
-// Connect to database only if not in test environment
+// Connect to database and OpenBao only if not in test environment
 if (process.env.NODE_ENV !== 'test') {
+  // Initialize OpenBao connection
+  openbaoConfig.init().then(success => {
+    if (success) {
+      console.log('✅ OpenBao initialized successfully');
+    } else {
+      console.warn('⚠️  OpenBao initialization failed - crypto operations may fail');
+    }
+  });
+  
+  // Connect to MongoDB
   connectDB();
+  
   // Start cron jobs only in production
   startAllCrons();
 }
@@ -46,11 +58,24 @@ if (process.env.NODE_ENV !== 'test') {
 app.get('/', (req, res) => {
   res.send('Electronic Health Record System backend is running securely!');
 });
+
+// Health check endpoint including OpenBao status
+app.get('/api/health', async (req, res) => {
+  const openbaoHealth = await openbaoConfig.healthCheck();
+  res.status(openbaoHealth.healthy ? 200 : 503).json({
+    status: openbaoHealth.healthy ? 'healthy' : 'unhealthy',
+    services: {
+      api: 'operational',
+      openbao: openbaoHealth
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.use('/api/users', userRoutes);
 app.use('/api/patient-records', patientRecordRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
-
 app.use('/api/key-exchange', keyExchangeRoutes);
 
 // start server only if not in test environment

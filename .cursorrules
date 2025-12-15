@@ -536,3 +536,399 @@ __tests__/
 - Add tests for bugs before fixing them (TDD)
 - Share testing patterns with the team
 - Update these guidelines as needed
+
+## OpenBao Testing Patterns
+
+### Overview
+The EHR backend now uses OpenBao Transit Engine for all cryptographic operations. This section covers testing patterns specific to OpenBao integration.
+
+### Mocking OpenBao
+
+#### Using the OpenBao Mock
+```javascript
+const { createMockVaultClient, mockResponses } = require('../../setup/mocks/openbaoMock');
+
+// Mock OpenBao config before requiring services
+jest.mock('../../../config/openbao.config', () => {
+  const mockVault = createMockVaultClient();
+  return {
+    getTransitClient: () => mockVault,
+    keys: {
+      aesMaster: 'ehr-aes-master',
+      rsaExchange: 'ehr-rsa-exchange'
+    },
+    validateConnection: jest.fn().mockResolvedValue(true)
+  };
+});
+```
+
+#### Mock OpenBao Responses
+```javascript
+// Mock encryption
+mockVault.write = jest.fn().mockResolvedValue({
+  data: {
+    ciphertext: 'vault:v1:' + crypto.randomBytes(64).toString('base64'),
+    key_version: 1
+  }
+});
+
+// Mock decryption
+mockVault.write = jest.fn().mockResolvedValue({
+  data: {
+    plaintext: Buffer.from(JSON.stringify({ test: 'data' })).toString('base64')
+  }
+});
+
+// Mock data key generation
+mockVault.write = jest.fn().mockResolvedValue({
+  data: {
+    plaintext: crypto.randomBytes(32).toString('base64'),
+    ciphertext: 'vault:v1:encrypted-key',
+    key_version: 1
+  }
+});
+```
+
+### Testing Crypto Service
+
+#### Unit Test Pattern
+```javascript
+describe('OpenBao Crypto Service', () => {
+  let cryptoService;
+  let mockVault;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.resetModules();
+    
+    const openbaoConfig = require('../../../config/openbao.config');
+    mockVault = openbaoConfig.getTransitClient();
+    cryptoService = require('../../../services/openbaoCryptoService');
+  });
+
+  describe('encryptData', () => {
+    test('should encrypt data using OpenBao Transit Engine', async () => {
+      const plaintext = { ssn: '123-45-6789' };
+      const encrypted = await cryptoService.encryptData(plaintext);
+      
+      expect(encrypted.ciphertext).toMatch(/^vault:v\d+:/);
+      expect(encrypted.ciphertext).not.toContain('123-45-6789');
+      expect(encrypted.keyVersion).toBeDefined();
+    });
+    
+    test('should produce unique ciphertext for same plaintext', async () => {
+      const data = { test: 'data' };
+      const cipher1 = await cryptoService.encryptData(data);
+      const cipher2 = await cryptoService.encryptData(data);
+      
+      expect(cipher1.ciphertext).not.toBe(cipher2.ciphertext);
+    });
+  });
+});
+```
+
+### Testing Key Exchange Service
+
+```javascript
+describe('Key Exchange Service', () => {
+  test('should retrieve RSA public key from OpenBao', async () => {
+    const result = await keyExchangeService.getPublicKeyForFrontend();
+    
+    expect(result.publicKey).toContain('BEGIN PUBLIC KEY');
+    expect(result.algorithm).toBe('RSA-2048');
+    expect(result.keyVersion).toBeDefined();
+  });
+  
+  test('should wrap AES key with RSA', async () => {
+    const plaintextKey = crypto.randomBytes(32).toString('base64');
+    const result = await keyExchangeService.wrapAESKeyForFrontend(plaintextKey);
+    
+    expect(result.wrappedKey).toMatch(/^vault:v\d+:/);
+    expect(result.wrappedKey).not.toContain(plaintextKey);
+  });
+});
+```
+
+### Testing Transit Middlewares
+
+```javascript
+describe('Transit Encrypt Middleware', () => {
+  test('should encrypt specified fields', async () => {
+    cryptoService.encryptData.mockResolvedValue({
+      ciphertext: 'vault:v1:encrypted',
+      keyVersion: 1
+    });
+    
+    const req = {
+      body: {
+        diagnosis: 'Hypertension',
+        notes: 'Patient stable'
+      }
+    };
+    
+    const middleware = transitEncryptMiddleware(['diagnosis', 'notes']);
+    await middleware(req, res, next);
+    
+    expect(req.body.diagnosis).toContain('vault:v1:');
+    expect(req.body.notes).toContain('vault:v1:');
+    expect(next).toHaveBeenCalled();
+  });
+});
+```
+
+### Integration Testing with OpenBao
+
+#### Setup
+```javascript
+// Mock OpenBao before requiring app
+jest.mock('../../config/openbao.config', () => {
+  const mockVault = createMockVaultClient();
+  return {
+    getTransitClient: () => mockVault,
+    keys: {
+      aesMaster: 'ehr-aes-master',
+      rsaExchange: 'ehr-rsa-exchange'
+    },
+    init: jest.fn().mockResolvedValue(true),
+    initialized: true
+  };
+});
+
+const app = require('../../server');
+```
+
+#### Full Flow Test
+```javascript
+describe('Integration: Patient Record Creation with OpenBao', () => {
+  test('should create encrypted record via OpenBao', async () => {
+    // Create test user
+    const provider = await User.create(testUsers.provider);
+    const patient = await User.create(testUsers.patient);
+    
+    // Get auth token
+    const loginRes = await request(app)
+      .post('/api/auth/login')
+      .send({ email: provider.email, password: plainPassword });
+    
+    const token = loginRes.headers['set-cookie'][0];
+    
+    // Create record
+    const response = await request(app)
+      .post('/api/patient-records')
+      .set('Cookie', token)
+      .set('x-encrypted-aes-key', 'vault:v1:mock-wrapped-key')
+      .set('x-client-public-key', Buffer.from('mock-key').toString('base64'))
+      .send({
+        patient: patient._id,
+        diagnosis: 'Hypertension',
+        notes: 'Patient stable',
+        medications: ['Lisinopril'],
+        visitDate: new Date().toISOString().split('T')[0]
+      });
+    
+    expect(response.status).toBe(201);
+    expect(response.body.record.diagnosis).toMatch(/^vault:v\d+:/);
+  });
+});
+```
+
+### Security Testing with OpenBao
+
+```javascript
+describe('Security: OpenBao Transit Encryption', () => {
+  test('should never expose plaintext in encrypted data', async () => {
+    const sensitiveData = { ssn: '123-45-6789', diagnosis: 'HIV+' };
+    const encrypted = await cryptoService.encryptData(sensitiveData);
+    
+    expect(encrypted.ciphertext).not.toContain('123-45-6789');
+    expect(encrypted.ciphertext).not.toContain('HIV');
+    expect(encrypted.ciphertext).toMatch(/^vault:v\d+:/);
+  });
+  
+  test('should use OpenBao key versioning', async () => {
+    const result = await cryptoService.encryptData({ test: 'data' });
+    
+    expect(result.keyVersion).toBeDefined();
+    expect(result.keyVersion).toBeGreaterThan(0);
+  });
+  
+  test('should handle OpenBao service unavailability gracefully', async () => {
+    mockVault.write = jest.fn().mockRejectedValue(new Error('Service down'));
+    
+    await expect(cryptoService.encryptData({ test: 'data' }))
+      .rejects.toThrow('Encryption service unavailable');
+  });
+});
+```
+
+### Test Data Formats
+
+#### OpenBao Ciphertext Format
+```javascript
+// Valid OpenBao ciphertext format: vault:v{version}:{base64_ciphertext}
+const mockCiphertext = 'vault:v1:8J+YguKdjO+7vcO3w7Y8Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8=';
+
+// Test data from fixtures
+const { openBaoTestData } = require('../../setup/fixtures/records.fixture');
+```
+
+#### Mock Data Keys
+```javascript
+const mockDataKey = {
+  plaintextKey: crypto.randomBytes(32).toString('base64'),
+  ciphertextKey: 'vault:v1:encrypted-data-key',
+  keyVersion: 1,
+  keyId: 'data-key-1234567890-abc123'
+};
+```
+
+### Error Simulation Patterns
+
+```javascript
+describe('Error Handling', () => {
+  test('should handle OpenBao connection timeout', async () => {
+    mockVault.write = jest.fn().mockRejectedValue(
+      new Error('ETIMEDOUT: Connection timeout')
+    );
+    
+    await expect(cryptoService.generateDataKey())
+      .rejects.toThrow('Key generation service unavailable');
+  });
+  
+  test('should handle invalid ciphertext format', async () => {
+    mockVault.write = jest.fn().mockRejectedValue(
+      new Error('Invalid ciphertext format')
+    );
+    
+    await expect(cryptoService.decryptData('invalid-format'))
+      .rejects.toThrow('Decryption failed');
+  });
+  
+  test('should handle key version mismatch', async () => {
+    mockVault.write = jest.fn().mockRejectedValue(
+      new Error('Key version not found')
+    );
+    
+    await expect(cryptoService.decryptData('vault:v99:old-data'))
+      .rejects.toThrow();
+  });
+});
+```
+
+### Performance Testing
+
+```javascript
+describe('Performance', () => {
+  test('should encrypt data within acceptable time', async () => {
+    const startTime = Date.now();
+    await cryptoService.encryptData({ test: 'data' });
+    const duration = Date.now() - startTime;
+    
+    expect(duration).toBeLessThan(100); // Should be fast with mocks
+  });
+  
+  test('should handle batch operations efficiently', async () => {
+    const operations = Array(10).fill(null).map(() => 
+      cryptoService.encryptData({ test: 'data' })
+    );
+    
+    const startTime = Date.now();
+    await Promise.all(operations);
+    const duration = Date.now() - startTime;
+    
+    expect(duration).toBeLessThan(500);
+  });
+});
+```
+
+### Environment Setup for OpenBao Tests
+
+#### Test Environment Variables
+```javascript
+// In test setup
+process.env.OPENBAO_ADDR = 'http://localhost:8200';
+process.env.OPENBAO_TOKEN = 'test-token';
+process.env.OPENBAO_TRANSIT_AES_KEY = 'ehr-aes-master';
+process.env.OPENBAO_TRANSIT_RSA_KEY = 'ehr-rsa-exchange';
+```
+
+#### Docker Compose for Integration Tests
+```yaml
+# docker-compose.test.yml
+services:
+  openbao-test:
+    image: openbao/openbao:latest
+    environment:
+      OPENBAO_DEV_ROOT_TOKEN_ID: test-token
+      OPENBAO_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
+    ports:
+      - "8200:8200"
+```
+
+### Updated Test Structure
+
+```
+test/
+├── setup/
+│   ├── mocks/
+│   │   └── openbaoMock.js          # OpenBao mock implementation
+│   ├── fixtures/
+│   │   ├── users.fixture.js
+│   │   └── records.fixture.js      # Includes OpenBao test data
+│   ├── testSetup.js
+│   └── testDb.js
+├── unit/
+│   ├── config/
+│   │   └── openbao.config.test.js  # OpenBao config tests
+│   ├── services/
+│   │   ├── openbaoCryptoService.test.js
+│   │   └── keyExchangeService.test.js
+│   └── middlewares/
+│       ├── transitEncryptMiddleware.test.js
+│       ├── transitDecryptMiddleware.test.js
+│       └── authMiddleware.test.js
+├── integration/
+│   ├── auth.integration.test.js
+│   ├── keyExchange.integration.test.js
+│   └── patientRecords.integration.test.js
+└── security/
+    ├── encryption.security.test.js
+    └── rbac.security.test.js
+```
+
+### Best Practices for OpenBao Testing
+
+1. **Always Mock OpenBao in Unit Tests**: Use `createMockVaultClient()` for fast, isolated tests
+2. **Test Ciphertext Format**: Verify `vault:v\d+:` format in all encryption tests
+3. **Test Key Versioning**: Ensure key versions are tracked and returned
+4. **Test Error Scenarios**: Simulate OpenBao unavailability, invalid keys, timeouts
+5. **Never Expose Plaintext**: Verify sensitive data never appears in ciphertext
+6. **Test Idempotency**: Same plaintext should produce different ciphertext (unique IVs)
+7. **Test Round-Trip**: Encrypt → Decrypt should return original data
+8. **Mock Realistically**: Use actual OpenBao response formats in mocks
+9. **Test Async Operations**: All OpenBao operations are async, use async/await
+10. **Clean Up Mocks**: Reset mocks between tests with `jest.clearAllMocks()`
+
+### Common Pitfalls to Avoid
+
+1. **Don't use real OpenBao in unit tests**: Too slow, requires external service
+2. **Don't hardcode ciphertext**: Use mock generators for realistic test data
+3. **Don't test OpenBao itself**: Trust that OpenBao works, test your integration
+4. **Don't skip error handling tests**: OpenBao failures must be handled gracefully
+5. **Don't forget to mock config**: Always mock `openbao.config` before requiring services
+6. **Don't test with plaintext keys**: Always use wrapped/encrypted keys in tests
+7. **Don't ignore key versions**: Version tracking is critical for rotation
+8. **Don't leak sensitive data in logs**: Verify no plaintext in console output
+
+### Security Testing Checklist (OpenBao-Specific)
+
+- [ ] Encryption produces `vault:v\d+:` format
+- [ ] Plaintext never appears in ciphertext
+- [ ] Same data produces different ciphertext (unique IVs)
+- [ ] Key versions tracked in all operations
+- [ ] Decryption fails gracefully with invalid ciphertext
+- [ ] OpenBao unavailability handled without exposing data
+- [ ] RSA key wrapping/unwrapping works correctly
+- [ ] Public keys don't contain private key material
+- [ ] Error messages don't leak sensitive information
+- [ ] Audit logs created for crypto operations
