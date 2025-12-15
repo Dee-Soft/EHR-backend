@@ -25,7 +25,10 @@ const app = express();
 // middleware
 app.use(helmet());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true, // Allow cookies to be sent with requests
+}));
 app.use(rateLimit({ 
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100 // limit each IP to 100 requests per windowMs
