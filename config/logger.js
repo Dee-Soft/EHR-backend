@@ -4,6 +4,7 @@
  */
 
 const winston = require('winston');
+const DailyRotateFile = require('winston-daily-rotate-file');
 const path = require('path');
 
 // Define log format
@@ -21,7 +22,7 @@ const logger = winston.createLogger({
   defaultMeta: { service: 'ehr-backend' },
   transports: [
     // Error logs - separate file for errors only
-    new winston.transports.DailyRotateFile({
+    new DailyRotateFile({
       filename: path.join('logs', 'error-%DATE%.log'),
       datePattern: 'YYYY-MM-DD',
       level: 'error',
@@ -29,7 +30,7 @@ const logger = winston.createLogger({
       zippedArchive: true
     }),
     // Combined logs - all log levels
-    new winston.transports.DailyRotateFile({
+    new DailyRotateFile({
       filename: path.join('logs', 'combined-%DATE%.log'),
       datePattern: 'YYYY-MM-DD',
       maxFiles: '30d',

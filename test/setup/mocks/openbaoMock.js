@@ -7,7 +7,7 @@ const crypto = require('crypto');
 
 class OpenBaoMock {
   constructor() {
-    this.initialized = false;
+    this.initialized = true;
     this.sealed = false;
     this.keys = {
       'ehr-aes-master': {

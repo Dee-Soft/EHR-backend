@@ -4,6 +4,11 @@ const jwt = require('jsonwebtoken');
 // Mock jwt
 jest.mock('jsonwebtoken');
 
+// Mock AuditLog model to prevent database operations
+jest.mock('../../../models/AuditLog', () => ({
+  create: jest.fn().mockResolvedValue({})
+}));
+
 describe('Auth Middleware', () => {
   let req, res, next;
   
@@ -46,20 +51,20 @@ describe('Auth Middleware', () => {
       expect(next).not.toHaveBeenCalled();
     });
     
-    test('should return 403 when token is invalid', () => {
+    test('should return 403 when token is invalid', async () => {
       req.cookies.token = 'invalid-token';
       jwt.verify.mockImplementation(() => {
         throw new Error('Invalid token');
       });
       
-      authMiddleware(req, res, next);
+      await authMiddleware(req, res, next);
       
       expect(res.status).toHaveBeenCalledWith(403);
       expect(res.json).toHaveBeenCalledWith({ message: 'Failed to authenticate token' });
       expect(next).not.toHaveBeenCalled();
     });
     
-    test('should return 403 when token is expired', () => {
+    test('should return 403 when token is expired', async () => {
       req.cookies.token = 'expired-token';
       jwt.verify.mockImplementation(() => {
         const error = new Error('Token expired');
@@ -67,7 +72,7 @@ describe('Auth Middleware', () => {
         throw error;
       });
       
-      authMiddleware(req, res, next);
+      await authMiddleware(req, res, next);
       
       expect(res.status).toHaveBeenCalledWith(403);
       expect(res.json).toHaveBeenCalledWith({ message: 'Failed to authenticate token' });
@@ -111,42 +116,42 @@ describe('Auth Middleware', () => {
       expect(res.status).not.toHaveBeenCalled();
     });
     
-    test('should return 403 when user does not have required role', () => {
+    test('should return 403 when user does not have required role', async () => {
       const middleware = requiredRole('Admin');
       
-      middleware(req, res, next);
+      await middleware(req, res, next);
       
       expect(res.status).toHaveBeenCalledWith(403);
       expect(res.json).toHaveBeenCalledWith({ message: 'Access denied' });
       expect(next).not.toHaveBeenCalled();
     });
     
-    test('should return 403 when user role is not in list of required roles', () => {
+    test('should return 403 when user role is not in list of required roles', async () => {
       const middleware = requiredRole('Admin', 'Manager', 'Provider');
       
-      middleware(req, res, next);
+      await middleware(req, res, next);
       
       expect(res.status).toHaveBeenCalledWith(403);
       expect(res.json).toHaveBeenCalledWith({ message: 'Access denied' });
       expect(next).not.toHaveBeenCalled();
     });
     
-    test('should return 403 when user object is missing', () => {
+    test('should return 403 when user object is missing', async () => {
       req.user = null;
       const middleware = requiredRole('Patient');
       
-      middleware(req, res, next);
+      await middleware(req, res, next);
       
       expect(res.status).toHaveBeenCalledWith(403);
       expect(res.json).toHaveBeenCalledWith({ message: 'Access denied' });
       expect(next).not.toHaveBeenCalled();
     });
     
-    test('should return 403 when user role is undefined', () => {
+    test('should return 403 when user role is undefined', async () => {
       req.user = { id: 'user123', email: 'test@test.com' }; // No role
       const middleware = requiredRole('Patient');
       
-      middleware(req, res, next);
+      await middleware(req, res, next);
       
       expect(res.status).toHaveBeenCalledWith(403);
       expect(res.json).toHaveBeenCalledWith({ message: 'Access denied' });

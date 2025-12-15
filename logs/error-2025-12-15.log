@@ -1,0 +1,133 @@
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:53"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:53"}
+{"error":"Test error","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:53"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:53"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:54"}
+{"error":"Invalid ciphertext","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:54"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:54"}
+{"error":"AuditLog validation failed: actorId: Cast to ObjectId failed for value \"user123\" (type string) at path \"actorId\" because of \"BSONError\"","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:32:55"}
+{"error":"AuditLog validation failed: actorId: Cast to ObjectId failed for value \"user123\" (type string) at path \"actorId\" because of \"BSONError\"","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:32:55"}
+{"error":"AuditLog validation failed: actorId: Cast to ObjectId failed for value \"user123\" (type string) at path \"actorId\" because of \"BSONError\"","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:32:55"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:39:34"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:39:34"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:39:34"}
+{"error":"Operation `auditlogs.insertOne()` buffering timed out after 10000ms","level":"error","message":"Failed to create audit log for auth failure","service":"ehr-backend","timestamp":"2025-12-15 23:39:46"}
+{"error":"AuditLog validation failed: actorId: Cast to ObjectId failed for value \"user123\" (type string) at path \"actorId\" because of \"BSONError\"","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:39:56"}
+{"error":"AuditLog validation failed: actorId: Cast to ObjectId failed for value \"user123\" (type string) at path \"actorId\" because of \"BSONError\"","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:39:56"}
+{"error":"Operation `auditlogs.insertOne()` buffering timed out after 10000ms","level":"error","message":"Failed to create audit log for auth failure","service":"ehr-backend","timestamp":"2025-12-15 23:39:56"}
+{"error":"AuditLog validation failed: actorId: Cast to ObjectId failed for value \"user123\" (type string) at path \"actorId\" because of \"BSONError\"","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:40:06"}
+{"error":"Operation `auditlogs.insertOne()` buffering timed out after 10000ms","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:40:06"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:40:07"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:40:07"}
+{"error":"Connection refused","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:40:11"}
+{"error":"Network error","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:40:14"}
+{"error":"Invalid credentials","level":"error","message":"AppRole authentication failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:14"}
+{"error":"Connection timeout","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:40:18"}
+{"error":"Service unavailable","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:19"}
+{"error":"Encryption failed","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:19"}
+{"error":"Invalid ciphertext","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:19"}
+{"error":"Invalid format","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:19"}
+{"error":"Re-encryption failed","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:20"}
+{"error":"Decryption failed","level":"error","message":"Re-encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:20"}
+{"error":"Network timeout","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:20"}
+{"error":"Internal error","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:20"}
+{"error":"Service down","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:40:21"}
+{"error":"Wrap failed","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:22"}
+{"error":"Invalid key","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:22"}
+{"error":"Service unavailable","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:22"}
+{"error":"Network error","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:40:22"}
+{"error":"Internal error","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:22"}
+{"error":"Connection refused","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:41:03"}
+{"error":"Network error","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:41:06"}
+{"error":"Invalid credentials","level":"error","message":"AppRole authentication failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:06"}
+{"error":"Connection timeout","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:41:10"}
+{"error":"Service unavailable","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:11"}
+{"error":"Encryption failed","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:11"}
+{"error":"Invalid ciphertext","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:11"}
+{"error":"Invalid format","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:12"}
+{"error":"Re-encryption failed","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:12"}
+{"error":"Decryption failed","level":"error","message":"Re-encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:12"}
+{"error":"Network timeout","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:12"}
+{"error":"Internal error","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:12"}
+{"error":"Service down","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:41:13"}
+{"error":"Wrap failed","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:13"}
+{"error":"Invalid key","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:14"}
+{"error":"Service unavailable","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:14"}
+{"error":"Network error","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:41:14"}
+{"error":"Internal error","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:14"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:15"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:15"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:15"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:16"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:16"}
+{"error":"Connection refused","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:41:27"}
+{"error":"Network error","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:41:30"}
+{"error":"Invalid credentials","level":"error","message":"AppRole authentication failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:30"}
+{"error":"Connection timeout","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:41:34"}
+{"error":"Service unavailable","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:35"}
+{"error":"Encryption failed","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:35"}
+{"error":"Invalid ciphertext","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:36"}
+{"error":"Invalid format","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:36"}
+{"error":"Re-encryption failed","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:36"}
+{"error":"Decryption failed","level":"error","message":"Re-encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:36"}
+{"error":"Network timeout","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:36"}
+{"error":"Internal error","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:36"}
+{"error":"Service down","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:41:37"}
+{"error":"Wrap failed","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:38"}
+{"error":"Invalid key","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:38"}
+{"error":"Service unavailable","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:38"}
+{"error":"Network error","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:41:38"}
+{"error":"Internal error","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:38"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:40"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:40"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:40"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:41"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:41"}
+{"error":"Connection refused","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:43:13"}
+{"error":"Network error","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:43:16"}
+{"error":"Invalid credentials","level":"error","message":"AppRole authentication failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:16"}
+{"error":"Connection timeout","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:43:20"}
+{"error":"Service unavailable","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:21"}
+{"error":"Encryption failed","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:21"}
+{"error":"Invalid ciphertext","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:21"}
+{"error":"Invalid format","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:21"}
+{"error":"Re-encryption failed","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:22"}
+{"error":"Decryption failed","level":"error","message":"Re-encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:22"}
+{"error":"Network timeout","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:22"}
+{"error":"Internal error","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:22"}
+{"error":"Service down","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:43:23"}
+{"error":"Wrap failed","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:23"}
+{"error":"Invalid key","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:23"}
+{"error":"Service unavailable","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:23"}
+{"error":"Network error","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:43:24"}
+{"error":"Internal error","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:24"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:43:24"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:43:24"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:43:24"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:43:25"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:43:25"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:53:22"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:53:22"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:53:22"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:53:23"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:53:23"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:10"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:10"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:10"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:11"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:11"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:46"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:46"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:46"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:47"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:47"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:55:18"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:55:18"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:55:18"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:55:19"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:55:19"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:56:30"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:56:30"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:56:30"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:56:31"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:56:31"}

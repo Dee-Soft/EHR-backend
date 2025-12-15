@@ -116,18 +116,19 @@ describe('Transit Decrypt Middleware', () => {
     });
 
     test('should log error message', async () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+      const logger = require('../../../config/logger');
+      const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
       cryptoService.decryptData.mockRejectedValue(new Error('Invalid ciphertext'));
       
       const middleware = transitDecryptMiddleware(['diagnosis']);
       await middleware(req, res, next);
       
-      expect(consoleSpy).toHaveBeenCalledWith(
+      expect(loggerSpy).toHaveBeenCalledWith(
         expect.stringContaining('transitDecryptMiddleware error'),
-        'Invalid ciphertext'
+        expect.objectContaining({ error: 'Invalid ciphertext', fields: ['diagnosis'] })
       );
       
-      consoleSpy.mockRestore();
+      loggerSpy.mockRestore();
     });
 
     test('should handle partial decryption failure', async () => {

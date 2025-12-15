@@ -124,18 +124,19 @@ describe('Transit Encrypt Middleware', () => {
     });
 
     test('should log error message', async () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+      const logger = require('../../../config/logger');
+      const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
       cryptoService.encryptData.mockRejectedValue(new Error('Test error'));
       
       const middleware = transitEncryptMiddleware(['diagnosis']);
       await middleware(req, res, next);
       
-      expect(consoleSpy).toHaveBeenCalledWith(
+      expect(loggerSpy).toHaveBeenCalledWith(
         expect.stringContaining('transitEncryptMiddleware error'),
-        'Test error'
+        expect.objectContaining({ error: 'Test error', fields: ['diagnosis'] })
       );
       
-      consoleSpy.mockRestore();
+      loggerSpy.mockRestore();
     });
 
     test('should handle partial encryption failure gracefully', async () => {

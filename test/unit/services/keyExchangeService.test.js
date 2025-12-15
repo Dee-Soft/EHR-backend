@@ -3,12 +3,19 @@
  * Tests RSA key pair management and AES key wrapping/unwrapping via OpenBao
  */
 
-const { createMockVaultClient } = require('../../setup/mocks/openbaoMock');
+const { createMockVaultClient: mockCreateMockVaultClient } = require('../../setup/mocks/openbaoMock');
 const crypto = require('crypto');
+
+// Mock logger
+jest.mock('../../../config/logger', () => ({
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn()
+}));
 
 // Mock the openbao config
 jest.mock('../../../config/openbao.config', () => {
-  const mockVault = createMockVaultClient();
+  const mockVault = mockCreateMockVaultClient();
   return {
     getTransitClient: () => mockVault,
     keys: {
@@ -217,13 +224,17 @@ describe('Key Exchange Service', () => {
 
   describe('Error Handling', () => {
     test('should log errors with context', async () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+      const logger = require('../../../config/logger');
+      logger.error.mockClear();
+      
       mockVault.read = jest.fn().mockRejectedValue(new Error('Network error'));
       
       await expect(keyExchangeService.getPublicKeyForFrontend()).rejects.toThrow();
       
-      expect(consoleSpy).toHaveBeenCalled();
-      consoleSpy.mockRestore();
+      expect(logger.error).toHaveBeenCalledWith(
+        'Failed to get public key',
+        expect.any(Object)
+      );
     });
 
     test('should provide user-friendly error messages', async () => {

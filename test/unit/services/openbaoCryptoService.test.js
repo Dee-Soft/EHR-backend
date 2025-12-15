@@ -3,12 +3,19 @@
  * Tests encryption, decryption, data key generation, and error handling
  */
 
-const { createMockVaultClient, mockResponses } = require('../../setup/mocks/openbaoMock');
+const { createMockVaultClient: mockCreateMockVaultClient, mockResponses } = require('../../setup/mocks/openbaoMock');
 const { openBaoTestData } = require('../../setup/fixtures/records.fixture');
+
+// Mock logger
+jest.mock('../../../config/logger', () => ({
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn()
+}));
 
 // Mock the openbao config
 jest.mock('../../../config/openbao.config', () => {
-  const mockVault = createMockVaultClient();
+  const mockVault = mockCreateMockVaultClient();
   return {
     getTransitClient: () => mockVault,
     keys: {
@@ -257,13 +264,17 @@ describe('OpenBao Crypto Service', () => {
 
   describe('Error Handling', () => {
     test('should log errors with context', async () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+      const logger = require('../../../config/logger');
+      logger.error.mockClear();
+      
       mockVault.write = jest.fn().mockRejectedValue(new Error('Network timeout'));
       
       await expect(cryptoService.generateDataKey()).rejects.toThrow();
       
-      expect(consoleSpy).toHaveBeenCalled();
-      consoleSpy.mockRestore();
+      expect(logger.error).toHaveBeenCalledWith(
+        'Data key generation failed',
+        expect.any(Object)
+      );
     });
 
     test('should provide user-friendly error messages', async () => {

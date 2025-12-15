@@ -3,11 +3,20 @@
  * Tests connection, initialization, health checks, and error handling
  */
 
-const { createMockVaultClient } = require('../../setup/mocks/openbaoMock');
+const { createMockVaultClient: mockCreateMockVaultClient } = require('../../setup/mocks/openbaoMock');
 
-// Mock node-vault module
+// Mock logger module
+jest.mock('../../../config/logger', () => ({
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn()
+}));
+
+// Mock node-vault module - create mock inline to avoid scope issues
 jest.mock('node-vault', () => {
-  return jest.fn(() => createMockVaultClient());
+  const { createMockVaultClient } = require('../../setup/mocks/openbaoMock');
+  const mockInstance = createMockVaultClient();
+  return jest.fn(() => mockInstance);
 });
 
 describe('OpenBao Configuration', () => {
@@ -23,9 +32,23 @@ describe('OpenBao Configuration', () => {
     process.env.OPENBAO_ADDR = 'http://localhost:8200';
     process.env.OPENBAO_TOKEN = 'test-token';
     
+    // Re-mock logger after resetModules
+    jest.doMock('../../../config/logger', () => ({
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn()
+    }));
+    
+    // Re-mock node-vault after resetModules
+    jest.doMock('node-vault', () => {
+      const { createMockVaultClient } = require('../../setup/mocks/openbaoMock');
+      const mockInstance = createMockVaultClient();
+      return jest.fn(() => mockInstance);
+    });
+    
     // Require after setting env vars
     OpenBaoConfig = require('../../../config/openbao.config');
-    mockVault = createMockVaultClient();
+    mockVault = mockCreateMockVaultClient();
   });
 
   afterEach(() => {
@@ -127,6 +150,9 @@ describe('OpenBao Configuration', () => {
 
   describe('Health Check', () => {
     test('should return healthy status when OpenBao is operational', async () => {
+      // Initialize OpenBao first
+      await OpenBaoConfig.init();
+      
       const health = await OpenBaoConfig.healthCheck();
       
       expect(health.healthy).toBe(true);
@@ -153,6 +179,9 @@ describe('OpenBao Configuration', () => {
     });
 
     test('should include version information in health check', async () => {
+      // Initialize OpenBao first
+      await OpenBaoConfig.init();
+      
       const health = await OpenBaoConfig.healthCheck();
       
       expect(health.version).toBeDefined();
@@ -189,7 +218,8 @@ describe('OpenBao Configuration', () => {
 
   describe('Error Handling', () => {
     test('should log error message on initialization failure', async () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+      const logger = require('../../../config/logger');
+      logger.error.mockClear();
       
       const nodeVault = require('node-vault');
       const mockClient = nodeVault();
@@ -200,25 +230,30 @@ describe('OpenBao Configuration', () => {
         return jest.fn(() => mockClient);
       });
       
+      // Re-mock logger after resetModules
+      jest.doMock('../../../config/logger', () => ({
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn()
+      }));
+      
       const FailingConfig = require('../../../config/openbao.config');
       await FailingConfig.init();
       
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('OpenBao connection failed'),
-        expect.any(String)
+      const loggerAfterInit = require('../../../config/logger');
+      expect(loggerAfterInit.error).toHaveBeenCalledWith(
+        'OpenBao connection failed after all retries',
+        expect.any(Object)
       );
-      
-      consoleSpy.mockRestore();
     });
 
     test('should log success message on successful initialization', async () => {
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+      const logger = require('../../../config/logger');
+      logger.info.mockClear();
       
       await OpenBaoConfig.init();
       
-      expect(consoleSpy).toHaveBeenCalledWith('OpenBao connection established');
-      
-      consoleSpy.mockRestore();
+      expect(logger.info).toHaveBeenCalledWith('OpenBao connection established');
     });
   });
 
@@ -234,9 +269,29 @@ describe('OpenBao Configuration', () => {
     });
 
     test('should use environment OPENBAO_ADDR when set', () => {
+      // Set env var BEFORE requiring the module
       process.env.OPENBAO_ADDR = 'http://custom-vault:9200';
       
+      // Reset modules to force re-creation with new env var
       jest.resetModules();
+      
+      // Re-mock logger
+      jest.doMock('../../../config/logger', () => ({
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn()
+      }));
+      
+      // Re-mock node-vault to use the env var
+      jest.doMock('node-vault', () => {
+        return jest.fn((options) => {
+          const mock = mockCreateMockVaultClient();
+          mock.endpoint = options.endpoint;
+          return mock;
+        });
+      });
+      
+      // NOW require the config
       const CustomConfig = require('../../../config/openbao.config');
       const client = CustomConfig.getTransitClient();
       

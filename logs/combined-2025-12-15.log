@@ -1,0 +1,391 @@
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:53"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:53"}
+{"error":"Test error","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:53"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:53"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:54"}
+{"error":"Invalid ciphertext","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:54"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:32:54"}
+{"level":"warn","message":"Authentication failed: Token missing","service":"ehr-backend","timestamp":"2025-12-15 23:32:55"}
+{"error":"Invalid token","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:32:55"}
+{"error":"Token expired","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:32:55"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Patient","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55","userId":"user123"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55","userId":"user123"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55","userId":"user123","userRole":"Admin"}
+{"level":"info","message":"Authorization check","requiredRoles":["Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55","userId":"user123","userRole":"Provider"}
+{"level":"info","message":"Authorization check","requiredRoles":["Manager"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55","userId":"user123","userRole":"Manager"}
+{"level":"info","message":"Authorization check","requiredRoles":["Employee"],"service":"ehr-backend","timestamp":"2025-12-15 23:32:55","userId":"user123","userRole":"Employee"}
+{"error":"AuditLog validation failed: actorId: Cast to ObjectId failed for value \"user123\" (type string) at path \"actorId\" because of \"BSONError\"","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:32:55"}
+{"error":"AuditLog validation failed: actorId: Cast to ObjectId failed for value \"user123\" (type string) at path \"actorId\" because of \"BSONError\"","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:32:55"}
+{"error":"AuditLog validation failed: actorId: Cast to ObjectId failed for value \"user123\" (type string) at path \"actorId\" because of \"BSONError\"","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:32:55"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:39:34"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:39:34"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:39:34"}
+{"level":"warn","message":"Authentication failed: Token missing","service":"ehr-backend","timestamp":"2025-12-15 23:39:36"}
+{"error":"Invalid token","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:39:36"}
+{"error":"Token expired","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:39:46"}
+{"error":"Operation `auditlogs.insertOne()` buffering timed out after 10000ms","level":"error","message":"Failed to create audit log for auth failure","service":"ehr-backend","timestamp":"2025-12-15 23:39:46"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:39:56","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Patient","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:39:56","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:39:56","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:39:56","userId":"user123","userRole":"Patient"}
+{"error":"AuditLog validation failed: actorId: Cast to ObjectId failed for value \"user123\" (type string) at path \"actorId\" because of \"BSONError\"","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:39:56"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:39:56","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:39:56","userId":"user123","userRole":"Patient"}
+{"error":"AuditLog validation failed: actorId: Cast to ObjectId failed for value \"user123\" (type string) at path \"actorId\" because of \"BSONError\"","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:39:56"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:39:56"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:39:56"}
+{"error":"Operation `auditlogs.insertOne()` buffering timed out after 10000ms","level":"error","message":"Failed to create audit log for auth failure","service":"ehr-backend","timestamp":"2025-12-15 23:39:56"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:06","userId":"user123"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:06","userId":"user123"}
+{"error":"AuditLog validation failed: actorId: Cast to ObjectId failed for value \"user123\" (type string) at path \"actorId\" because of \"BSONError\"","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:40:06"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:06","userId":"user123","userRole":"Admin"}
+{"level":"info","message":"Authorization check","requiredRoles":["Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:06","userId":"user123","userRole":"Provider"}
+{"level":"info","message":"Authorization check","requiredRoles":["Manager"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:06","userId":"user123","userRole":"Manager"}
+{"level":"info","message":"Authorization check","requiredRoles":["Employee"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:06","userId":"user123","userRole":"Employee"}
+{"error":"Operation `auditlogs.insertOne()` buffering timed out after 10000ms","level":"error","message":"Failed to create audit log for authz denial","service":"ehr-backend","timestamp":"2025-12-15 23:40:06"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:40:07"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:40:07"}
+{"level":"info","message":"OpenBao connection established","service":"ehr-backend","timestamp":"2025-12-15 23:40:08"}
+{"error":"Connection refused","level":"warn","message":"OpenBao connection attempt 1/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:08"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-15 23:40:08"}
+{"error":"Connection refused","level":"warn","message":"OpenBao connection attempt 2/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:09"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-15 23:40:09"}
+{"error":"Connection refused","level":"warn","message":"OpenBao connection attempt 3/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:11"}
+{"error":"Connection refused","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:40:11"}
+{"level":"warn","message":"Application will continue but crypto operations will fail","service":"ehr-backend","timestamp":"2025-12-15 23:40:11"}
+{"error":"Network error","level":"warn","message":"OpenBao connection attempt 1/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:11"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-15 23:40:11"}
+{"error":"Network error","level":"warn","message":"OpenBao connection attempt 2/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:12"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-15 23:40:12"}
+{"error":"Network error","level":"warn","message":"OpenBao connection attempt 3/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:14"}
+{"error":"Network error","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:40:14"}
+{"level":"warn","message":"Application will continue but crypto operations will fail","service":"ehr-backend","timestamp":"2025-12-15 23:40:14"}
+{"level":"info","message":"OpenBao connection established","service":"ehr-backend","timestamp":"2025-12-15 23:40:14"}
+{"level":"info","message":"AppRole authentication successful","service":"ehr-backend","timestamp":"2025-12-15 23:40:14"}
+{"error":"Invalid credentials","level":"error","message":"AppRole authentication failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:14"}
+{"error":"Connection timeout","level":"warn","message":"OpenBao connection attempt 1/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:15"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-15 23:40:15"}
+{"error":"Connection timeout","level":"warn","message":"OpenBao connection attempt 2/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:16"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-15 23:40:16"}
+{"error":"Connection timeout","level":"warn","message":"OpenBao connection attempt 3/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:18"}
+{"error":"Connection timeout","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:40:18"}
+{"level":"warn","message":"Application will continue but crypto operations will fail","service":"ehr-backend","timestamp":"2025-12-15 23:40:18"}
+{"level":"info","message":"OpenBao connection established","service":"ehr-backend","timestamp":"2025-12-15 23:40:18"}
+{"error":"Service unavailable","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:19"}
+{"error":"Encryption failed","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:19"}
+{"error":"Invalid ciphertext","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:19"}
+{"error":"Invalid format","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:19"}
+{"error":"Re-encryption failed","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:20"}
+{"error":"Decryption failed","level":"error","message":"Re-encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:20"}
+{"error":"Network timeout","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:20"}
+{"error":"Internal error","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:20"}
+{"error":"Service down","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:40:21"}
+{"error":"Wrap failed","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:22"}
+{"error":"Invalid key","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:22"}
+{"error":"Service unavailable","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:22"}
+{"error":"Network error","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:40:22"}
+{"error":"Internal error","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:22"}
+{"level":"warn","message":"Authentication failed: Token missing","service":"ehr-backend","timestamp":"2025-12-15 23:40:59"}
+{"error":"Invalid token","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:59"}
+{"error":"Token expired","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:40:59"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Patient","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59","userId":"user123"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59","userId":"user123"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59","userId":"user123","userRole":"Admin"}
+{"level":"info","message":"Authorization check","requiredRoles":["Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59","userId":"user123","userRole":"Provider"}
+{"level":"info","message":"Authorization check","requiredRoles":["Manager"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59","userId":"user123","userRole":"Manager"}
+{"level":"info","message":"Authorization check","requiredRoles":["Employee"],"service":"ehr-backend","timestamp":"2025-12-15 23:40:59","userId":"user123","userRole":"Employee"}
+{"level":"info","message":"OpenBao connection established","service":"ehr-backend","timestamp":"2025-12-15 23:41:00"}
+{"error":"Connection refused","level":"warn","message":"OpenBao connection attempt 1/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:00"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-15 23:41:00"}
+{"error":"Connection refused","level":"warn","message":"OpenBao connection attempt 2/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:01"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-15 23:41:01"}
+{"error":"Connection refused","level":"warn","message":"OpenBao connection attempt 3/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:03"}
+{"error":"Connection refused","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:41:03"}
+{"level":"warn","message":"Application will continue but crypto operations will fail","service":"ehr-backend","timestamp":"2025-12-15 23:41:03"}
+{"error":"Network error","level":"warn","message":"OpenBao connection attempt 1/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:03"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-15 23:41:03"}
+{"error":"Network error","level":"warn","message":"OpenBao connection attempt 2/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:04"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-15 23:41:04"}
+{"error":"Network error","level":"warn","message":"OpenBao connection attempt 3/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:06"}
+{"error":"Network error","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:41:06"}
+{"level":"warn","message":"Application will continue but crypto operations will fail","service":"ehr-backend","timestamp":"2025-12-15 23:41:06"}
+{"level":"info","message":"OpenBao connection established","service":"ehr-backend","timestamp":"2025-12-15 23:41:06"}
+{"level":"info","message":"AppRole authentication successful","service":"ehr-backend","timestamp":"2025-12-15 23:41:06"}
+{"error":"Invalid credentials","level":"error","message":"AppRole authentication failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:06"}
+{"error":"Connection timeout","level":"warn","message":"OpenBao connection attempt 1/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:07"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-15 23:41:07"}
+{"error":"Connection timeout","level":"warn","message":"OpenBao connection attempt 2/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:08"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-15 23:41:08"}
+{"error":"Connection timeout","level":"warn","message":"OpenBao connection attempt 3/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:10"}
+{"error":"Connection timeout","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:41:10"}
+{"level":"warn","message":"Application will continue but crypto operations will fail","service":"ehr-backend","timestamp":"2025-12-15 23:41:10"}
+{"level":"info","message":"OpenBao connection established","service":"ehr-backend","timestamp":"2025-12-15 23:41:10"}
+{"error":"Service unavailable","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:11"}
+{"error":"Encryption failed","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:11"}
+{"error":"Invalid ciphertext","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:11"}
+{"error":"Invalid format","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:12"}
+{"error":"Re-encryption failed","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:12"}
+{"error":"Decryption failed","level":"error","message":"Re-encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:12"}
+{"error":"Network timeout","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:12"}
+{"error":"Internal error","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:12"}
+{"error":"Service down","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:41:13"}
+{"error":"Wrap failed","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:13"}
+{"error":"Invalid key","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:14"}
+{"error":"Service unavailable","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:14"}
+{"error":"Network error","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:41:14"}
+{"error":"Internal error","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:14"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:15"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:15"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:15"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:16"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:16"}
+{"level":"info","message":"OpenBao connection established","service":"ehr-backend","timestamp":"2025-12-15 23:41:24"}
+{"error":"Connection refused","level":"warn","message":"OpenBao connection attempt 1/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:24"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-15 23:41:24"}
+{"error":"Connection refused","level":"warn","message":"OpenBao connection attempt 2/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:25"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-15 23:41:25"}
+{"error":"Connection refused","level":"warn","message":"OpenBao connection attempt 3/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:27"}
+{"error":"Connection refused","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:41:27"}
+{"level":"warn","message":"Application will continue but crypto operations will fail","service":"ehr-backend","timestamp":"2025-12-15 23:41:27"}
+{"error":"Network error","level":"warn","message":"OpenBao connection attempt 1/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:27"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-15 23:41:27"}
+{"error":"Network error","level":"warn","message":"OpenBao connection attempt 2/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:28"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-15 23:41:28"}
+{"error":"Network error","level":"warn","message":"OpenBao connection attempt 3/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:30"}
+{"error":"Network error","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:41:30"}
+{"level":"warn","message":"Application will continue but crypto operations will fail","service":"ehr-backend","timestamp":"2025-12-15 23:41:30"}
+{"level":"info","message":"OpenBao connection established","service":"ehr-backend","timestamp":"2025-12-15 23:41:30"}
+{"level":"info","message":"AppRole authentication successful","service":"ehr-backend","timestamp":"2025-12-15 23:41:30"}
+{"error":"Invalid credentials","level":"error","message":"AppRole authentication failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:30"}
+{"error":"Connection timeout","level":"warn","message":"OpenBao connection attempt 1/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:31"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-15 23:41:31"}
+{"error":"Connection timeout","level":"warn","message":"OpenBao connection attempt 2/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:32"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-15 23:41:32"}
+{"error":"Connection timeout","level":"warn","message":"OpenBao connection attempt 3/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:34"}
+{"error":"Connection timeout","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:41:34"}
+{"level":"warn","message":"Application will continue but crypto operations will fail","service":"ehr-backend","timestamp":"2025-12-15 23:41:34"}
+{"level":"info","message":"OpenBao connection established","service":"ehr-backend","timestamp":"2025-12-15 23:41:34"}
+{"error":"Service unavailable","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:35"}
+{"error":"Encryption failed","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:35"}
+{"error":"Invalid ciphertext","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:36"}
+{"error":"Invalid format","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:36"}
+{"error":"Re-encryption failed","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:36"}
+{"error":"Decryption failed","level":"error","message":"Re-encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:36"}
+{"error":"Network timeout","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:36"}
+{"error":"Internal error","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:36"}
+{"error":"Service down","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:41:37"}
+{"error":"Wrap failed","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:38"}
+{"error":"Invalid key","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:38"}
+{"error":"Service unavailable","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:38"}
+{"error":"Network error","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:41:38"}
+{"error":"Internal error","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:38"}
+{"level":"warn","message":"Authentication failed: Token missing","service":"ehr-backend","timestamp":"2025-12-15 23:41:39"}
+{"error":"Invalid token","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:39"}
+{"error":"Token expired","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:41:39"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Patient","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39","userId":"user123"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39","userId":"user123"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39","userId":"user123","userRole":"Admin"}
+{"level":"info","message":"Authorization check","requiredRoles":["Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39","userId":"user123","userRole":"Provider"}
+{"level":"info","message":"Authorization check","requiredRoles":["Manager"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39","userId":"user123","userRole":"Manager"}
+{"level":"info","message":"Authorization check","requiredRoles":["Employee"],"service":"ehr-backend","timestamp":"2025-12-15 23:41:39","userId":"user123","userRole":"Employee"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:40"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:40"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:40"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:41"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:41:41"}
+{"level":"info","message":"OpenBao connection established","service":"ehr-backend","timestamp":"2025-12-15 23:43:10"}
+{"error":"Connection refused","level":"warn","message":"OpenBao connection attempt 1/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:10"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-15 23:43:10"}
+{"error":"Connection refused","level":"warn","message":"OpenBao connection attempt 2/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:11"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-15 23:43:11"}
+{"error":"Connection refused","level":"warn","message":"OpenBao connection attempt 3/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:13"}
+{"error":"Connection refused","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:43:13"}
+{"level":"warn","message":"Application will continue but crypto operations will fail","service":"ehr-backend","timestamp":"2025-12-15 23:43:13"}
+{"error":"Network error","level":"warn","message":"OpenBao connection attempt 1/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:13"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-15 23:43:13"}
+{"error":"Network error","level":"warn","message":"OpenBao connection attempt 2/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:14"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-15 23:43:14"}
+{"error":"Network error","level":"warn","message":"OpenBao connection attempt 3/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:16"}
+{"error":"Network error","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:43:16"}
+{"level":"warn","message":"Application will continue but crypto operations will fail","service":"ehr-backend","timestamp":"2025-12-15 23:43:16"}
+{"level":"info","message":"OpenBao connection established","service":"ehr-backend","timestamp":"2025-12-15 23:43:16"}
+{"level":"info","message":"AppRole authentication successful","service":"ehr-backend","timestamp":"2025-12-15 23:43:16"}
+{"error":"Invalid credentials","level":"error","message":"AppRole authentication failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:16"}
+{"error":"Connection timeout","level":"warn","message":"OpenBao connection attempt 1/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:17"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-15 23:43:17"}
+{"error":"Connection timeout","level":"warn","message":"OpenBao connection attempt 2/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:18"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-15 23:43:18"}
+{"error":"Connection timeout","level":"warn","message":"OpenBao connection attempt 3/3 failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:20"}
+{"error":"Connection timeout","level":"error","message":"OpenBao connection failed after all retries","service":"ehr-backend","timestamp":"2025-12-15 23:43:20"}
+{"level":"warn","message":"Application will continue but crypto operations will fail","service":"ehr-backend","timestamp":"2025-12-15 23:43:20"}
+{"level":"info","message":"OpenBao connection established","service":"ehr-backend","timestamp":"2025-12-15 23:43:20"}
+{"error":"Service unavailable","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:21"}
+{"error":"Encryption failed","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:21"}
+{"error":"Invalid ciphertext","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:21"}
+{"error":"Invalid format","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:21"}
+{"error":"Re-encryption failed","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:22"}
+{"error":"Decryption failed","level":"error","message":"Re-encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:22"}
+{"error":"Network timeout","level":"error","message":"Data key generation failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:22"}
+{"error":"Internal error","level":"error","message":"Encryption failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:22"}
+{"error":"Service down","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:43:23"}
+{"error":"Wrap failed","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:23"}
+{"error":"Invalid key","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:23"}
+{"error":"Service unavailable","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:23"}
+{"error":"Network error","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-15 23:43:24"}
+{"error":"Internal error","level":"error","message":"Key wrapping failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:24"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:43:24"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:43:24"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:43:24"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:43:25"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:43:25"}
+{"level":"warn","message":"Authentication failed: Token missing","service":"ehr-backend","timestamp":"2025-12-15 23:43:26"}
+{"error":"Invalid token","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:26"}
+{"error":"Token expired","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:43:26"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Patient","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26","userId":"user123"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26","userId":"user123"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26","userId":"user123","userRole":"Admin"}
+{"level":"info","message":"Authorization check","requiredRoles":["Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26","userId":"user123","userRole":"Provider"}
+{"level":"info","message":"Authorization check","requiredRoles":["Manager"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26","userId":"user123","userRole":"Manager"}
+{"level":"info","message":"Authorization check","requiredRoles":["Employee"],"service":"ehr-backend","timestamp":"2025-12-15 23:43:26","userId":"user123","userRole":"Employee"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:53:22"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:53:22"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:53:22"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:53:23"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:53:23"}
+{"level":"warn","message":"Authentication failed: Token missing","service":"ehr-backend","timestamp":"2025-12-15 23:53:24"}
+{"error":"Invalid token","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:53:24"}
+{"error":"Token expired","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:53:24"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Patient","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24","userId":"user123"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24","userId":"user123"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24","userId":"user123","userRole":"Admin"}
+{"level":"info","message":"Authorization check","requiredRoles":["Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24","userId":"user123","userRole":"Provider"}
+{"level":"info","message":"Authorization check","requiredRoles":["Manager"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24","userId":"user123","userRole":"Manager"}
+{"level":"info","message":"Authorization check","requiredRoles":["Employee"],"service":"ehr-backend","timestamp":"2025-12-15 23:53:24","userId":"user123","userRole":"Employee"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:10"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:10"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:10"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:11"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:11"}
+{"level":"warn","message":"Authentication failed: Token missing","service":"ehr-backend","timestamp":"2025-12-15 23:54:12"}
+{"error":"Invalid token","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:54:12"}
+{"error":"Token expired","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:54:12"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Patient","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12","userId":"user123"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12","userId":"user123"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12","userId":"user123","userRole":"Admin"}
+{"level":"info","message":"Authorization check","requiredRoles":["Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12","userId":"user123","userRole":"Provider"}
+{"level":"info","message":"Authorization check","requiredRoles":["Manager"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12","userId":"user123","userRole":"Manager"}
+{"level":"info","message":"Authorization check","requiredRoles":["Employee"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:12","userId":"user123","userRole":"Employee"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:46"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:46"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:46"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:47"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:54:47"}
+{"level":"warn","message":"Authentication failed: Token missing","service":"ehr-backend","timestamp":"2025-12-15 23:54:48"}
+{"error":"Invalid token","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:54:48"}
+{"error":"Token expired","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:54:48"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Patient","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48","userId":"user123"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48","userId":"user123"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48","userId":"user123","userRole":"Admin"}
+{"level":"info","message":"Authorization check","requiredRoles":["Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48","userId":"user123","userRole":"Provider"}
+{"level":"info","message":"Authorization check","requiredRoles":["Manager"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48","userId":"user123","userRole":"Manager"}
+{"level":"info","message":"Authorization check","requiredRoles":["Employee"],"service":"ehr-backend","timestamp":"2025-12-15 23:54:48","userId":"user123","userRole":"Employee"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:55:18"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:55:18"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:55:18"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:55:19"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:55:19"}
+{"level":"warn","message":"Authentication failed: Token missing","service":"ehr-backend","timestamp":"2025-12-15 23:55:20"}
+{"error":"Invalid token","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:55:20"}
+{"error":"Token expired","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:55:20"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Patient","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20","userId":"user123"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20","userId":"user123"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20","userId":"user123","userRole":"Admin"}
+{"level":"info","message":"Authorization check","requiredRoles":["Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20","userId":"user123","userRole":"Provider"}
+{"level":"info","message":"Authorization check","requiredRoles":["Manager"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20","userId":"user123","userRole":"Manager"}
+{"level":"info","message":"Authorization check","requiredRoles":["Employee"],"service":"ehr-backend","timestamp":"2025-12-15 23:55:20","userId":"user123","userRole":"Employee"}
+{"error":"Cannot read properties of undefined (reading 'ciphertext')","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:56:30"}
+{"error":"Encryption service down","fields":["diagnosis"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:56:30"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitEncryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:56:30"}
+{"error":"Decryption service down","fields":["diagnosis"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:56:31"}
+{"error":"Second field failed","fields":["diagnosis","notes"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-15 23:56:31"}
+{"level":"warn","message":"Authentication failed: Token missing","service":"ehr-backend","timestamp":"2025-12-15 23:56:31"}
+{"error":"Invalid token","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:56:31"}
+{"error":"Token expired","level":"warn","message":"Authentication failed: JWT verification failed","service":"ehr-backend","timestamp":"2025-12-15 23:56:31"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Patient","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31","userId":"user123","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Admin","Manager","Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31","userId":"user123","userRole":"Patient"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31"}
+{"level":"info","message":"Authorization check","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31","userId":"user123"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","requiredRoles":["Patient"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31","userId":"user123"}
+{"level":"info","message":"Authorization check","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31","userId":"user123","userRole":"Admin"}
+{"level":"info","message":"Authorization check","requiredRoles":["Provider"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31","userId":"user123","userRole":"Provider"}
+{"level":"info","message":"Authorization check","requiredRoles":["Manager"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31","userId":"user123","userRole":"Manager"}
+{"level":"info","message":"Authorization check","requiredRoles":["Employee"],"service":"ehr-backend","timestamp":"2025-12-15 23:56:31","userId":"user123","userRole":"Employee"}

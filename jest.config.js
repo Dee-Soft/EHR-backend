@@ -4,8 +4,8 @@ module.exports = {
 
   // Test match patterns
   testMatch: [
-    '**/__tests__/**/*.test.js',
-    '**/__tests__/**/*.spec.js',
+    '**/test/**/*.test.js',
+    '**/test/**/*.spec.js',
     '**/*.test.js',
     '**/*.spec.js'
   ],
@@ -19,7 +19,6 @@ module.exports = {
     'models/**/*.js',
     '!**/node_modules/**',
     '!**/test/**',
-    '!**/__tests__/**',
     '!**/coverage/**',
     '!**/scripts/**',
     '!**/config/**',
@@ -37,7 +36,7 @@ module.exports = {
   },
 
   // Setup files
-  setupFilesAfterEnv: ['<rootDir>/__tests__/setup/testSetup.js'],
+  setupFilesAfterEnv: ['<rootDir>/test/setup/testSetup.js'],
 
   // Coverage reporters
   coverageReporters: ['text', 'lcov', 'html'],
