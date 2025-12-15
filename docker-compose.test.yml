@@ -4,29 +4,11 @@ version: '3.8'
 # Usage: docker-compose -f docker-compose.test.yml up --abort-on-container-exit
 
 services:
-  openbao-test:
-    image: openbao/openbao:latest
-    container_name: ehr-openbao-test
-    environment:
-      OPENBAO_DEV_ROOT_TOKEN_ID: test-token
-      OPENBAO_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
-    ports:
-      - "8200:8200"
-    networks:
-      - ehr-test
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8200/v1/sys/health"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-
   mongodb-test:
     image: mongo:latest
     container_name: ehr-mongodb-test
     environment:
       MONGO_INITDB_DATABASE: ehr-test
-    ports:
-      - "27017:27017"
     networks:
       - ehr-test
     healthcheck:
@@ -43,15 +25,9 @@ services:
     depends_on:
       mongodb-test:
         condition: service_healthy
-      openbao-test:
-        condition: service_healthy
     environment:
       - NODE_ENV=test
       - MONGO_URI=mongodb://mongodb-test:27017/ehr-test
-      - OPENBAO_ADDR=http://openbao-test:8200
-      - OPENBAO_TOKEN=test-token
-      - OPENBAO_TRANSIT_AES_KEY=ehr-aes-master
-      - OPENBAO_TRANSIT_RSA_KEY=ehr-rsa-exchange
       - JWT_SECRET=test-jwt-secret-key-for-testing-only
     networks:
       - ehr-test

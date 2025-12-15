@@ -1,66 +1,63 @@
 version: '3.8'
 
+# Development compose:
+# - Runs ehr-server + mongoDB
+# - Exposes API on localhost:3001 for Postman/httpie
+# - Connects to OpenBao running outside this compose via host.docker.internal:8200
 services:
   mongoDB:
     image: mongo:latest
-    container_name: ehr-mongodb
+    container_name: ehr-mongodb-dev
     ports:
       - "27017:27017"
     networks:
-      - ehr-backend
+      - ehr-dev
     volumes:
-      - mongo-data:/data/db
+      - mongo-dev-data:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
       start_period: 20s
     restart: unless-stopped
 
   ehr-server:
-    build: 
+    build:
       context: .
-      dockerfile: Dockerfile
-    container_name: ehr-server
+      dockerfile: Dockerfile.dev
+    container_name: ehr-server-dev
     ports:
       - "3001:3001"
     networks:
-      - ehr-backend
+      - ehr-dev
     depends_on:
       mongoDB:
         condition: service_healthy
     environment:
-      - NODE_ENV=${NODE_ENV:-production}
+      - NODE_ENV=development
       - PORT=3001
       - MONGO_URI=mongodb://mongoDB:27017/ehr-system
-      # OpenBao runs outside this compose. From inside Docker, the host is reachable
-      # at host.docker.internal (macOS/Windows) or via host-gateway mapping (Linux).
       - OPENBAO_ADDR=${OPENBAO_ADDR:-http://host.docker.internal:8200}
       - OPENBAO_TOKEN=${OPENBAO_TOKEN}
-      - OPENBAO_TRANSIT_AES_KEY=ehr-aes-master
-      - OPENBAO_TRANSIT_RSA_KEY=ehr-rsa-exchange
-      - JWT_SECRET=${JWT_SECRET}
+      - OPENBAO_TRANSIT_AES_KEY=${OPENBAO_TRANSIT_AES_KEY:-ehr-aes-master}
+      - OPENBAO_TRANSIT_RSA_KEY=${OPENBAO_TRANSIT_RSA_KEY:-ehr-rsa-exchange}
+      - JWT_SECRET=${JWT_SECRET:-dev-jwt-secret-change-me}
       - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
-      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_LEVEL=${LOG_LEVEL:-debug}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
+      - .:/app
+      - /app/node_modules
       - ./logs:/app/logs
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3001/api/health/live"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
     restart: unless-stopped
 
 networks:
-  ehr-backend:
+  ehr-dev:
     driver: bridge
 
 volumes:
-  mongo-data:
+  mongo-dev-data:
     driver: local
-  logs:
-    driver: local
+

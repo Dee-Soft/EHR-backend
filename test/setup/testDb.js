@@ -10,6 +10,18 @@ async function connect() {
   // Close any existing connections
   await mongoose.disconnect();
 
+  // Prefer an externally-provided MongoDB (e.g., docker-compose mongodb-test)
+  // to avoid mongodb-memory-server downloading binaries in containerized runs.
+  const externalMongoUri = process.env.MONGO_URI;
+  if (externalMongoUri) {
+    mongoServer = undefined;
+    await mongoose.connect(externalMongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    return;
+  }
+
   mongoServer = await MongoMemoryServer.create();
   const mongoUri = mongoServer.getUri();
 

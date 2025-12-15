@@ -145,25 +145,46 @@ The server will start on `http://localhost:3001`
 
 ### Using Docker Compose
 
-1. **Start all services**
-   ```bash
-   docker-compose up -d
-   ```
+#### 1) Start OpenBao (separately)
 
-   This starts:
-   - EHR Backend Server (port 3001)
-   - MongoDB (port 27017)
-   - OpenBao (port 8200)
+OpenBao is intended to run **outside** this backend compose (separate Docker project/network). If you are using the provided secret-management stack, see [`Dee-Soft/EHR-secret-management`](https://github.com/Dee-Soft/EHR-secret-management).
 
-2. **View logs**
-   ```bash
-   docker-compose logs -f ehr-server
-   ```
+For local/dev OpenBao, make the dev token stable by setting a fixed dev root token (example):
 
-3. **Stop services**
-   ```bash
-   docker-compose down
-   ```
+```bash
+# In your OpenBao compose/project
+export OPENBAO_DEV_ROOT_TOKEN_ID="dev-openbao-token"
+```
+
+#### 2) Start backend + MongoDB (this repo)
+
+This repo’s default compose starts only:
+- EHR Backend Server (port 3001)
+- MongoDB (port 27017)
+
+```bash
+docker compose up -d --build
+```
+
+**Important networking note:** inside Docker, `localhost` refers to the container itself. To reach OpenBao running on your laptop at `http://localhost:8200`, the backend container must use `http://host.docker.internal:8200` (macOS/Windows). This compose config already defaults to that.
+
+#### 3) Development compose (recommended for Postman/httpie)
+
+Use `docker-compose.dev.yml` for live reload (nodemon) and easy manual endpoint testing:
+
+```bash
+# Provide the OpenBao token from your separate OpenBao stack
+export OPENBAO_TOKEN="dev-openbao-token"
+
+docker compose -f docker-compose.dev.yml up --build
+```
+
+#### 4) View logs / stop services
+
+```bash
+docker compose logs -f ehr-server
+docker compose down
+```
 
 ### Production Deployment
 
@@ -178,7 +199,7 @@ docker-compose --env-file .env.production up -d
 ### Run Tests in Docker
 
 ```bash
-docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+docker compose -f docker-compose.test.yml up --build --abort-on-container-exit
 ```
 
 ## Environment Variables
@@ -190,7 +211,7 @@ docker-compose -f docker-compose.test.yml up --abort-on-container-exit
 | `NODE_ENV` | Environment | `production` |
 | `PORT` | Server port | `3001` |
 | `MONGO_URI` | MongoDB connection string | `mongodb://localhost:27017/ehr` |
-| `OPENBAO_ADDR` | OpenBao address | `http://localhost:8200` |
+| `OPENBAO_ADDR` | OpenBao address | `http://localhost:8200` (host) / `http://host.docker.internal:8200` (from inside Docker) |
 | `OPENBAO_TOKEN` | OpenBao token | `s.xxxxx` |
 | `JWT_SECRET` | JWT signing secret | `your-secret-key` |
 | `FRONTEND_URL` | Frontend URL for CORS | `http://localhost:3000` |

@@ -1,0 +1,20 @@
+# Development Dockerfile
+# - Installs dev dependencies (nodemon)
+# - Intended for use with docker-compose.dev.yml (volume-mounted source)
+
+FROM node:24-alpine
+
+WORKDIR /app
+
+# Install dependencies (including dev deps)
+COPY package*.json ./
+RUN npm ci
+
+# Copy source (compose will volume-mount over /app for live reload)
+COPY . .
+
+EXPOSE 3001
+
+CMD ["npm", "run", "dev"]
+
+
