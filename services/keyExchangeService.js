@@ -24,7 +24,7 @@ class KeyExchangeService {
       const latestVersion = result.data.latest_version;
       
       return {
-        publicKey: result.data.keys[latestVersion].public_key,
+        publicKey: result.data.keys[latestVersion].public_key.trim(),
         keyVersion: latestVersion,
         algorithm: 'RSA-2048',
         validUntil: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours

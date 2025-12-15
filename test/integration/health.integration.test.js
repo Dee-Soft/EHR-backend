@@ -38,6 +38,16 @@ describe('Integration: Health Endpoints', () => {
     await connect();
   });
 
+  beforeEach(() => {
+    // Reset the mock to default healthy state before each test
+    openbaoConfig.healthCheck.mockResolvedValue({
+      healthy: true,
+      initialized: true,
+      sealed: false,
+      version: '2.0.0-alpha1'
+    });
+  });
+
   afterAll(async () => {
     await closeDatabase();
   });

@@ -18,8 +18,11 @@ exports.getHealth = async (req, res) => {
     const openbaoHealth = await openbaoConfig.healthCheck();
     const mongoHealth = mongoose.connection.readyState === 1;
 
+    // Defensive check for openbaoHealth structure
+    const isOpenbaoHealthy = openbaoHealth && openbaoHealth.healthy === true;
+
     const health = {
-      status: openbaoHealth.healthy && mongoHealth ? 'healthy' : 'unhealthy',
+      status: isOpenbaoHealthy && mongoHealth ? 'healthy' : 'unhealthy',
       timestamp: new Date().toISOString(),
       services: {
         api: {
@@ -34,7 +37,13 @@ exports.getHealth = async (req, res) => {
           host: mongoose.connection.host,
           name: mongoose.connection.name
         },
-        openbao: openbaoHealth
+        openbao: {
+          status: openbaoHealth?.healthy ? 'healthy' : 'unhealthy',
+          healthy: openbaoHealth?.healthy || false,
+          initialized: openbaoHealth?.initialized || false,
+          sealed: openbaoHealth?.sealed ?? true,
+          version: openbaoHealth?.version || 'unknown'
+        }
       }
     };
 

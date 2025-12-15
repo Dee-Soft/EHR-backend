@@ -7,6 +7,14 @@ const AuditLog = require('../../models/AuditLog');
 // Import app - will be available after server.js exports it
 let app;
 
+// Helper function to extract cookie value from set-cookie header
+const extractCookie = (setCookieHeader) => {
+  if (!setCookieHeader) return null;
+  const cookieString = Array.isArray(setCookieHeader) ? setCookieHeader[0] : setCookieHeader;
+  // Extract just the name=value part before the first semicolon
+  return cookieString.split(';')[0];
+};
+
 describe('Integration: Authentication', () => {
   beforeAll(async () => {
     await connect();
@@ -104,7 +112,8 @@ describe('Integration: Authentication', () => {
           password: plainPassword
         });
       
-      expect(response.status).toBe(500);
+      expect(response.status).toBe(401);
+      expect(response.body.message).toBe('Invalid credentials');
     });
     
     test('should reject login with missing password', async () => {
@@ -151,7 +160,7 @@ describe('Integration: Authentication', () => {
           password: plainPassword
         });
       
-      const cookies = loginResponse.headers['set-cookie'];
+      const cookies = extractCookie(loginResponse.headers['set-cookie']);
       
       // Act: Get current user
       const response = await request(app)
@@ -194,7 +203,7 @@ describe('Integration: Authentication', () => {
           password: plainPassword
         });
       
-      const cookies = loginResponse.headers['set-cookie'];
+      const cookies = extractCookie(loginResponse.headers['set-cookie']);
       
       // Act: Logout
       const response = await request(app)
@@ -234,7 +243,7 @@ describe('Integration: Authentication', () => {
         });
       expect(loginResponse.status).toBe(200);
       
-      const cookies = loginResponse.headers['set-cookie'];
+      const cookies = extractCookie(loginResponse.headers['set-cookie']);
       
       // Step 3: Access protected route
       const meResponse = await request(app)
@@ -251,7 +260,7 @@ describe('Integration: Authentication', () => {
       // Step 5: Try to access protected route after logout (should fail)
       const afterLogoutResponse = await request(app)
         .get('/api/auth/me')
-        .set('Cookie', logoutResponse.headers['set-cookie']);
+        .set('Cookie', extractCookie(logoutResponse.headers['set-cookie']));
       expect(afterLogoutResponse.status).toBe(401);
     });
   });

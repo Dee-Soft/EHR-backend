@@ -245,18 +245,19 @@ exports.getMyRecord = async (req, res) => {
   const { role, id: requesterId } = req.user;
   
   try {
+    // Check role FIRST before querying database
+    if (role !== 'Patient') {
+      return res.status(403).json({ 
+        message: 'Only patients can view their own records' 
+      });
+    }
+
     const records = await PatientRecord.find({ patient: requesterId })
       .populate('patient');
     
     if (!records || records.length === 0) {
       return res.status(404).json({ 
         message: 'No records found for this patient' 
-      });
-    }
-
-    if (role !== 'Patient') {
-      return res.status(403).json({ 
-        message: 'Only patients can view their own records' 
       });
     }
 

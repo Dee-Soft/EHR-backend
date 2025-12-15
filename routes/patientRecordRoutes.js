@@ -16,7 +16,7 @@ router.post('/', authMiddleware, createRecord);
 router.get('/', authMiddleware, getAllRecords);
 
 // Get my patient record
-router.get('/mine', authMiddleware, getMyRecord);
+router.get('/my-records', authMiddleware, getMyRecord);
 
 // Get a patient record by ID
 router.get('/:id', authMiddleware, getRecordById);

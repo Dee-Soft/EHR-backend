@@ -38,7 +38,7 @@ exports.login = async (req, res) => {
         });
 
         await AuditLog.create({
-          action: 'LOGIN',
+          action: 'login',
           actorId: user._id,
           targetId: user._id,
           targetType: 'User',

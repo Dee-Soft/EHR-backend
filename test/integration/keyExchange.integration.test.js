@@ -5,10 +5,10 @@
 
 const request = require('supertest');
 const { connect, closeDatabase, clearDatabase } = require('../setup/testDb');
-const { createMockVaultClient } = require('../setup/mocks/openbaoMock');
 
 // Mock OpenBao before requiring app
 jest.mock('../../config/openbao.config', () => {
+  const { createMockVaultClient } = require('../setup/mocks/openbaoMock');
   const mockVault = createMockVaultClient();
   return {
     getTransitClient: () => mockVault,
@@ -18,6 +18,7 @@ jest.mock('../../config/openbao.config', () => {
     },
     init: jest.fn().mockResolvedValue(true),
     initialized: true,
+    healthCheck: jest.fn().mockResolvedValue({ healthy: true, initialized: true, sealed: false }),
     validateConnection: jest.fn().mockResolvedValue(true)
   };
 });

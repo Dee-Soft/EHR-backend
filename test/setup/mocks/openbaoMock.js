@@ -106,9 +106,9 @@ class OpenBaoMock {
         throw new Error('invalid ciphertext format');
       }
 
-      // Extract mock plaintext (for testing, we'll reverse the encryption)
-      // In real tests, you'd track encrypted data to return correct plaintext
-      const mockPlaintext = Buffer.from('{"test":"data"}').toString('base64');
+      // Return a proper 32-byte AES key in base64 format
+      // This simulates unwrapping an RSA-encrypted AES key
+      const mockPlaintext = crypto.randomBytes(32).toString('base64');
       return {
         data: {
           plaintext: mockPlaintext

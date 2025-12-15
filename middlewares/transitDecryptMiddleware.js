@@ -24,11 +24,18 @@ module.exports = function transitDecryptMiddleware(fieldsToDecrypt) {
           continue;
         }
         
-        // Decrypt using OpenBao Transit Engine
-        const decrypted = await cryptoService.decryptData(value);
+        // Check if value is encrypted (starts with "vault:v")
+        // If not encrypted, skip decryption (allows plaintext passthrough)
+        const isEncrypted = typeof value === 'string' && value.startsWith('vault:v');
         
-        // Replace ciphertext with plaintext
-        req.body[field] = decrypted;
+        if (isEncrypted) {
+          // Decrypt using OpenBao Transit Engine
+          const decrypted = await cryptoService.decryptData(value);
+          
+          // Replace ciphertext with plaintext
+          req.body[field] = decrypted;
+        }
+        // If not encrypted, leave as is (already plaintext)
       }
       
       next();

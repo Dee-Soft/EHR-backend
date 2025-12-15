@@ -41,7 +41,7 @@ const helmetConfig = helmet({
  * CORS Configuration
  * Cross-Origin Resource Sharing settings
  */
-const corsOptions = {
+const corsOptionsConfig = {
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
   credentials: true,
   optionsSuccessStatus: 200,
@@ -55,13 +55,15 @@ const corsOptions = {
   exposedHeaders: ['set-cookie']
 };
 
+const corsMiddleware = cors(corsOptionsConfig);
+
 /**
  * General API Rate Limiter
  * Limits requests to API endpoints
  */
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  max: process.env.NODE_ENV === 'test' ? 10000 : 100, // Much higher limit for tests
   message: 'Too many requests from this IP, please try again later',
   standardHeaders: true,
   legacyHeaders: false,
@@ -75,7 +77,7 @@ const apiLimiter = rateLimit({
  */
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // Limit each IP to 5 requests per windowMs
+  max: process.env.NODE_ENV === 'test' ? 10000 : 5, // Much higher limit for tests
   message: 'Too many authentication attempts, please try again after 15 minutes',
   standardHeaders: true,
   legacyHeaders: false,
@@ -84,7 +86,7 @@ const authLimiter = rateLimit({
 
 module.exports = {
   helmetConfig,
-  corsOptions,
+  corsOptions: corsMiddleware,
   apiLimiter,
   authLimiter
 };

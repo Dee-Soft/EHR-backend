@@ -33,7 +33,7 @@ describe('Integration: Authorization/RBAC', () => {
 
   beforeAll(async () => {
     await connect();
-  });
+  }, 60000); // 60 second timeout for MongoDB Memory Server initialization
 
   beforeEach(async () => {
     await clearDatabase();

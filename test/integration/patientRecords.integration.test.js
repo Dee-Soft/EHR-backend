@@ -29,6 +29,14 @@ jest.mock('../../config/openbao.config', () => {
 
 const app = require('../../server');
 
+// Helper function to extract cookie value from set-cookie header
+const extractCookie = (setCookieHeader) => {
+  if (!setCookieHeader) return null;
+  const cookieString = Array.isArray(setCookieHeader) ? setCookieHeader[0] : setCookieHeader;
+  // Extract just the name=value part before the first semicolon
+  return cookieString.split(';')[0];
+};
+
 describe('Integration: Patient Records', () => {
   let adminToken, managerToken, providerToken, patientToken;
   let adminUser, managerUser, providerUser, patientUser, assignedPatientUser;
@@ -61,22 +69,22 @@ describe('Integration: Patient Records', () => {
     const adminLogin = await request(app)
       .post('/api/auth/login')
       .send({ email: testUsers.admin.email, password: plainPassword });
-    adminToken = adminLogin.headers['set-cookie'][0];
+    adminToken = extractCookie(adminLogin.headers['set-cookie']);
 
     const managerLogin = await request(app)
       .post('/api/auth/login')
       .send({ email: testUsers.manager.email, password: plainPassword });
-    managerToken = managerLogin.headers['set-cookie'][0];
+    managerToken = extractCookie(managerLogin.headers['set-cookie']);
 
     const providerLogin = await request(app)
       .post('/api/auth/login')
       .send({ email: testUsers.provider.email, password: plainPassword });
-    providerToken = providerLogin.headers['set-cookie'][0];
+    providerToken = extractCookie(providerLogin.headers['set-cookie']);
 
     const patientLogin = await request(app)
       .post('/api/auth/login')
       .send({ email: assignedPatientUser.email, password: plainPassword });
-    patientToken = patientLogin.headers['set-cookie'][0];
+    patientToken = extractCookie(patientLogin.headers['set-cookie']);
   });
 
   afterEach(async () => {
@@ -88,12 +96,19 @@ describe('Integration: Patient Records', () => {
   });
 
   describe('POST /api/patient-records - Create Record', () => {
-    const recordData = {
+    // Helper to get today's date in local timezone (same as controller logic)
+    const getTodayDate = () => {
+      const today = new Date();
+      const tzOffsetMs = today.getTimezoneOffset() * 60 * 1000;
+      return new Date(today.getTime() - tzOffsetMs).toISOString().split('T')[0];
+    };
+
+    const getRecordData = () => ({
       diagnosis: 'Hypertension',
       notes: 'Patient stable, continue medication',
       medications: ['Lisinopril 10mg'],
-      visitDate: new Date().toISOString().split('T')[0]
-    };
+      visitDate: getTodayDate()
+    });
 
     const mockWrappedKey = 'vault:v1:' + crypto.randomBytes(32).toString('base64');
     const mockPublicKey = Buffer.from('mock-public-key').toString('base64');
@@ -105,7 +120,7 @@ describe('Integration: Patient Records', () => {
         .set('x-encrypted-aes-key', mockWrappedKey)
         .set('x-client-public-key', mockPublicKey)
         .send({
-          ...recordData,
+          ...getRecordData(),
           patient: assignedPatientUser._id
         });
 
@@ -122,7 +137,7 @@ describe('Integration: Patient Records', () => {
         .set('x-encrypted-aes-key', mockWrappedKey)
         .set('x-client-public-key', mockPublicKey)
         .send({
-          ...recordData,
+          ...getRecordData(),
           patient: patientUser._id // Not assigned to this provider
         });
 
@@ -137,7 +152,7 @@ describe('Integration: Patient Records', () => {
         .set('x-encrypted-aes-key', mockWrappedKey)
         .set('x-client-public-key', mockPublicKey)
         .send({
-          ...recordData,
+          ...getRecordData(),
           patient: patientUser._id
         });
 
@@ -151,7 +166,7 @@ describe('Integration: Patient Records', () => {
         .set('x-encrypted-aes-key', mockWrappedKey)
         .set('x-client-public-key', mockPublicKey)
         .send({
-          ...recordData,
+          ...getRecordData(),
           patient: assignedPatientUser._id
         });
 
@@ -161,7 +176,8 @@ describe('Integration: Patient Records', () => {
     test('Should reject record with past visit date', async () => {
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
-      const pastDate = yesterday.toISOString().split('T')[0];
+      const tzOffsetMs = yesterday.getTimezoneOffset() * 60 * 1000;
+      const pastDate = new Date(yesterday.getTime() - tzOffsetMs).toISOString().split('T')[0];
 
       const response = await request(app)
         .post('/api/patient-records')
@@ -169,7 +185,7 @@ describe('Integration: Patient Records', () => {
         .set('x-encrypted-aes-key', mockWrappedKey)
         .set('x-client-public-key', mockPublicKey)
         .send({
-          ...recordData,
+          ...getRecordData(),
           patient: assignedPatientUser._id,
           visitDate: pastDate
         });
@@ -201,7 +217,7 @@ describe('Integration: Patient Records', () => {
         .set('x-encrypted-aes-key', mockWrappedKey)
         .set('x-client-public-key', mockPublicKey)
         .send({
-          ...recordData,
+          ...getRecordData(),
           patient: assignedPatientUser._id
         });
 
@@ -392,6 +408,13 @@ describe('Integration: Patient Records', () => {
   });
 
   describe('Encryption Integration', () => {
+    // Helper to get today's date in local timezone (same as controller logic)
+    const getTodayDate = () => {
+      const today = new Date();
+      const tzOffsetMs = today.getTimezoneOffset() * 60 * 1000;
+      return new Date(today.getTime() - tzOffsetMs).toISOString().split('T')[0];
+    };
+
     test('Record contains encrypted fields in vault format', async () => {
       const mockWrappedKey = 'vault:v1:' + crypto.randomBytes(32).toString('base64');
       const mockPublicKey = Buffer.from('mock-public-key').toString('base64');
@@ -406,7 +429,7 @@ describe('Integration: Patient Records', () => {
           diagnosis: 'Type 2 Diabetes',
           notes: 'Blood sugar elevated',
           medications: ['Metformin 500mg'],
-          visitDate: new Date().toISOString().split('T')[0]
+          visitDate: getTodayDate()
         });
 
       expect(response.status).toBe(201);
@@ -439,13 +462,20 @@ describe('Integration: Patient Records', () => {
   });
 
   describe('Audit Logging', () => {
+    // Helper to get today's date in local timezone (same as controller logic)
+    const getTodayDate = () => {
+      const today = new Date();
+      const tzOffsetMs = today.getTimezoneOffset() * 60 * 1000;
+      return new Date(today.getTime() - tzOffsetMs).toISOString().split('T')[0];
+    };
+
     test('Record creation creates audit log', async () => {
       const AuditLog = require('../../models/AuditLog');
       
       const mockWrappedKey = 'vault:v1:' + crypto.randomBytes(32).toString('base64');
       const mockPublicKey = Buffer.from('mock-public-key').toString('base64');
 
-      await request(app)
+      const response = await request(app)
         .post('/api/patient-records')
         .set('Cookie', providerToken)
         .set('x-encrypted-aes-key', mockWrappedKey)
@@ -455,8 +485,11 @@ describe('Integration: Patient Records', () => {
           diagnosis: 'Test',
           notes: 'Test',
           medications: ['Test'],
-          visitDate: new Date().toISOString().split('T')[0]
+          visitDate: getTodayDate()
         });
+
+      // Verify record was created successfully
+      expect(response.status).toBe(201);
 
       const auditLogs = await AuditLog.find({ action: 'CREATE_RECORD' });
       expect(auditLogs.length).toBeGreaterThan(0);
@@ -477,9 +510,12 @@ describe('Integration: Patient Records', () => {
         transitKeyVersion: 1
       });
 
-      await request(app)
+      const response = await request(app)
         .get(`/api/patient-records/${record._id}`)
         .set('Cookie', providerToken);
+
+      // Verify record was retrieved successfully
+      expect(response.status).toBe(200);
 
       const auditLogs = await AuditLog.find({ action: 'VIEW_RECORD' });
       expect(auditLogs.length).toBeGreaterThan(0);

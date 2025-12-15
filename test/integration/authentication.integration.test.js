@@ -28,6 +28,14 @@ jest.mock('../../config/openbao.config', () => {
 
 const app = require('../../server');
 
+// Helper function to extract cookie value from set-cookie header
+const extractCookie = (setCookieHeader) => {
+  if (!setCookieHeader) return null;
+  const cookieString = Array.isArray(setCookieHeader) ? setCookieHeader[0] : setCookieHeader;
+  // Extract just the name=value part before the first semicolon
+  return cookieString.split(';')[0];
+};
+
 describe('Integration: Authentication', () => {
   beforeAll(async () => {
     await connect();
@@ -130,7 +138,7 @@ describe('Integration: Authentication', () => {
 
         const cookies = response.headers['set-cookie'];
         expect(cookies).toBeDefined();
-        expect(cookies[0]).toContain('httpOnly');
+        expect(cookies[0]).toContain('HttpOnly');
         expect(cookies[0]).toContain('SameSite=Strict');
       });
     });
@@ -170,7 +178,8 @@ describe('Integration: Authentication', () => {
             password: plainPassword
           });
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(401);
+        expect(response.body.message).toBe('Invalid credentials');
       });
 
       test('should reject login with missing password', async () => {
@@ -199,7 +208,7 @@ describe('Integration: Authentication', () => {
           password: plainPassword
         });
 
-      const token = loginRes.headers['set-cookie'][0];
+      const token = extractCookie(loginRes.headers['set-cookie']);
 
       // Get current user
       const response = await request(app)
@@ -275,7 +284,7 @@ describe('Integration: Authentication', () => {
           password: plainPassword
         });
 
-      const token = loginRes.headers['set-cookie'][0];
+      const token = extractCookie(loginRes.headers['set-cookie']);
 
       // Logout
       const response = await request(app)
@@ -312,7 +321,7 @@ describe('Integration: Authentication', () => {
           password: plainPassword
         });
 
-      const token = loginRes.headers['set-cookie'][0];
+      const token = extractCookie(loginRes.headers['set-cookie']);
 
       // First authenticated request
       const req1 = await request(app)
@@ -341,7 +350,7 @@ describe('Integration: Authentication', () => {
           password: plainPassword
         });
 
-      const token = loginRes.headers['set-cookie'][0];
+      const token = extractCookie(loginRes.headers['set-cookie']);
 
       // Verify authenticated
       const authReq = await request(app)
@@ -372,7 +381,7 @@ describe('Integration: Authentication', () => {
           password: plainPassword
         });
 
-      const token = loginRes.headers['set-cookie'][0];
+      const token = extractCookie(loginRes.headers['set-cookie']);
 
       // Access admin-only endpoint
       const response = await request(app)
