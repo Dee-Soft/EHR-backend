@@ -5,6 +5,7 @@
  */
 
 const cryptoService = require('../services/openbaoCryptoService');
+const logger = require('../config/logger');
 
 /**
  * Encrypt specified fields in request body
@@ -37,7 +38,10 @@ module.exports = function transitEncryptMiddleware(fieldsToEncrypt) {
       
       next();
     } catch (error) {
-      console.error('transitEncryptMiddleware error:', error.message);
+      logger.error('transitEncryptMiddleware error', { 
+        error: error.message,
+        fields: fieldsToEncrypt
+      });
       res.status(500).json({
         message: 'Failed to encrypt fields',
         error: error.message

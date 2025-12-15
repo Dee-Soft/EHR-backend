@@ -5,12 +5,18 @@ require('dotenv').config();
 
 const User = require('../models/User');
 
+// For scripts, we can use console directly or create a simple logger
+const log = {
+  info: (msg) => console.log(`[INFO] ${msg}`),
+  error: (msg, details) => console.error(`[ERROR] ${msg}`, details || '')
+};
+
 const createAdmin = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     const exists = await User.findOne({ role: 'Admin' });
     if (exists) {
-      console.log('Admin already exists');
+      log.info('Admin already exists');
       process.exit(0);
     }
 
@@ -22,10 +28,10 @@ const createAdmin = async () => {
     });
     await admin.save(); // triggers pre-save hook to hash password
 
-    console.log('Admin created:', admin.email);
+    log.info(`Admin created: ${admin.email}`);
     process.exit(0);
   } catch (err) {
-    console.error('Failed to create admin:', err.message);
+    log.error('Failed to create admin:', err.message);
     process.exit(1);
   }
 };

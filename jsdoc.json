@@ -1,0 +1,50 @@
+{
+  "source": {
+    "include": [
+      "controllers",
+      "services",
+      "middlewares",
+      "models",
+      "utils",
+      "config"
+    ],
+    "includePattern": ".+\\.js(doc|x)?$",
+    "excludePattern": "(node_modules|test)"
+  },
+  "sourceType": "module",
+  "opts": {
+    "destination": "./docs/api",
+    "recurse": true,
+    "readme": "./README.md",
+    "template": "node_modules/better-docs"
+  },
+  "plugins": ["plugins/markdown"],
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": true,
+    "default": {
+      "staticFiles": {
+        "include": ["./docs"]
+      }
+    },
+    "better-docs": {
+      "name": "EHR Backend API",
+      "title": "EHR Backend API Documentation",
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "index.html"
+        },
+        {
+          "label": "GitHub",
+          "href": "https://github.com/yourorg/ehr-backend"
+        }
+      ]
+    }
+  },
+  "markdown": {
+    "hardwrap": false,
+    "idInHeadings": true
+  }
+}
+

@@ -5,6 +5,7 @@
  */
 
 const openbaoConfig = require('../config/openbao.config');
+const logger = require('../config/logger');
 
 class KeyExchangeService {
   constructor() {
@@ -29,7 +30,7 @@ class KeyExchangeService {
         validUntil: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours
       };
     } catch (error) {
-      console.error('Failed to get public key:', error.message);
+      logger.error('Failed to get public key', { error: error.message });
       throw new Error('Public key unavailable');
     }
   }
@@ -57,7 +58,7 @@ class KeyExchangeService {
         wrappedAt: new Date().toISOString()
       };
     } catch (error) {
-      console.error('Key wrapping failed:', error.message);
+      logger.error('Key wrapping failed', { error: error.message });
       throw new Error('Key exchange failed');
     }
   }
@@ -83,7 +84,7 @@ class KeyExchangeService {
         unwrappedAt: new Date().toISOString()
       };
     } catch (error) {
-      console.error('Key unwrapping failed:', error.message);
+      logger.error('Key unwrapping failed', { error: error.message });
       throw new Error('Invalid key material');
     }
   }

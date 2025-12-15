@@ -1,87 +1,97 @@
 require('dotenv').config();
 const express = require('express');
-const helmet = require('helmet');
-const cors = require('cors');
-const rateLimit = require('express-rate-limit');
-const connectDB = require('./config/db');
-const openbaoConfig = require('./config/openbao.config');
-
-// cron jobs auto loader
-const startAllCrons = require('./crons');
-
 const cookieParser = require('cookie-parser');
 
+// Configuration imports
+const connectDB = require('./config/db');
+const openbaoConfig = require('./config/openbao.config');
+const logger = require('./config/logger');
+const { helmetConfig, corsOptions, apiLimiter, authLimiter } = require('./config/security');
 
-//routes
+// Middleware imports
+const httpLogger = require('./middlewares/httpLogger');
+const { notFound, errorHandler } = require('./middlewares/errorHandler');
+
+// Cron jobs
+const startAllCrons = require('./crons');
+
+// Route imports
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const patientRecordRoutes = require('./routes/patientRecordRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-
 const keyExchangeRoutes = require('./routes/keyExchangeRoutes');
-
+const healthRoutes = require('./routes/healthRoutes');
 
 const app = express();
 
-// middleware
-app.use(helmet());
+// Security middleware
+app.use(helmetConfig);
 app.use(cookieParser());
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true, // Allow cookies to be sent with requests
-}));
-app.use(rateLimit({ 
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
-}));
+app.use(corsOptions);
+
+// HTTP request logging
+app.use(httpLogger);
+
+// Body parser
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Rate limiting
+app.use('/api/', apiLimiter);
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
 
 // Connect to database and OpenBao only if not in test environment
 if (process.env.NODE_ENV !== 'test') {
   // Initialize OpenBao connection
   openbaoConfig.init().then(success => {
     if (success) {
-      console.log('✅ OpenBao initialized successfully');
+      logger.info('OpenBao initialized successfully');
     } else {
-      console.warn('⚠️  OpenBao initialization failed - crypto operations may fail');
+      logger.warn('OpenBao initialization failed - crypto operations may fail');
     }
+  }).catch(error => {
+    logger.error('OpenBao initialization error:', error);
   });
   
   // Connect to MongoDB
   connectDB();
   
-  // Start cron jobs only in production
+  // Start cron jobs
   startAllCrons();
 }
 
-// api endpoints
+// Root endpoint
 app.get('/', (req, res) => {
-  res.send('Electronic Health Record System backend is running securely!');
-});
-
-// Health check endpoint including OpenBao status
-app.get('/api/health', async (req, res) => {
-  const openbaoHealth = await openbaoConfig.healthCheck();
-  res.status(openbaoHealth.healthy ? 200 : 503).json({
-    status: openbaoHealth.healthy ? 'healthy' : 'unhealthy',
-    services: {
-      api: 'operational',
-      openbao: openbaoHealth
-    },
-    timestamp: new Date().toISOString()
+  res.json({
+    message: 'EHR Backend API',
+    version: '2.0.0',
+    status: 'running',
+    documentation: '/api/docs'
   });
 });
 
+// API routes
+app.use('/api/health', healthRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/patient-records', patientRecordRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/key-exchange', keyExchangeRoutes);
 
-// start server only if not in test environment
+// Error handling middleware (must be after all routes)
+app.use(notFound);
+app.use(errorHandler);
+
+// Start server only if not in test environment
 if (process.env.NODE_ENV !== 'test') {
   const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  app.listen(PORT, () => {
+    logger.info(`Server running on port ${PORT}`);
+    logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    logger.info(`API Documentation: http://localhost:${PORT}/api/docs`);
+  });
 }
 
 // Export app for testing

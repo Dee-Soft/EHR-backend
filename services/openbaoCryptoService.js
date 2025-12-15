@@ -5,6 +5,7 @@
  */
 
 const openbaoConfig = require('../config/openbao.config');
+const logger = require('../config/logger');
 
 class OpenBaoCryptoService {
   constructor() {
@@ -30,7 +31,7 @@ class OpenBaoCryptoService {
         keyId: `data-key-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
       };
     } catch (error) {
-      console.error('Data key generation failed:', error.message);
+      logger.error('Data key generation failed', { error: error.message });
       throw new Error('Key generation service unavailable');
     }
   }
@@ -63,7 +64,7 @@ class OpenBaoCryptoService {
         encryptedAt: new Date().toISOString()
       };
     } catch (error) {
-      console.error('Encryption failed:', error.message);
+      logger.error('Encryption failed', { error: error.message });
       throw new Error('Encryption service unavailable');
     }
   }
@@ -91,7 +92,7 @@ class OpenBaoCryptoService {
       
       return JSON.parse(Buffer.from(result.data.plaintext, 'base64').toString());
     } catch (error) {
-      console.error('Decryption failed:', error.message);
+      logger.error('Decryption failed', { error: error.message });
       throw new Error('Decryption failed');
     }
   }
@@ -129,7 +130,7 @@ class OpenBaoCryptoService {
       // Encrypt with new key
       return await this.encryptData(decrypted, newKeyCiphertext);
     } catch (error) {
-      console.error('Re-encryption failed:', error.message);
+      logger.error('Re-encryption failed', { error: error.message });
       throw new Error('Data migration failed');
     }
   }
@@ -150,7 +151,7 @@ class OpenBaoCryptoService {
         minEncryptionVersion: result.data.min_encryption_version
       };
     } catch (error) {
-      console.error('Failed to get key version:', error.message);
+      logger.error('Failed to get key version', { error: error.message });
       throw new Error('Key version unavailable');
     }
   }

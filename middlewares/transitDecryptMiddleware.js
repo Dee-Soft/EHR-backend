@@ -5,6 +5,7 @@
  */
 
 const cryptoService = require('../services/openbaoCryptoService');
+const logger = require('../config/logger');
 
 /**
  * Decrypt specified fields in request body
@@ -32,7 +33,10 @@ module.exports = function transitDecryptMiddleware(fieldsToDecrypt) {
       
       next();
     } catch (error) {
-      console.error('transitDecryptMiddleware error:', error.message);
+      logger.error('transitDecryptMiddleware error', { 
+        error: error.message,
+        fields: fieldsToDecrypt
+      });
       res.status(500).json({
         message: 'Failed to decrypt fields',
         error: error.message

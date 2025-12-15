@@ -1,12 +1,15 @@
 const AuditLog = require('../models/AuditLog');
 const { Parser } = require('json2csv');
-const archiver = require('archiver');
-const crypto = require('crypto');
-
 const User = require('../models/User');
+const logger = require('../config/logger');
+const { AppError } = require('../middlewares/errorHandler');
 
-// Function to assign a patient to a provider
-exports.assignPatientToProvider = async (req, res) => {
+/**
+ * Assign a patient to a provider
+ * @route POST /api/admin/assign-patient
+ * @access Admin only
+ */
+exports.assignPatientToProvider = async (req, res, next) => {
   const { providerId, patientId } = req.body;
 
   try {
@@ -14,11 +17,13 @@ exports.assignPatientToProvider = async (req, res) => {
     const patient = await User.findById(patientId);
 
     if (!provider || provider.role !== 'Provider') {
-      return res.status(400).json({ message: 'Provider not found or invalid role' });
+      logger.warn(`Invalid provider assignment attempt: ${providerId}`);
+      throw new AppError('Provider not found or invalid role', 400);
     }
 
     if (!patient || patient.role !== 'Patient') {
-      return res.status(400).json({ message: 'Patient not found or invalid role' });
+      logger.warn(`Invalid patient assignment attempt: ${patientId}`);
+      throw new AppError('Patient not found or invalid role', 400);
     }
 
     // Add patient to provider's assigned list
@@ -33,91 +38,87 @@ exports.assignPatientToProvider = async (req, res) => {
       await patient.save();
     }
 
+    logger.info(`Patient ${patientId} assigned to Provider ${providerId} by Admin ${req.user.id}`);
     res.status(200).json({ message: 'Patient assigned to provider successfully' });
   } catch (err) {
-    res.status(500).json({ message: 'Assignment failed', error: err.message });
+    next(err);
   }
 };
 
-// Function to get audit logs
-exports.getAuditLogs = async (req, res) => {
+/**
+ * Get all audit logs
+ * @route GET /api/admin/audit-logs
+ * @access Admin only
+ */
+exports.getAuditLogs = async (req, res, next) => {
     try {
         const logs = await AuditLog.find().sort({ timestamp: -1 });
-        res.status(200).json(logs);
+        logger.info(`Admin ${req.user.id} retrieved ${logs.length} audit logs`);
+        res.status(200).json({
+            success: true,
+            count: logs.length,
+            data: logs
+        });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Failed to retrieve audit logs' });
+        logger.error('Failed to retrieve audit logs:', error);
+        next(new AppError('Failed to retrieve audit logs', 500));
     }
 };
 
-// Function to export audit logs as CSV
-exports.exportAuditLogs = async (req, res) => {
+/**
+ * Export audit logs as CSV
+ * @route GET /api/admin/audit-logs/export
+ * @access Admin only
+ */
+exports.exportAuditLogs = async (req, res, next) => {
     try {
         const logs = await AuditLog.find().lean();
 
+        if (logs.length === 0) {
+            throw new AppError('No audit logs to export', 404);
+        }
+
         const csvParser = new Parser({
-            fields: ['action', 'actorId', 'targetId', 'targetType', 'details', 'timestamp'],});
+            fields: ['action', 'actorId', 'targetId', 'targetType', 'details', 'timestamp']
+        });
         const csv = csvParser.parse(logs);
+
+        logger.info(`Admin ${req.user.id} exported ${logs.length} audit logs as CSV`);
 
         res.header('Content-Type', 'text/csv');
-        res.attachment('audit-logs.csv');
+        res.attachment(`audit-logs-${new Date().toISOString().split('T')[0]}.csv`);
         res.status(200).send(csv);
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Failed to export audit logs' });
+        logger.error('Failed to export audit logs:', error);
+        next(error);
     }
 };
 
-// Function to export audit logs as a ZIP file
-exports.exportAuditLogsZip = async (req, res) => {
+/**
+ * Export audit logs as JSON (simplified, removed complex ZIP encryption)
+ * @route GET /api/admin/audit-logs/export-json
+ * @access Admin only
+ */
+exports.exportAuditLogsJson = async (req, res, next) => {
     try {
         const logs = await AuditLog.find().lean();
 
-        const csvParser = new Parser({
-            fields: ['action', 'actorId', 'targetId', 'targetType', 'details', 'timestamp'],
+        if (logs.length === 0) {
+            throw new AppError('No audit logs to export', 404);
+        }
+
+        logger.info(`Admin ${req.user.id} exported ${logs.length} audit logs as JSON`);
+
+        res.header('Content-Type', 'application/json');
+        res.attachment(`audit-logs-${new Date().toISOString().split('T')[0]}.json`);
+        res.status(200).json({
+            exportDate: new Date().toISOString(),
+            exportedBy: req.user.id,
+            totalRecords: logs.length,
+            logs: logs
         });
-        const csv = csvParser.parse(logs);
-
-        const adminId = req.user.id;
-        const password = crypto.createHash('sha256')
-        .update(adminId + process.env.AUDIT_LOG_SALT)
-        .digest('hex')
-        .slice(0, 32); // Generate a random password for the ZIP file
-
-        const key = crypto.scryptSync(password, 'audit_salt', 32);
-        const iv = crypto.randomBytes(16);
-
-        const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
-        const encrypted = Buffer.concat([cipher.update(csv, 'utf8'), cipher.final()]);
-
-        const dycryptScript = `
-const fs = require('fs');
-const crypto = require('crypto');
-
-const enc = fs.readFileSync('audit-logs.csv.enc');
-const iv = Buffer.from(fs.readFileSync('iv.txt', 'utf8'), 'hex');
-const password = '${password}';
-
-const key = crypto.scryptSync(password, 'audit_salt', 32);
-const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
-const decrypted = Buffer.concat([decipher.update(enc), decipher.final()]);
-fs.writeFileSync('decrypted.csv', decrypted);
-console.log('Decryption complete. Check decrypted.csv');
-        `;
-
-        res.set({
-            'Content-Type': 'application/zip',
-            'Content-Disposition': 'attachment; filename=audit-logs-encrypted.zip',
-        });
-
-        const archive = archiver('zip');
-        archive.pipe(res);
-        archive.append(encrypted, { name: 'audit-logs.csv.enc' });
-        archive.append(iv.toString('hex'), { name: 'iv.txt' });
-        archive.append(dycryptScript, { name: 'decrypt.js' });
-        await archive.finalize();
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Failed to export audit logs as ZIP' });
+        logger.error('Failed to export audit logs as JSON:', error);
+        next(error);
     }
 };

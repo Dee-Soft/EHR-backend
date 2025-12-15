@@ -8,6 +8,7 @@ const User = require('../models/User');
 const AuditLog = require('../models/AuditLog');
 const cryptoService = require('../services/openbaoCryptoService');
 const keyExchangeService = require('../services/keyExchangeService');
+const logger = require('../config/logger');
 const {
   canCreateRecord,
   canViewOwnRecord,
@@ -81,7 +82,10 @@ exports.createRecord = [
 
       next();
     } catch (error) {
-      console.error('Pre-validation error in createRecord:', error);
+      logger.error('Pre-validation error in createRecord', { 
+        error: error.message,
+        userId: req.user.id
+      });
       return res.status(500).json({ 
         message: 'Validation failed', 
         error: error.message 
@@ -138,6 +142,12 @@ exports.createRecord = [
         details: `Created record for patient ${patient}`,
       });
 
+      logger.info('Record created successfully', {
+        recordId: record._id,
+        creatorId: creatorId,
+        patientId: patient
+      });
+
       return res.status(201).json({
         message: 'Record created successfully',
         recordId: record._id,
@@ -152,7 +162,11 @@ exports.createRecord = [
         }
       });
     } catch (error) {
-      console.error('Error saving record:', error);
+      logger.error('Error saving record', { 
+        error: error.message,
+        userId: req.user?.id,
+        patientId: req.body.patient
+      });
       return res.status(500).json({ 
         message: 'Record creation failed', 
         error: error.message 
@@ -203,12 +217,20 @@ exports.getAllRecords = async (req, res) => {
       details: 'Manager viewed all patient records',
     });
 
+    logger.info('All records retrieved', {
+      managerId: req.user.id,
+      recordCount: responseRecords.length
+    });
+
     res.status(200).json({
       message: 'All records retrieved successfully',
       records: responseRecords
     });
   } catch (error) {
-    console.error('Error retrieving all records:', error);
+    logger.error('Error retrieving all records', { 
+      error: error.message,
+      userId: req.user.id
+    });
     return res.status(500).json({ 
       message: 'Failed to retrieve all records', 
       error: error.message 
@@ -268,12 +290,20 @@ exports.getMyRecord = async (req, res) => {
       details: `Viewed all records for patient ${req.user.id}`,
     });
 
+    logger.info('Patient records retrieved', {
+      patientId: requesterId,
+      recordCount: responseRecords.length
+    });
+
     res.status(200).json({
       message: 'Records retrieved successfully',
       records: responseRecords
     });
   } catch (error) {
-    console.error('Error retrieving patient records:', error);
+    logger.error('Error retrieving patient records', { 
+      error: error.message,
+      userId: requesterId
+    });
     return res.status(500).json({ 
       message: 'Failed to retrieve patient records', 
       error: error.message 
@@ -323,12 +353,21 @@ exports.getRecordById = async (req, res) => {
       details: `Viewed record for patient ${record.patient?._id}`,
     });
 
+    logger.info('Record retrieved by ID', {
+      recordId: req.params.id,
+      userId: requesterId
+    });
+
     res.status(200).json({
       message: 'Record retrieved successfully',
       record: responseRecord
     });
   } catch (error) {
-    console.error('Error retrieving record by ID:', error);
+    logger.error('Error retrieving record by ID', { 
+      error: error.message,
+      recordId: req.params.id,
+      userId: requesterId
+    });
     return res.status(500).json({ 
       message: 'Failed to retrieve record', 
       error: error.message 

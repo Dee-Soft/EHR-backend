@@ -5,6 +5,7 @@
  */
 
 const keyExchangeService = require('../services/keyExchangeService');
+const logger = require('../config/logger');
 
 /**
  * Load and unwrap AES key from request headers
@@ -25,7 +26,10 @@ async function loadAESKey(req, res, next) {
     const unwrapped = await keyExchangeService.unwrapAESKeyFromFrontend(encryptedAesKey);
     const aesKey = unwrapped.plaintextKey;
     
-    console.log('Successfully unwrapped frontend AES key via OpenBao');
+    logger.debug('Successfully unwrapped frontend AES key via OpenBao', {
+      keyVersion: unwrapped.keyVersion,
+      userId: req.user?.id
+    });
     
     // Validate key format (should be base64 encoded)
     if (!aesKey || aesKey.length < 32) {
@@ -38,7 +42,10 @@ async function loadAESKey(req, res, next) {
     
     next();
   } catch (error) {
-    console.error('Failed to load AES key:', error.message);
+    logger.error('Failed to load AES key', { 
+      error: error.message,
+      userId: req.user?.id
+    });
     return res.status(500).json({ 
       message: 'Failed to load AES key', 
       error: error.message 

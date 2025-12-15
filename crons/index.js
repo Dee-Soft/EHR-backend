@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const logger = require('../config/logger');
 
 function startAllCrons() {
     const cronDir = __dirname;
@@ -8,12 +9,12 @@ function startAllCrons() {
         const fullPath = path.join(cronDir, file);
 
         if (file !== 'index.js' && path.extname(file) === '.js') {
-            console.log(`Starting cron job: ${file}`);
+            logger.info(`Starting cron job: ${file}`);
             const cronJob = require(fullPath);
             if (typeof cronJob === 'function') {
                 cronJob();
             } else {
-                console.warn(`⚠️ Skipped ${file}: Not a function export`);
+                logger.warn(`Skipped ${file}: Not a function export`);
             }
         }
     });

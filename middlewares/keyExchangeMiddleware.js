@@ -1,4 +1,5 @@
 const axios = require('axios');
+const logger = require('../config/logger');
 
 /**
  * Middleware to fetch frontend public key by hitting the route
@@ -6,10 +7,10 @@ const axios = require('axios');
 const fetchFrontendPublicKey = async (req, res, next) => {
     try {
         await axios.get(`${process.env.BACKEND_URL}/api/key-exchange/backend`);
-        console.log('Fetched frontend public key via route');
+        logger.info('Fetched frontend public key via route');
         next();
     } catch (err) {
-        console.error('Failed to fetch frontend public key:', err.message);
+        logger.error('Failed to fetch frontend public key', { error: err.message });
         return res.status(500).json({ message: 'Failed to fetch frontend public key', error: err.message });
     }
 };
@@ -20,10 +21,10 @@ const fetchFrontendPublicKey = async (req, res, next) => {
 const sendBackendPublicKey = async (req, res, next) => {
     try {
         await axios.post(`${process.env.BACKEND_URL}/api/key-exchange/frontend`);
-        console.log('Sent backend public key via route');
+        logger.info('Sent backend public key via route');
         next();
     } catch (err) {
-        console.error('Failed to send backend public key:', err.message);
+        logger.error('Failed to send backend public key', { error: err.message });
         return res.status(500).json({ message: 'Failed to send backend public key', error: err.message });
     }
 };

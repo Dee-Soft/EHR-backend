@@ -1,27 +1,86 @@
-version: '3' # docker-compose version
-services: # services which our app going to use. (list of containers we want to create)
-  mongoDB: # container name 
-    image: mongo # which image container will build on
+version: '3.8'
+
+services:
+  openbao:
+    image: openbao/openbao:latest
+    container_name: ehr-openbao
+    ports:
+      - "8200:8200"
+    environment:
+      OPENBAO_DEV_ROOT_TOKEN_ID: ${OPENBAO_TOKEN:-s.JfR6axjtdGedQeblSsppTMds}
+      OPENBAO_DEV_LISTEN_ADDRESS: 0.0.0.0:8200
+    networks:
+      - ehr-backend
+    volumes:
+      - openbao-data:/vault/data
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8200/v1/sys/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  mongoDB:
+    image: mongo:latest
+    container_name: ehr-mongodb
     ports:
       - "27017:27017"
-    networks: # adding network
+    networks:
       - ehr-backend
     volumes:
       - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
 
   ehr-server:
-    build: . # build the Docker image for the service using the Dockerfile located in the current directory
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: ehr-server
     ports:
       - "3001:3001"
-    networks: # adding network
+    networks:
       - ehr-backend
     depends_on:
-      - mongoDB
+      mongoDB:
+        condition: service_healthy
+      openbao:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=3001
+      - MONGO_URI=mongodb://mongoDB:27017/ehr-system
+      - OPENBAO_ADDR=http://openbao:8200
+      - OPENBAO_TOKEN=${OPENBAO_TOKEN:-s.JfR6axjtdGedQeblSsppTMds}
+      - OPENBAO_TRANSIT_AES_KEY=ehr-aes-master
+      - OPENBAO_TRANSIT_RSA_KEY=ehr-rsa-exchange
+      - JWT_SECRET=${JWT_SECRET}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3001/api/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
 
-networks: # allow services to talk to each other while providing isolation from other docker container, running on the same host
+networks:
   ehr-backend:
     driver: bridge
 
-volumes: # enable persistence of database data across container restart
+volumes:
   mongo-data:
+    driver: local
+  openbao-data:
+    driver: local
+  logs:
     driver: local

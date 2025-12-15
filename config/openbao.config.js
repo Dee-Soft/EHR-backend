@@ -4,6 +4,15 @@ const vault = require('node-vault')({
   token: process.env.OPENBAO_TOKEN,
 });
 
+// Note: logger is conditionally imported to avoid circular dependency during initialization
+let logger;
+try {
+  logger = require('./logger');
+} catch (e) {
+  // Fallback to console if logger not yet available
+  logger = console;
+}
+
 class OpenBaoConfig {
   constructor() {
     this.initialized = false;
@@ -26,7 +35,7 @@ class OpenBaoConfig {
         // Test connection
         await vault.status();
         this.initialized = true;
-        console.log('OpenBao connection established');
+        logger.info('OpenBao connection established');
         
         // If using AppRole, authenticate here
         if (process.env.OPENBAO_ROLE_ID && process.env.OPENBAO_SECRET_ID) {
@@ -36,20 +45,24 @@ class OpenBaoConfig {
         return true;
       } catch (error) {
         lastError = error;
-        console.error(`OpenBao connection attempt ${attempt}/${this.maxRetries} failed:`, error.message);
+        logger.warn(`OpenBao connection attempt ${attempt}/${this.maxRetries} failed`, { 
+          error: error.message 
+        });
         
         if (attempt < this.maxRetries) {
           // Exponential backoff
           const delay = this.retryDelay * Math.pow(2, attempt - 1);
-          console.log(`Retrying in ${delay}ms...`);
+          logger.info(`Retrying OpenBao connection in ${delay}ms`);
           await this._sleep(delay);
         }
       }
     }
     
     // All retries failed
-    console.error('OpenBao connection failed after all retries:', lastError.message);
-    console.error('Application will continue but crypto operations will fail');
+    logger.error('OpenBao connection failed after all retries', { 
+      error: lastError.message 
+    });
+    logger.warn('Application will continue but crypto operations will fail');
     return false;
   }
 
@@ -64,10 +77,10 @@ class OpenBaoConfig {
       });
       
       vault.token = result.auth.client_token;
-      console.log('AppRole authentication successful');
+      logger.info('AppRole authentication successful');
       return true;
     } catch (error) {
-      console.error('AppRole authentication failed:', error.message);
+      logger.error('AppRole authentication failed', { error: error.message });
       throw error;
     }
   }
@@ -111,7 +124,7 @@ class OpenBaoConfig {
       await vault.status();
       return true;
     } catch (error) {
-      console.error('OpenBao connection validation failed:', error.message);
+      logger.error('OpenBao connection validation failed', { error: error.message });
       throw new Error('OpenBao service unavailable');
     }
   }

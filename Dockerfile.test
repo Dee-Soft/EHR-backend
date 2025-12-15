@@ -1,0 +1,20 @@
+# Test Dockerfile
+# Used for running tests in Docker environment
+
+FROM node:24-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm ci
+
+# Copy application code
+COPY . .
+
+# Create coverage directory
+RUN mkdir -p /app/coverage
+
+# Run tests by default
+CMD ["npm", "run", "test:coverage"]
+
