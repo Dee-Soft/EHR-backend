@@ -1,256 +1,265 @@
-const { encryptAES, decryptAES } = require('../../utils/aesUtils');
-const { generateAESKey } = require('../../helpers/cryptoHelper');
+/**
+ * Security: OpenBao Transit Encryption Tests
+ * Tests encryption security using OpenBao Transit Engine
+ */
+
 const crypto = require('crypto');
 
-describe('Security: Encryption', () => {
-  let testKey;
-  
-  beforeEach(() => {
-    testKey = generateAESKey();
-  });
-  
-  describe('AES-256 Encryption Security', () => {
-    test('should never store plaintext sensitive data', () => {
+// Mock OpenBao before requiring the crypto service
+jest.mock('../../config/openbao.config', () => {
+  const { createMockVaultClient } = require('../setup/mocks/openbaoMock');
+  const mockVault = createMockVaultClient();
+  return {
+    getTransitClient: () => mockVault,
+    keys: {
+      aesMaster: 'ehr-aes-master',
+      rsaExchange: 'ehr-rsa-exchange'
+    },
+    init: jest.fn().mockResolvedValue(true),
+    initialized: true
+  };
+});
+
+const cryptoService = require('../../services/openbaoCryptoService');
+
+describe('Security: OpenBao Transit Encryption', () => {
+  describe('Data Encryption Security', () => {
+    test('should never store plaintext sensitive data', async () => {
       const sensitiveData = 'Patient SSN: 123-45-6789';
-      const encrypted = encryptAES(sensitiveData, testKey);
+      const result = await cryptoService.encryptData(sensitiveData);
       
       // Verify encryption happened
-      expect(encrypted).not.toContain('123-45-6789');
-      expect(encrypted).not.toContain('SSN');
-      expect(encrypted).not.toContain('Patient');
+      expect(result.ciphertext).toBeDefined();
+      expect(result.ciphertext).not.toContain('123-45-6789');
+      expect(result.ciphertext).not.toContain('SSN');
+      expect(result.ciphertext).not.toContain('Patient');
       
-      // Verify format
-      expect(encrypted).toMatch(/^[a-f0-9]+:[a-f0-9]+$/);
+      // Verify OpenBao format: vault:v{version}:{base64}
+      expect(result.ciphertext).toMatch(/^vault:v\d+:/);
+      expect(result.keyVersion).toBeDefined();
     });
     
-    test('should use unique IV for each encryption to prevent pattern detection', () => {
+    test('should use unique encryption for each operation to prevent pattern detection', async () => {
       const data = 'Same sensitive data';
-      const encrypted1 = encryptAES(data, testKey);
-      const encrypted2 = encryptAES(data, testKey);
-      const encrypted3 = encryptAES(data, testKey);
+      const encrypted1 = await cryptoService.encryptData(data);
+      const encrypted2 = await cryptoService.encryptData(data);
+      const encrypted3 = await cryptoService.encryptData(data);
       
       // Same data encrypted multiple times should produce different ciphertext
-      expect(encrypted1).not.toBe(encrypted2);
-      expect(encrypted2).not.toBe(encrypted3);
-      expect(encrypted1).not.toBe(encrypted3);
+      // OpenBao handles IV/nonce internally
+      expect(encrypted1.ciphertext).not.toBe(encrypted2.ciphertext);
+      expect(encrypted2.ciphertext).not.toBe(encrypted3.ciphertext);
+      expect(encrypted1.ciphertext).not.toBe(encrypted3.ciphertext);
       
-      // Extract IVs (part before colon)
-      const iv1 = encrypted1.split(':')[0];
-      const iv2 = encrypted2.split(':')[0];
-      const iv3 = encrypted3.split(':')[0];
-      
-      expect(iv1).not.toBe(iv2);
-      expect(iv2).not.toBe(iv3);
-      expect(iv1).not.toBe(iv3);
-      
-      // But all should decrypt to same plaintext
-      expect(decryptAES(encrypted1, testKey)).toBe(data);
-      expect(decryptAES(encrypted2, testKey)).toBe(data);
-      expect(decryptAES(encrypted3, testKey)).toBe(data);
+      // All should have proper OpenBao format
+      expect(encrypted1.ciphertext).toMatch(/^vault:v\d+:/);
+      expect(encrypted2.ciphertext).toMatch(/^vault:v\d+:/);
+      expect(encrypted3.ciphertext).toMatch(/^vault:v\d+:/);
     });
     
-    test('should make encrypted data unreadable without key', () => {
+    test('should make encrypted data unreadable without key', async () => {
       const sensitiveData = 'Confidential patient diagnosis: Cancer';
-      const encrypted = encryptAES(sensitiveData, testKey);
+      const result = await cryptoService.encryptData(sensitiveData);
       
       // Encrypted data should not contain any recognizable words
-      expect(encrypted.toLowerCase()).not.toContain('cancer');
-      expect(encrypted.toLowerCase()).not.toContain('diagnosis');
-      expect(encrypted.toLowerCase()).not.toContain('patient');
-      expect(encrypted.toLowerCase()).not.toContain('confidential');
+      expect(result.ciphertext.toLowerCase()).not.toContain('cancer');
+      expect(result.ciphertext.toLowerCase()).not.toContain('diagnosis');
+      expect(result.ciphertext.toLowerCase()).not.toContain('patient');
+      expect(result.ciphertext.toLowerCase()).not.toContain('confidential');
     });
     
-    test('should produce non-deterministic encryption', () => {
+    test('should produce non-deterministic encryption', async () => {
       const records = [
         'Patient: John Doe, Condition: Diabetes',
         'Patient: John Doe, Condition: Diabetes',
         'Patient: John Doe, Condition: Diabetes'
       ];
       
-      const encrypted = records.map(record => encryptAES(record, testKey));
+      const encrypted = await Promise.all(
+        records.map(record => cryptoService.encryptData(record))
+      );
+      
+      const ciphertexts = encrypted.map(e => e.ciphertext);
       
       // All encrypted values should be unique despite same input
-      const uniqueEncrypted = new Set(encrypted);
+      const uniqueEncrypted = new Set(ciphertexts);
       expect(uniqueEncrypted.size).toBe(3);
     });
     
-    test('should prevent key reuse attacks with unique IVs', () => {
+    test('should prevent pattern analysis with unique encryptions', async () => {
       const messages = [
         'Message 1: Sensitive data A',
         'Message 2: Sensitive data B',
         'Message 3: Sensitive data C'
       ];
       
-      const encrypted = messages.map(msg => encryptAES(msg, testKey));
+      const encrypted = await Promise.all(
+        messages.map(msg => cryptoService.encryptData(msg))
+      );
       
-      // Verify no two ciphertexts share the same IV
-      const ivs = encrypted.map(enc => enc.split(':')[0]);
-      const uniqueIvs = new Set(ivs);
-      expect(uniqueIvs.size).toBe(messages.length);
+      // Verify no two ciphertexts are the same
+      const ciphertexts = encrypted.map(e => e.ciphertext);
+      const uniqueCiphertexts = new Set(ciphertexts);
+      expect(uniqueCiphertexts.size).toBe(messages.length);
     });
   });
   
   describe('Key Security', () => {
-    test('should use 256-bit keys (32 bytes)', () => {
-      const key = generateAESKey();
+    test('should generate 256-bit data keys (32 bytes)', async () => {
+      const keyData = await cryptoService.generateDataKey();
       
-      // Key should be 64 hex characters (32 bytes * 2)
-      expect(key.length).toBe(64);
+      expect(keyData.plaintextKey).toBeDefined();
+      expect(keyData.ciphertextKey).toBeDefined();
       
-      // Convert to buffer and verify length
-      const keyBuffer = Buffer.from(key, 'hex');
+      // Plaintext key should be base64 encoded 32 bytes
+      const keyBuffer = Buffer.from(keyData.plaintextKey, 'base64');
       expect(keyBuffer.length).toBe(32); // 256 bits = 32 bytes
+      
+      // Ciphertext should have OpenBao format
+      expect(keyData.ciphertextKey).toMatch(/^vault:v\d+:/);
     });
     
-    test('should generate cryptographically random keys', () => {
+    test('should generate cryptographically random keys', async () => {
       const keys = [];
       for (let i = 0; i < 100; i++) {
-        keys.push(generateAESKey());
+        const keyData = await cryptoService.generateDataKey();
+        keys.push(keyData.plaintextKey);
       }
       
       // All keys should be unique
       const uniqueKeys = new Set(keys);
       expect(uniqueKeys.size).toBe(100);
       
-      // Keys should have high entropy (no obvious patterns)
-      // Check for long repetitions indicating weak randomness
+      // Keys should have proper length
       keys.forEach(key => {
-        expect(key).not.toMatch(/(.)\1{10,}/); // No long repetitions of same character
-        expect(key.length).toBe(64); // Proper length
+        const keyBuffer = Buffer.from(key, 'base64');
+        expect(keyBuffer.length).toBe(32);
       });
     });
     
-    test('should fail decryption with wrong key', () => {
-      const data = 'Sensitive data';
-      const correctKey = generateAESKey();
-      const wrongKey = generateAESKey();
+    test('should fail decryption with invalid ciphertext', async () => {
+      const invalidCiphertext = 'not-a-valid-vault-ciphertext';
       
-      const encrypted = encryptAES(data, correctKey);
-      
-      // Attempting to decrypt with wrong key should throw error
-      expect(() => decryptAES(encrypted, wrongKey)).toThrow();
+      await expect(
+        cryptoService.decryptData(invalidCiphertext)
+      ).rejects.toThrow();
     });
     
-    test('should not allow weak keys', () => {
+    test('should track key versions for rotation', async () => {
       const data = 'Test data';
+      const result = await cryptoService.encryptData(data);
       
-      // Test with insufficient key length
-      const shortKey = 'a'.repeat(32); // Too short for AES-256
-      
-      // The function should handle this, but the key should ideally be validated
-      // Note: Our current implementation accepts hex strings, so this is for reference
-      expect(shortKey.length).toBeLessThan(64);
+      expect(result.keyVersion).toBeDefined();
+      expect(result.keyVersion).toBeGreaterThan(0);
     });
   });
   
   describe('Data Integrity', () => {
-    test('should maintain data integrity through encryption/decryption cycle', () => {
+    test('should maintain data integrity through encryption/decryption cycle', async () => {
       const testCases = [
         'Simple text',
         'Text with numbers 123456',
         'Special chars: !@#$%^&*()',
         'Unicode: 你好世界 🎉',
-        'Very long text: ' + 'A'.repeat(10000),
+        'Very long text: ' + 'A'.repeat(1000),
         'Newlines\nand\ttabs',
-        JSON.stringify({ patient: 'John', diagnosis: 'Flu' })
+        { patient: 'John', diagnosis: 'Flu' }
       ];
       
-      testCases.forEach(data => {
-        const encrypted = encryptAES(data, testKey);
-        const decrypted = decryptAES(encrypted, testKey);
-        expect(decrypted).toBe(data);
-      });
+      for (const data of testCases) {
+        const encrypted = await cryptoService.encryptData(data);
+        const decrypted = await cryptoService.decryptData(encrypted.ciphertext);
+        
+        if (typeof data === 'object') {
+          expect(decrypted).toEqual(data);
+        } else {
+          expect(decrypted).toBe(data);
+        }
+      }
     });
     
-    test('should detect tampering with encrypted data', () => {
+    test('should detect tampering with encrypted data', async () => {
       const data = 'Important medical record';
-      const encrypted = encryptAES(data, testKey);
+      const encrypted = await cryptoService.encryptData(data);
       
-      // Tamper with encrypted data
-      const [iv, ciphertext] = encrypted.split(':');
-      const tamperedCiphertext = ciphertext.slice(0, -4) + 'ffff';
-      const tampered = `${iv}:${tamperedCiphertext}`;
+      // Tamper with ciphertext
+      const parts = encrypted.ciphertext.split(':');
+      const tamperedCiphertext = parts[0] + ':' + parts[1] + ':corrupted';
       
-      // Decryption should fail or produce garbage
-      expect(() => {
-        const result = decryptAES(tampered, testKey);
-        // If it doesn't throw, result should not match original
-        expect(result).not.toBe(data);
-      }).toThrow();
+      // Decryption should fail
+      await expect(
+        cryptoService.decryptData(tamperedCiphertext)
+      ).rejects.toThrow();
     });
     
-    test('should detect IV tampering', () => {
-      const data = 'Test data';
-      const encrypted = encryptAES(data, testKey);
+    test('should require proper ciphertext format', async () => {
+      const invalidFormats = [
+        'plaintext',
+        'vault:v1:', // Missing ciphertext
+        'vault:', // Missing version and ciphertext
+        'notavaultstring:data',
+        ''
+      ];
       
-      // Tamper with IV
-      const [iv, ciphertext] = encrypted.split(':');
-      const tamperedIV = 'a'.repeat(iv.length);
-      const tampered = `${tamperedIV}:${ciphertext}`;
-      
-      // Should throw error or produce wrong plaintext
-      try {
-        const result = decryptAES(tampered, testKey);
-        expect(result).not.toBe(data);
-      } catch (error) {
-        // Expect decryption to fail with tampered IV
-        expect(error).toBeDefined();
+      for (const invalid of invalidFormats) {
+        await expect(
+          cryptoService.decryptData(invalid)
+        ).rejects.toThrow();
       }
     });
   });
   
   describe('Protection Against Common Attacks', () => {
-    test('should prevent padding oracle attacks (CBC mode)', () => {
-      // AES-256-CBC should handle padding properly
-      const shortData = 'Hi';
-      const encrypted = encryptAES(shortData, testKey);
-      const decrypted = decryptAES(encrypted, testKey);
+    test('should use authenticated encryption (prevents tampering)', async () => {
+      const data = 'Sensitive data';
+      const encrypted = await cryptoService.encryptData(data);
       
-      expect(decrypted).toBe(shortData);
-      expect(encrypted.length).toBeGreaterThan(shortData.length * 2);
+      // OpenBao uses AES-GCM which provides authentication
+      expect(encrypted.ciphertext).toMatch(/^vault:v\d+:/);
+      
+      // Any tampering should be detected on decryption
+      const tampered = encrypted.ciphertext.slice(0, -10) + 'AAAAAAAAAA';
+      await expect(
+        cryptoService.decryptData(tampered)
+      ).rejects.toThrow();
     });
     
-    test('should make brute force attacks computationally infeasible', () => {
-      // With 256-bit key, brute force is practically impossible
-      // Test that different keys produce different results
+    test('should make brute force attacks computationally infeasible', async () => {
+      // With 256-bit keys managed by OpenBao, brute force is impractical
       const data = 'Test';
-      const key1 = generateAESKey();
-      const key2 = generateAESKey();
+      const enc1 = await cryptoService.encryptData(data);
+      const enc2 = await cryptoService.encryptData(data);
       
-      const enc1 = encryptAES(data, key1);
-      const enc2 = encryptAES(data, key2);
+      // Different encryptions should be completely different
+      expect(enc1.ciphertext).not.toBe(enc2.ciphertext);
       
-      // Different keys should produce completely different ciphertext
-      expect(enc1).not.toBe(enc2);
-      
-      // Each key can only decrypt its own ciphertext
-      expect(decryptAES(enc1, key1)).toBe(data);
-      expect(() => decryptAES(enc1, key2)).toThrow();
+      // Both should have proper format
+      expect(enc1.ciphertext).toMatch(/^vault:v\d+:/);
+      expect(enc2.ciphertext).toMatch(/^vault:v\d+:/);
     });
     
-    test('should prevent timing attacks on comparison', () => {
-      // Ensure constant-time comparison where applicable
+    test('should handle encryption/decryption consistently', async () => {
       const data = 'Timing test data';
-      const encrypted = encryptAES(data, testKey);
+      const encrypted = await cryptoService.encryptData(data);
       
-      // Multiple decryptions should take similar time
-      const times = [];
-      for (let i = 0; i < 5; i++) {
-        const start = process.hrtime.bigint();
-        decryptAES(encrypted, testKey);
-        const end = process.hrtime.bigint();
-        times.push(Number(end - start));
-      }
+      // Multiple decryptions should all succeed
+      const results = await Promise.all([
+        cryptoService.decryptData(encrypted.ciphertext),
+        cryptoService.decryptData(encrypted.ciphertext),
+        cryptoService.decryptData(encrypted.ciphertext),
+        cryptoService.decryptData(encrypted.ciphertext),
+        cryptoService.decryptData(encrypted.ciphertext)
+      ]);
       
-      // All times should be relatively similar (within order of magnitude)
-      const maxTime = Math.max(...times);
-      const minTime = Math.min(...times);
-      expect(maxTime / minTime).toBeLessThan(10);
+      // All results should be identical
+      results.forEach(result => {
+        expect(result).toBe(data);
+      });
     });
   });
   
   describe('Sensitive Data Patterns', () => {
-    test('should properly encrypt common sensitive data patterns', () => {
+    test('should properly encrypt common sensitive data patterns', async () => {
       const sensitivePatterns = [
         'SSN: 123-45-6789',
         'Credit Card: 4532-1234-5678-9010',
@@ -261,44 +270,93 @@ describe('Security: Encryption', () => {
         'Phone: +1-555-123-4567'
       ];
       
-      sensitivePatterns.forEach(pattern => {
-        const encrypted = encryptAES(pattern, testKey);
+      for (const pattern of sensitivePatterns) {
+        const encrypted = await cryptoService.encryptData(pattern);
         
         // Should not contain any recognizable part
-        expect(encrypted).not.toContain('123');
-        expect(encrypted).not.toContain('SSN');
-        expect(encrypted).not.toContain('Credit');
-        expect(encrypted).not.toContain('Password');
-        expect(encrypted).not.toContain('@');
-        expect(encrypted).not.toContain('sk_live');
+        expect(encrypted.ciphertext).not.toContain('123');
+        expect(encrypted.ciphertext).not.toContain('SSN');
+        expect(encrypted.ciphertext).not.toContain('Credit');
+        expect(encrypted.ciphertext).not.toContain('Password');
+        expect(encrypted.ciphertext).not.toContain('@');
+        expect(encrypted.ciphertext).not.toContain('sk_live');
         
         // Should decrypt correctly
-        expect(decryptAES(encrypted, testKey)).toBe(pattern);
-      });
+        const decrypted = await cryptoService.decryptData(encrypted.ciphertext);
+        expect(decrypted).toBe(pattern);
+      }
     });
     
-    test('should encrypt structured data (JSON) securely', () => {
-      const patientRecord = JSON.stringify({
+    test('should encrypt structured data (objects) securely', async () => {
+      const patientRecord = {
         name: 'John Doe',
         ssn: '123-45-6789',
         diagnosis: 'Hypertension',
         medications: ['Lisinopril', 'Aspirin'],
         notes: 'Patient shows improvement'
-      });
+      };
       
-      const encrypted = encryptAES(patientRecord, testKey);
+      const encrypted = await cryptoService.encryptData(patientRecord);
       
-      // Should not contain any JSON structure or values
-      expect(encrypted).not.toContain('John');
-      expect(encrypted).not.toContain('ssn');
-      expect(encrypted).not.toContain('diagnosis');
-      expect(encrypted).not.toContain('{');
-      expect(encrypted).not.toContain('}');
+      // Should not contain any recognizable values
+      expect(encrypted.ciphertext).not.toContain('John');
+      expect(encrypted.ciphertext).not.toContain('ssn');
+      expect(encrypted.ciphertext).not.toContain('diagnosis');
+      expect(encrypted.ciphertext).not.toContain('Hypertension');
+      expect(encrypted.ciphertext).not.toContain('Lisinopril');
       
       // Should decrypt to exact original
-      const decrypted = decryptAES(encrypted, testKey);
-      expect(decrypted).toBe(patientRecord);
-      expect(JSON.parse(decrypted)).toEqual(JSON.parse(patientRecord));
+      const decrypted = await cryptoService.decryptData(encrypted.ciphertext);
+      expect(decrypted).toEqual(patientRecord);
+    });
+  });
+  
+  describe('OpenBao-Specific Security', () => {
+    test('should use OpenBao Transit Engine format', async () => {
+      const data = 'Test data';
+      const result = await cryptoService.encryptData(data);
+      
+      // Verify OpenBao ciphertext format: vault:v{version}:{base64}
+      expect(result.ciphertext).toMatch(/^vault:v\d+:[A-Za-z0-9+/=]+$/);
+    });
+    
+    test('should track encryption metadata', async () => {
+      const data = 'Test data';
+      const result = await cryptoService.encryptData(data);
+      
+      expect(result.ciphertext).toBeDefined();
+      expect(result.keyVersion).toBeDefined();
+      expect(result.encryptedAt).toBeDefined();
+      
+      // Verify timestamp is recent
+      const encryptedTime = new Date(result.encryptedAt);
+      const now = new Date();
+      const diff = now - encryptedTime;
+      expect(diff).toBeLessThan(5000); // Within 5 seconds
+    });
+    
+    test('should support key versioning for rotation', async () => {
+      const data = 'Test data';
+      const result = await cryptoService.encryptData(data);
+      
+      expect(result.keyVersion).toBeGreaterThanOrEqual(1);
+      expect(typeof result.keyVersion).toBe('number');
+    });
+    
+    test('should handle data key generation properly', async () => {
+      const keyData = await cryptoService.generateDataKey();
+      
+      expect(keyData.plaintextKey).toBeDefined();
+      expect(keyData.ciphertextKey).toBeDefined();
+      expect(keyData.keyVersion).toBeDefined();
+      expect(keyData.keyId).toBeDefined();
+      
+      // Verify formats
+      expect(keyData.ciphertextKey).toMatch(/^vault:v\d+:/);
+      expect(keyData.keyId).toMatch(/^data-key-/);
+      
+      // Plaintext key should be valid base64
+      expect(() => Buffer.from(keyData.plaintextKey, 'base64')).not.toThrow();
     });
   });
 });

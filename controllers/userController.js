@@ -4,6 +4,48 @@ const { canRegister } = require('../utils/registrationRoles');
 const logger = require('../config/logger');
 
 /**
+ * Get all users with role-based access control
+ * @route GET /api/users
+ * @access Private (Admin, Manager)
+ */
+exports.getAllUsers = async (req, res) => {
+  const requester = req.user;
+
+  try {
+    // Only Admin and Manager can see all users
+    if (requester.role !== 'Admin' && requester.role !== 'Manager') {
+      logger.warn('Unauthorized access attempt to user list', {
+        userId: requester.id,
+        userRole: requester.role
+      });
+      return res.status(403).json({ 
+        message: 'Access denied. Only Admin and Manager can view all users.' 
+      });
+    }
+
+    const users = await User.find().select('-password');
+    
+    logger.info('Users list retrieved', {
+      requesterId: requester.id,
+      requesterRole: requester.role,
+      userCount: users.length
+    });
+
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      data: users
+    });
+  } catch (err) {
+    logger.error('Failed to retrieve users', { 
+      error: err.message,
+      requesterId: requester.id
+    });
+    res.status(500).json({ message: 'Failed to retrieve users' });
+  }
+};
+
+/**
  * Register a new user
  * @route POST /api/users/register
  * @access Private (Admin, Manager, Employee)

@@ -179,16 +179,63 @@ exports.createRecord = [
  * Get all patient records (Manager only)
  */
 exports.getAllRecords = async (req, res) => {
-  const { role } = req.user;
+  const { role, id: requesterId } = req.user;
   
   try {
-    if (!canViewAllRecords(role)) {
-      return res.status(403).json({ 
-        message: 'Only managers can view all records' 
+    let records;
+    let message;
+
+    // Admin and Manager can view all records
+    if (canViewAllRecords(role)) {
+      records = await PatientRecord.find().populate({ path: 'patient' });
+      message = 'All records retrieved successfully';
+      
+      // Audit log
+      await AuditLog.create({
+        action: 'VIEW_ALL_RECORDS',
+        actorId: requesterId,
+        targetType: 'PatientRecord',
+        details: `${role} viewed all patient records`,
       });
     }
-
-    const records = await PatientRecord.find().populate({ path: 'patient' });
+    // Provider can view records of assigned patients
+    else if (role === 'Provider') {
+      const provider = await User.findById(requesterId);
+      const assignedPatientIds = provider.assignedPatients || [];
+      
+      records = await PatientRecord.find({
+        patient: { $in: assignedPatientIds }
+      }).populate({ path: 'patient' });
+      
+      message = 'Assigned patient records retrieved successfully';
+      
+      // Audit log
+      await AuditLog.create({
+        action: 'VIEW_ASSIGNED_RECORDS',
+        actorId: requesterId,
+        targetType: 'PatientRecord',
+        details: 'Provider viewed assigned patient records',
+      });
+    }
+    // Patient can view their own records
+    else if (role === 'Patient') {
+      records = await PatientRecord.find({ patient: requesterId }).populate({ path: 'patient' });
+      message = 'Your records retrieved successfully';
+      
+      // Audit log
+      await AuditLog.create({
+        action: 'VIEW_OWN_RECORDS',
+        actorId: requesterId,
+        targetType: 'PatientRecord',
+        details: 'Patient viewed own records',
+      });
+    }
+    // Other roles not allowed
+    else {
+      return res.status(403).json({ 
+        message: 'You do not have permission to view records' 
+      });
+    }
     
     if (!records || records.length === 0) {
       return res.status(404).json({ message: 'No records found' });
@@ -209,25 +256,18 @@ exports.getAllRecords = async (req, res) => {
       transitKeyVersion: record.transitKeyVersion
     }));
 
-    // Audit log
-    await AuditLog.create({
-      action: 'VIEW_ALL_RECORDS',
-      actorId: req.user.id,
-      targetType: 'PatientRecord',
-      details: 'Manager viewed all patient records',
-    });
-
-    logger.info('All records retrieved', {
-      managerId: req.user.id,
+    logger.info('Records retrieved', {
+      userId: requesterId,
+      role: role,
       recordCount: responseRecords.length
     });
 
     res.status(200).json({
-      message: 'All records retrieved successfully',
+      message: message,
       records: responseRecords
     });
   } catch (error) {
-    logger.error('Error retrieving all records', { 
+    logger.error('Error retrieving records', { 
       error: error.message,
       userId: req.user.id
     });

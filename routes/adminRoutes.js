@@ -4,10 +4,18 @@ const {
     getAuditLogs,
     exportAuditLogs,
     exportAuditLogsJson,
-    assignPatientToProvider
+    assignPatientToProvider,
+    getAllUsers,
+    getUserById,
+    deleteUser
 } = require('../controllers/adminController');
 
 const router = express.Router();
+
+// User management routes
+router.get('/users', authMiddleware, requiredRole('Admin'), getAllUsers);
+router.get('/users/:id', authMiddleware, requiredRole('Admin'), getUserById);
+router.delete('/users/:id', authMiddleware, requiredRole('Admin'), deleteUser);
 
 // Assign a patient to a provider
 router.post(

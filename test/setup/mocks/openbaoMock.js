@@ -29,6 +29,7 @@ class OpenBaoMock {
       }
     };
     this.dataKeys = new Map(); // Store generated data keys
+    this.encryptedData = new Map(); // Store encrypted data for decryption
   }
 
   /**
@@ -91,9 +92,14 @@ class OpenBaoMock {
 
       // Simulate OpenBao's encryption format: vault:v{version}:{ciphertext}
       const mockCiphertext = crypto.randomBytes(64).toString('base64');
+      const fullCiphertext = `vault:v1:${mockCiphertext}`;
+      
+      // Store the plaintext so we can decrypt it later
+      this.encryptedData.set(fullCiphertext, plaintext);
+      
       return {
         data: {
-          ciphertext: `vault:v1:${mockCiphertext}`,
+          ciphertext: fullCiphertext,
           key_version: 1
         }
       };
@@ -106,12 +112,21 @@ class OpenBaoMock {
         throw new Error('invalid ciphertext format');
       }
 
-      // Return a proper 32-byte AES key in base64 format
-      // This simulates unwrapping an RSA-encrypted AES key
-      const mockPlaintext = crypto.randomBytes(32).toString('base64');
+      // Retrieve the stored plaintext
+      const plaintext = this.encryptedData.get(ciphertext);
+      if (!plaintext) {
+        // If not found, return a mock 32-byte AES key (for key unwrapping scenarios)
+        const mockPlaintext = crypto.randomBytes(32).toString('base64');
+        return {
+          data: {
+            plaintext: mockPlaintext
+          }
+        };
+      }
+      
       return {
         data: {
-          plaintext: mockPlaintext
+          plaintext: plaintext
         }
       };
     }
@@ -208,6 +223,7 @@ class OpenBaoMock {
     this.initialized = false;
     this.sealed = false;
     this.dataKeys.clear();
+    this.encryptedData.clear();
   }
 }
 
