@@ -35,7 +35,12 @@ app.use(rateLimit({
 }));
 app.use(express.json());
 
-connectDB();
+// Connect to database only if not in test environment
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+  // Start cron jobs only in production
+  startAllCrons();
+}
 
 // api endpoints
 app.get('/', (req, res) => {
@@ -48,6 +53,11 @@ app.use('/api/admin', adminRoutes);
 
 app.use('/api/key-exchange', keyExchangeRoutes);
 
-// start server
-const PORT = process.env.PORT;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// start server only if not in test environment
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+// Export app for testing
+module.exports = app;

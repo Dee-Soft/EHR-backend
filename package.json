@@ -8,7 +8,13 @@
     "prepare": "husky",
     "commit": "cz",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:unit": "jest __tests__/unit",
+    "test:integration": "jest __tests__/integration",
+    "test:security": "jest __tests__/security"
   },
   "author": "Sarfaraj Shahjahan",
   "license": "ISC",
@@ -33,12 +39,16 @@
   "devDependencies": {
     "@commitlint/cli": "^20.2.0",
     "@commitlint/config-conventional": "^20.2.0",
+    "@types/jest": "^30.0.0",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.39.2",
     "eslint-plugin-node": "^11.1.0",
     "husky": "^9.1.7",
-    "nodemon": "^3.1.10"
+    "jest": "^30.2.0",
+    "mongodb-memory-server": "^10.4.1",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.4"
   },
   "config": {
     "commitizen": {
