@@ -102,6 +102,30 @@ class KeyExchangeService {
       return false;
     }
   }
+
+  /**
+   * Check OpenBao connection status for key exchange operations
+   * @returns {Object} Connection status
+   */
+  async getConnectionStatus() {
+    try {
+      const health = await openbaoConfig.healthCheck();
+      return {
+        connected: health.healthy,
+        endpoint: health.endpoint,
+        rsaKeyAvailable: health.healthy, // If healthy, RSA key should be available
+        endpointsConfigured: health.endpointsConfigured
+      };
+    } catch (error) {
+      return {
+        connected: false,
+        error: error.message,
+        endpoint: openbaoConfig.getCurrentEndpoint(),
+        rsaKeyAvailable: false,
+        endpointsConfigured: openbaoConfig.getConfiguredEndpoints()
+      };
+    }
+  }
 }
 
 module.exports = new KeyExchangeService();

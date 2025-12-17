@@ -1,5 +1,14 @@
 version: '3.8'
 
+# EHR Backend Docker Compose Configuration
+# 
+# Note: This configuration assumes the OpenBao Keys Management System is running separately.
+# The OpenBao system should be accessible at http://localhost:18200 when running locally,
+# or at http://host.docker.internal:18200 when running in Docker.
+#
+# For production deployment, ensure proper network connectivity between this container
+# and the OpenBao Keys Management System.
+
 services:
   mongoDB:
     image: mongo:latest
@@ -34,12 +43,12 @@ services:
       - NODE_ENV=${NODE_ENV:-production}
       - PORT=3001
       - MONGO_URI=mongodb://mongoDB:27017/ehr-system
-      # OpenBao runs outside this compose. From inside Docker, the host is reachable
-      # at host.docker.internal (macOS/Windows) or via host-gateway mapping (Linux).
-      - OPENBAO_ADDR=${OPENBAO_ADDR:-http://host.docker.internal:8200}
-      - OPENBAO_TOKEN=${OPENBAO_TOKEN}
-      - OPENBAO_TRANSIT_AES_KEY=ehr-aes-master
-      - OPENBAO_TRANSIT_RSA_KEY=ehr-rsa-exchange
+      # OpenBao Keys Management System runs separately on port 18200
+      # When running in Docker, use host.docker.internal to access localhost
+      - OPENBAO_ADDR=${OPENBAO_ADDR:-http://host.docker.internal:18200}
+      - OPENBAO_TOKEN=${OPENBAO_TOKEN:-ehr-permanent-token}
+      - OPENBAO_TRANSIT_AES_KEY=${OPENBAO_TRANSIT_AES_KEY:-ehr-aes-master}
+      - OPENBAO_TRANSIT_RSA_KEY=${OPENBAO_TRANSIT_RSA_KEY:-ehr-rsa-exchange}
       - JWT_SECRET=${JWT_SECRET}
       - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
       - LOG_LEVEL=${LOG_LEVEL:-info}

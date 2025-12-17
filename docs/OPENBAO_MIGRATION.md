@@ -13,11 +13,14 @@ This document describes the migration from local file-based key management to Op
 - **Scalability Issues**: Difficult to manage keys across multiple instances
 - **No Audit Trail**: Limited visibility into key usage
 
-### New Architecture (OpenBao Transit Engine)
-- **Centralized Key Management**: All keys managed by OpenBao
-- **Automatic Key Rotation**: OpenBao handles rotation with versioning
+### New Architecture (OpenBao Keys Management System)
+- **Standalone Key Management**: Separate OpenBao system with PostgreSQL storage
+- **Independent Docker Network**: Runs in isolated network from EHR backend
+- **Fixed Development Token**: `ehr-permanent-token` for consistent development
+- **Dual Endpoint Support**: `localhost:18200` (local) and `openbao:8200` (Docker)
+- **Persistent Storage**: PostgreSQL backend for key persistence
 - **Enhanced Security**: Keys never leave OpenBao, only ciphertext
-- **High Availability**: OpenBao clustering for production
+- **Automatic Key Rotation**: OpenBao handles rotation with versioning
 - **Complete Audit Trail**: All crypto operations logged
 - **Compliance Ready**: Meets HIPAA and other regulatory requirements
 
@@ -63,31 +66,57 @@ Frontend → [OpenBao RSA Unwrap] → [OpenBao Transit Encrypt] → Database
 ### Environment Variables
 
 ```bash
-# OpenBao Connection
-OPENBAO_ADDR=http://openbao:8200
-OPENBAO_TOKEN=s.JfR6axjtdGedQeblSsppTMds  # Dev only
+# OpenBao Keys Management System Connection
+# For local development (EHR backend running locally):
+OPENBAO_ADDR=http://localhost:18200
 
-# Production: Use AppRole
-OPENBAO_ROLE_ID=your-role-id
-OPENBAO_SECRET_ID=your-secret-id
+# For Docker deployment (EHR backend in container):
+OPENBAO_ADDR=http://host.docker.internal:18200
+
+# Fixed development token
+OPENBAO_TOKEN=ehr-permanent-token
 
 # Transit Key Names
 OPENBAO_TRANSIT_AES_KEY=ehr-aes-master
 OPENBAO_TRANSIT_RSA_KEY=ehr-rsa-exchange
+
+# Production: Use AppRole (optional)
+OPENBAO_ROLE_ID=your-role-id
+OPENBAO_SECRET_ID=your-secret-id
 ```
 
-### OpenBao Setup
+### OpenBao Keys Management System Setup
 
-#### 1. Initialize OpenBao (Development)
+The OpenBao Keys Management System is a standalone system available at: [Dee-Soft/ehr-keys-management-system](https://github.com/Dee-Soft/ehr-keys-management-system)
+
+#### 1. Deploy the Keys Management System
 
 ```bash
-# Start OpenBao container
-docker-compose up -d openbao
+# Clone the keys management system repository
+git clone https://github.com/Dee-Soft/ehr-keys-management-system.git
+cd ehr-keys-management-system
 
-# Initialize and unseal (if not auto-unsealed)
-docker exec -it openbao bao operator init
-docker exec -it openbao bao operator unseal
+# Start the system
+./setup-keys-system.sh
 ```
+
+#### 2. Verify System is Running
+
+```bash
+# Check OpenBao is accessible
+curl http://localhost:18200/v1/sys/health
+
+# Expected response:
+# {"initialized":true,"sealed":false,"standby":false,...}
+```
+
+#### 3. Configure Transit Keys (Already done in setup)
+
+The setup script automatically configures:
+- Transit Engine with AES and RSA keys
+- Fixed development token: `ehr-permanent-token`
+- PostgreSQL storage backend
+- Audit logging
 
 #### 2. Create Transit Keys
 
@@ -163,14 +192,14 @@ mongodump --db=ehr-system --collection=patientrecords --out=backup/
 cp config/keys/* backup/keys/
 ```
 
-### Step 2: Deploy OpenBao
+### Step 2: Deploy OpenBao Keys Management System
 
 ```bash
-# Using docker-compose
-docker-compose -f docker-compose-secrets.yml up -d
+# Deploy the standalone keys management system
+# Follow instructions at: https://github.com/Dee-Soft/ehr-keys-management-system
 
-# Verify OpenBao is running
-curl http://localhost:8200/v1/sys/health
+# Verify the system is running
+curl http://localhost:18200/v1/sys/health
 ```
 
 ### Step 3: Setup Transit Keys
@@ -430,14 +459,15 @@ tail -f logs/application.log | grep "Encryption\|Decryption"
 
 ## Changelog
 
-### Version 2.0.0 - OpenBao Migration
-- **Added**: OpenBao Transit Engine integration
-- **Added**: Centralized key management
-- **Added**: Automatic key rotation
-- **Removed**: Local file-based key storage
-- **Removed**: Manual key rotation cron
-- **Changed**: All crypto operations via OpenBao
-- **Changed**: Enhanced security and compliance
+### Version 2.1.0 - OpenBao Keys Management System
+- **Added**: Standalone OpenBao Keys Management System with PostgreSQL
+- **Added**: Independent Docker network deployment
+- **Added**: Fixed development token `ehr-permanent-token`
+- **Added**: Dual endpoint support (localhost:18200 and openbao:8200)
+- **Changed**: Updated OpenBao configuration with endpoint fallback
+- **Changed**: Environment variables moved to `.env` files
+- **Changed**: Docker Compose configurations updated
+- **Updated**: All tests and documentation
 
 ---
 

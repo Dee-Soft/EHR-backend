@@ -3,7 +3,7 @@ version: '3.8'
 # Development compose:
 # - Runs ehr-server + mongoDB
 # - Exposes API on localhost:3001 for Postman/httpie
-# - Connects to OpenBao running outside this compose via host.docker.internal:8200
+# - Connects to OpenBao Keys Management System running separately via host.docker.internal:18200
 services:
   mongoDB:
     image: mongo:latest
@@ -38,8 +38,8 @@ services:
       - NODE_ENV=development
       - PORT=3001
       - MONGO_URI=mongodb://mongoDB:27017/ehr-system
-      - OPENBAO_ADDR=${OPENBAO_ADDR:-http://host.docker.internal:8200}
-      - OPENBAO_TOKEN=${OPENBAO_TOKEN}
+      - OPENBAO_ADDR=${OPENBAO_ADDR:-http://host.docker.internal:18200}
+      - OPENBAO_TOKEN=${OPENBAO_TOKEN:-ehr-permanent-token}
       - OPENBAO_TRANSIT_AES_KEY=${OPENBAO_TRANSIT_AES_KEY:-ehr-aes-master}
       - OPENBAO_TRANSIT_RSA_KEY=${OPENBAO_TRANSIT_RSA_KEY:-ehr-rsa-exchange}
       - JWT_SECRET=${JWT_SECRET:-dev-jwt-secret-change-me}

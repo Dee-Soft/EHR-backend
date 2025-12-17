@@ -155,6 +155,31 @@ class OpenBaoCryptoService {
       throw new Error('Key version unavailable');
     }
   }
+
+  /**
+   * Check OpenBao connection status
+   * @returns {Object} Connection status including endpoint information
+   */
+  async getConnectionStatus() {
+    try {
+      const health = await openbaoConfig.healthCheck();
+      return {
+        connected: health.healthy,
+        endpoint: health.endpoint,
+        endpointsConfigured: health.endpointsConfigured,
+        initialized: health.initialized,
+        sealed: health.sealed,
+        version: health.version
+      };
+    } catch (error) {
+      return {
+        connected: false,
+        error: error.message,
+        endpoint: openbaoConfig.getCurrentEndpoint(),
+        endpointsConfigured: openbaoConfig.getConfiguredEndpoints()
+      };
+    }
+  }
 }
 
 module.exports = new OpenBaoCryptoService();

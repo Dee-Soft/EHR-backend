@@ -29,8 +29,8 @@ describe('OpenBao Configuration', () => {
     jest.resetModules();
     
     // Set environment variables
-    process.env.OPENBAO_ADDR = 'http://localhost:8200';
-    process.env.OPENBAO_TOKEN = 'test-token';
+    process.env.OPENBAO_ADDR = 'http://localhost:18200';
+    process.env.OPENBAO_TOKEN = 'ehr-permanent-token';
     
     // Re-mock logger after resetModules
     jest.doMock('../../../config/logger', () => ({
@@ -242,8 +242,11 @@ describe('OpenBao Configuration', () => {
       
       const loggerAfterInit = require('../../../config/logger');
       expect(loggerAfterInit.error).toHaveBeenCalledWith(
-        'OpenBao connection failed after all retries',
-        expect.any(Object)
+        'OpenBao connection failed after trying all endpoints',
+        expect.objectContaining({
+          error: expect.any(String),
+          endpointsTried: expect.any(Array)
+        })
       );
     });
 
@@ -253,7 +256,13 @@ describe('OpenBao Configuration', () => {
       
       await OpenBaoConfig.init();
       
-      expect(logger.info).toHaveBeenCalledWith('OpenBao connection established');
+      // Should log both attempt and success messages
+      // Check that the messages were logged (they might not have additional parameters)
+      const infoCalls = logger.info.mock.calls;
+      const messages = infoCalls.map(call => call[0]);
+      
+      expect(messages).toContain('Attempting to connect to OpenBao at http://localhost:18200');
+      expect(messages).toContain('OpenBao connection established at http://localhost:18200');
     });
   });
 
@@ -267,7 +276,7 @@ describe('OpenBao Configuration', () => {
       
       expect(client.endpoint).toBeDefined();
     });
-
+    
     test('should use environment OPENBAO_ADDR when set', () => {
       // Set env var BEFORE requiring the module
       process.env.OPENBAO_ADDR = 'http://custom-vault:9200';
@@ -296,6 +305,52 @@ describe('OpenBao Configuration', () => {
       const client = CustomConfig.getTransitClient();
       
       expect(client.endpoint).toBe('http://custom-vault:9200');
+    });
+    
+    test('should have multiple endpoints configured for fallback', () => {
+      const endpoints = OpenBaoConfig.getConfiguredEndpoints();
+      expect(endpoints).toContain('http://localhost:18200');
+      expect(endpoints).toContain('http://openbao:8200');
+      expect(endpoints.length).toBe(2);
+    });
+    
+    test('should get current endpoint', () => {
+      const endpoint = OpenBaoConfig.getCurrentEndpoint();
+      expect(endpoint).toBeDefined();
+      expect(typeof endpoint).toBe('string');
+    });
+  });
+  
+  describe('Endpoint Fallback', () => {
+    test('should try multiple endpoints when connection fails', async () => {
+      // Create a fresh mock that will fail
+      const { createMockVaultClient } = require('../../setup/mocks/openbaoMock');
+      const mockClient = createMockVaultClient();
+      
+      // Override status to always fail
+      mockClient.status = jest.fn()
+        .mockRejectedValueOnce(new Error('Connection refused to localhost:18200'))
+        .mockRejectedValueOnce(new Error('Connection refused to openbao:8200'))
+        .mockRejectedValue(new Error('All endpoints failed'));
+      
+      jest.resetModules();
+      jest.doMock('node-vault', () => {
+        return jest.fn(() => mockClient);
+      });
+      
+      // Re-mock logger
+      jest.doMock('../../../config/logger', () => ({
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn()
+      }));
+      
+      const FailingConfig = require('../../../config/openbao.config');
+      const result = await FailingConfig.init();
+      
+      expect(result).toBe(false);
+      // Should try both endpoints (3 retries each = 6 calls total)
+      expect(mockClient.status.mock.calls.length).toBeGreaterThanOrEqual(2);
     });
   });
 });

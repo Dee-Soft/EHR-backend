@@ -241,8 +241,8 @@ function createMockVaultClient(options = {}) {
     write: mock.write.bind(mock),
     read: mock.read.bind(mock),
     delete: mock.delete.bind(mock),
-    token: options.token || 'mock-root-token',
-    endpoint: options.endpoint || 'http://localhost:8200',
+    token: options.token || 'ehr-permanent-token',
+    endpoint: options.endpoint || 'http://localhost:18200',
     // Helper methods for testing
     _mock: mock,
     _reset: mock.reset.bind(mock),

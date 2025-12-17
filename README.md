@@ -39,11 +39,24 @@
 └─────────────┘     └──────┬──────┘     └─────────────┘
                            │
                            ▼
-                    ┌─────────────┐
-                    │   OpenBao   │
-                    │  (Transit)  │
-                    └─────────────┘
+                    ┌─────────────────────┐
+                    │ OpenBao Keys        │
+                    │ Management System   │
+                    │ (Transit + Postgres)│
+                    └─────────────────────┘
 ```
+
+### OpenBao Keys Management System
+
+The EHR backend now uses a standalone OpenBao Keys Management System that runs independently with PostgreSQL storage. This system provides:
+
+- **Centralized Key Management**: All cryptographic keys managed separately
+- **PostgreSQL Storage**: Persistent key storage with audit logging
+- **Independent Docker Network**: Runs in its own isolated network
+- **Fixed Development Token**: `ehr-permanent-token` for development
+- **Dual Endpoint Support**: 
+  - `http://localhost:18200` for local development
+  - `http://openbao:8200` for Docker network access
 
 ### Key Components
 
@@ -145,15 +158,39 @@ The server will start on `http://localhost:3001`
 
 ### Using Docker Compose
 
-#### 1) Start OpenBao (separately)
+#### 1) Start OpenBao Keys Management System (separately)
 
-OpenBao is intended to run **outside** this backend compose (separate Docker project/network). If you are using the provided secret-management stack, see [`Dee-Soft/EHR-secret-management`](https://github.com/Dee-Soft/EHR-secret-management).
+The OpenBao Keys Management System runs **outside** this backend compose in its own Docker network with PostgreSQL storage. The system is available at: [Dee-Soft/ehr-keys-management-system](https://github.com/Dee-Soft/ehr-keys-management-system).
 
-For local/dev OpenBao, make the dev token stable by setting a fixed dev root token (example):
+**Key Features:**
+- Runs on port 18200 (default)
+- Uses PostgreSQL for persistent storage
+- Fixed development token: `ehr-permanent-token`
+- Independent Docker network
+
+#### 2) Configure Environment Variables
+
+Copy the example environment file and update it:
 
 ```bash
-# In your OpenBao compose/project
-export OPENBAO_DEV_ROOT_TOKEN_ID="dev-openbao-token"
+cp .env.example .env
+# Edit .env with your OpenBao configuration
+```
+
+**Important Environment Variables:**
+```bash
+# For local development (EHR backend running locally)
+OPENBAO_ADDR=http://localhost:18200
+
+# For Docker deployment (EHR backend in container)
+OPENBAO_ADDR=http://host.docker.internal:18200
+
+# Fixed development token
+OPENBAO_TOKEN=ehr-permanent-token
+
+# Transit key names
+OPENBAO_TRANSIT_AES_KEY=ehr-aes-master
+OPENBAO_TRANSIT_RSA_KEY=ehr-rsa-exchange
 ```
 
 #### 2) Start backend + MongoDB (this repo)
@@ -211,8 +248,8 @@ docker compose -f docker-compose.test.yml up --build --abort-on-container-exit
 | `NODE_ENV` | Environment | `production` |
 | `PORT` | Server port | `3001` |
 | `MONGO_URI` | MongoDB connection string | `mongodb://localhost:27017/ehr` |
-| `OPENBAO_ADDR` | OpenBao address | `http://localhost:8200` (host) / `http://host.docker.internal:8200` (from inside Docker) |
-| `OPENBAO_TOKEN` | OpenBao token | `s.xxxxx` |
+| `OPENBAO_ADDR` | OpenBao Keys Management System address | `http://localhost:18200` (local) / `http://host.docker.internal:18200` (Docker) |
+| `OPENBAO_TOKEN` | OpenBao authentication token | `ehr-permanent-token` (dev) / `your-token` (prod) |
 | `JWT_SECRET` | JWT signing secret | `your-secret-key` |
 | `FRONTEND_URL` | Frontend URL for CORS | `http://localhost:3000` |
 
