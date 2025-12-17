@@ -30,12 +30,16 @@ jest.mock('../../config/openbao.config', () => {
   };
 });
 
-const app = require('../../server');
-const openbaoConfig = require('../../config/openbao.config');
+// App will be imported inside beforeAll hook to ensure mocks are set up
+let app;
+let openbaoConfig;
 
 describe('Integration: Health Endpoints', () => {
   beforeAll(async () => {
     await connect();
+    // Import app and config after DB connection and mock setup
+    app = require('../../server');
+    openbaoConfig = require('../../config/openbao.config');
   });
 
   beforeEach(() => {

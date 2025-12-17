@@ -7,8 +7,10 @@ let mongoServer;
  * Connect to the in-memory database
  */
 async function connect() {
-  // Close any existing connections
-  await mongoose.disconnect();
+  // Only disconnect if we're already connected to a different database
+  if (mongoose.connection.readyState !== 0 && !mongoose.connection.host.includes('127.0.0.1')) {
+    await mongoose.disconnect();
+  }
 
   // Prefer an externally-provided MongoDB (e.g., docker-compose mongodb-test)
   // to avoid mongodb-memory-server downloading binaries in containerized runs.
@@ -22,13 +24,20 @@ async function connect() {
     return;
   }
 
-  mongoServer = await MongoMemoryServer.create();
+  // Create or reuse existing memory server
+  if (!mongoServer) {
+    mongoServer = await MongoMemoryServer.create();
+  }
+  
   const mongoUri = mongoServer.getUri();
 
-  await mongoose.connect(mongoUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  // Only connect if not already connected to this URI
+  if (mongoose.connection.readyState === 0 || mongoose.connection.host !== mongoUri) {
+    await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+  }
 }
 
 /**
@@ -48,11 +57,9 @@ async function closeDatabase() {
  * Remove all the data for all db collections
  */
 async function clearDatabase() {
-  const collections = mongoose.connection.collections;
-
-  for (const key in collections) {
-    const collection = collections[key];
-    await collection.deleteMany({});
+  if (mongoose.connection.readyState !== 0) {
+    // Use dropDatabase for better performance
+    await mongoose.connection.dropDatabase();
   }
 }
 

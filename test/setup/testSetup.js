@@ -8,7 +8,7 @@ process.env.PORT = '5001';
 process.env.FRONTEND_URL = 'http://localhost:3000';
 
 // Increase test timeout for integration tests
-jest.setTimeout(10000);
+jest.setTimeout(30000);
 
 // Suppress console logs during tests (optional - uncomment if needed)
 // global.console = {

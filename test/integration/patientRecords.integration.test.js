@@ -27,7 +27,8 @@ jest.mock('../../config/openbao.config', () => {
   };
 });
 
-const app = require('../../server');
+// App will be imported inside beforeAll hook to ensure mocks are set up
+let app;
 
 // Helper function to extract cookie value from set-cookie header
 const extractCookie = (setCookieHeader) => {
@@ -43,6 +44,8 @@ describe('Integration: Patient Records', () => {
 
   beforeAll(async () => {
     await connect();
+    // Import app after DB connection and mock setup
+    app = require('../../server');
   });
 
   beforeEach(async () => {

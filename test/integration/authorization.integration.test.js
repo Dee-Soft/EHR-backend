@@ -25,7 +25,8 @@ jest.mock('../../config/openbao.config', () => {
   };
 });
 
-const app = require('../../server');
+// App will be imported inside beforeAll hook to ensure mocks are set up
+let app;
 
 describe('Integration: Authorization/RBAC', () => {
   let adminToken, managerToken, providerToken, employeeToken, patientToken;
@@ -33,6 +34,8 @@ describe('Integration: Authorization/RBAC', () => {
 
   beforeAll(async () => {
     await connect();
+    // Import app after DB connection and mock setup
+    app = require('../../server');
   }, 60000); // 60 second timeout for MongoDB Memory Server initialization
 
   beforeEach(async () => {

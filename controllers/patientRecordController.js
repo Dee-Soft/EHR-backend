@@ -198,47 +198,15 @@ exports.getAllRecords = async (req, res) => {
         details: `${role} viewed all patient records`,
       });
     }
-    // Provider can view records of assigned patients
-    else if (role === 'Provider') {
-      const provider = await User.findById(requesterId);
-      const assignedPatientIds = provider.assignedPatients || [];
-      
-      records = await PatientRecord.find({
-        patient: { $in: assignedPatientIds }
-      }).populate({ path: 'patient' });
-      
-      message = 'Assigned patient records retrieved successfully';
-      
-      // Audit log
-      await AuditLog.create({
-        action: 'VIEW_ASSIGNED_RECORDS',
-        actorId: requesterId,
-        targetType: 'PatientRecord',
-        details: 'Provider viewed assigned patient records',
-      });
-    }
-    // Patient can view their own records
-    else if (role === 'Patient') {
-      records = await PatientRecord.find({ patient: requesterId }).populate({ path: 'patient' });
-      message = 'Your records retrieved successfully';
-      
-      // Audit log
-      await AuditLog.create({
-        action: 'VIEW_OWN_RECORDS',
-        actorId: requesterId,
-        targetType: 'PatientRecord',
-        details: 'Patient viewed own records',
-      });
-    }
     // Other roles not allowed
     else {
       return res.status(403).json({ 
-        message: 'You do not have permission to view records' 
+        message: 'You do not have permission to view all records' 
       });
     }
     
-    if (!records || records.length === 0) {
-      return res.status(404).json({ message: 'No records found' });
+    if (!records) {
+      records = [];
     }
 
     // Return encrypted records (frontend will decrypt)

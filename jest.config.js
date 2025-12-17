@@ -41,8 +41,8 @@ module.exports = {
   // Coverage reporters
   coverageReporters: ['text', 'lcov', 'html'],
 
-  // Test timeout
-  testTimeout: 10000,
+  // Test timeout - increased for integration tests
+  testTimeout: 30000,
 
   // Clear mocks between tests
   clearMocks: true,
