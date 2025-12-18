@@ -2135,3 +2135,437 @@
 {"error":"invalid ciphertext format","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-17 22:17:07"}
 {"error":"invalid ciphertext format","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-17 22:17:07"}
 {"error":"Unexpected token '*', \"*~��G����p\"... is not valid JSON","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-17 22:17:07"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://openbao:8200\",\"http://localhost:18200\"]","service":"ehr-backend","timestamp":"2025-12-17 12:18:53"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 12:18:53"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-17 12:18:53"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-17 12:18:53"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-17 12:18:53"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"EhrDB","service":"ehr-backend","timestamp":"2025-12-17 12:18:53"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 12:18:53"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-17 12:18:53"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://openbao:8200\",\"http://localhost:18200\"]","service":"ehr-backend","timestamp":"2025-12-17 12:22:21"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 12:22:21"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-17 12:22:21"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-17 12:22:21"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-17 12:22:21"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"EhrDB","service":"ehr-backend","timestamp":"2025-12-17 12:22:21"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 12:22:21"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-17 12:22:21"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:25:46","userId":"6942a1492634b84b0ede3f3a"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:25:46","userId":"6942a1492634b84b0ede3f3d"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:25:46","userId":"6942a1492634b84b0ede3f3f"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:25:46","userId":"6942a1492634b84b0ede3f41"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:46","userId":"6942a1492634b84b0ede3f43"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:46","userId":"6942a1492634b84b0ede3f3a","userRole":"Admin"}
+{"creatorId":"6942a1492634b84b0ede3f3a","creatorRole":"Admin","level":"info","message":"User registered successfully","newUserId":"6942a14a2634b84b0ede3f55","newUserRole":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:46"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:46","userId":"6942a1492634b84b0ede3f3a","userRole":"Admin"}
+{"creatorId":"6942a1492634b84b0ede3f3a","creatorRole":"Admin","level":"info","message":"User registered successfully","newUserId":"6942a14a2634b84b0ede3f5a","newUserRole":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:25:46"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:46","userId":"6942a1492634b84b0ede3f3a","userRole":"Admin"}
+{"creatorId":"6942a1492634b84b0ede3f3a","creatorRole":"Admin","level":"info","message":"User registered successfully","newUserId":"6942a14b2634b84b0ede3f5f","newUserRole":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:25:47"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:47","userId":"6942a1492634b84b0ede3f3a","userRole":"Admin"}
+{"creatorId":"6942a1492634b84b0ede3f3a","creatorRole":"Admin","level":"info","message":"User registered successfully","newUserId":"6942a14b2634b84b0ede3f64","newUserRole":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:25:47"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:25:47","userId":"6942a14b2634b84b0ede3f68"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:25:48","userId":"6942a14b2634b84b0ede3f6a"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:25:48","userId":"6942a14b2634b84b0ede3f6c"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:25:48","userId":"6942a14b2634b84b0ede3f6e"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:48","userId":"6942a14b2634b84b0ede3f70"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:48","userId":"6942a14b2634b84b0ede3f6a","userRole":"Manager"}
+{"creatorId":"6942a14b2634b84b0ede3f6a","creatorRole":"Manager","level":"info","message":"User registered successfully","newUserId":"6942a14c2634b84b0ede3f82","newUserRole":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:25:48"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:48","userId":"6942a14b2634b84b0ede3f6a","userRole":"Manager"}
+{"creatorId":"6942a14b2634b84b0ede3f6a","creatorRole":"Manager","level":"info","message":"User registered successfully","newUserId":"6942a14c2634b84b0ede3f87","newUserRole":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:25:48"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:48","userId":"6942a14b2634b84b0ede3f6a","userRole":"Manager"}
+{"creatorId":"6942a14b2634b84b0ede3f6a","creatorRole":"Manager","level":"info","message":"User registered successfully","newUserId":"6942a14c2634b84b0ede3f8c","newUserRole":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:48"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:25:49","userId":"6942a14c2634b84b0ede3f90"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:25:49","userId":"6942a14c2634b84b0ede3f92"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:25:49","userId":"6942a14d2634b84b0ede3f94"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:25:49","userId":"6942a14d2634b84b0ede3f96"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:49","userId":"6942a14d2634b84b0ede3f98"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:49","userId":"6942a14c2634b84b0ede3f92","userRole":"Manager"}
+{"creatorId":"6942a14c2634b84b0ede3f92","creatorRole":"Manager","level":"warn","message":"Registration denied: Insufficient permissions","service":"ehr-backend","targetRole":"Manager","timestamp":"2025-12-17 23:25:49"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:25:50","userId":"6942a14d2634b84b0ede3fa9"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:25:50","userId":"6942a14e2634b84b0ede3fab"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:25:50","userId":"6942a14e2634b84b0ede3fad"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:25:51","userId":"6942a14e2634b84b0ede3faf"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:51","userId":"6942a14e2634b84b0ede3fb1"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:51","userId":"6942a14e2634b84b0ede3faf","userRole":"Employee"}
+{"creatorId":"6942a14e2634b84b0ede3faf","creatorRole":"Employee","level":"info","message":"User registered successfully","newUserId":"6942a14f2634b84b0ede3fc3","newUserRole":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:51"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:25:51","userId":"6942a14f2634b84b0ede3fc7"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:25:52","userId":"6942a14f2634b84b0ede3fc9"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:25:52","userId":"6942a14f2634b84b0ede3fcb"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:25:52","userId":"6942a14f2634b84b0ede3fcd"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:52","userId":"6942a14f2634b84b0ede3fcf"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:52","userId":"6942a14f2634b84b0ede3fcd","userRole":"Employee"}
+{"creatorId":"6942a14f2634b84b0ede3fcd","creatorRole":"Employee","level":"warn","message":"Registration denied: Insufficient permissions","service":"ehr-backend","targetRole":"Provider","timestamp":"2025-12-17 23:25:52"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:25:53","userId":"6942a1502634b84b0ede3fe0"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:25:53","userId":"6942a1502634b84b0ede3fe2"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:25:53","userId":"6942a1502634b84b0ede3fe4"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:25:53","userId":"6942a1502634b84b0ede3fe6"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:53","userId":"6942a1502634b84b0ede3fe8"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:53","userId":"6942a1502634b84b0ede3fe6","userRole":"Employee"}
+{"creatorId":"6942a1502634b84b0ede3fe6","creatorRole":"Employee","level":"warn","message":"Registration denied: Insufficient permissions","service":"ehr-backend","targetRole":"Employee","timestamp":"2025-12-17 23:25:53"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:25:54","userId":"6942a1512634b84b0ede3ff9"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:25:54","userId":"6942a1512634b84b0ede3ffb"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:25:54","userId":"6942a1512634b84b0ede3ffd"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:25:54","userId":"6942a1522634b84b0ede3fff"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:54","userId":"6942a1522634b84b0ede4001"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:54","userId":"6942a1512634b84b0ede3ffd","userRole":"Provider"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:54","userId":"6942a1512634b84b0ede3ffd","userRole":"Provider"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:25:55","userId":"6942a1522634b84b0ede4014"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:25:55","userId":"6942a1532634b84b0ede4016"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:25:55","userId":"6942a1532634b84b0ede4018"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:25:55","userId":"6942a1532634b84b0ede401a"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:56","userId":"6942a1532634b84b0ede401c"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:56","userId":"6942a1532634b84b0ede401c","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","method":"POST","path":"/register","requiredRoles":["Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:56","userId":"6942a1532634b84b0ede401c","userRole":"Patient"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:25:56","userId":"6942a1542634b84b0ede402f"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:25:56","userId":"6942a1542634b84b0ede4031"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:25:57","userId":"6942a1542634b84b0ede4033"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:25:57","userId":"6942a1542634b84b0ede4035"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:57","userId":"6942a1542634b84b0ede4037"}
+{"level":"info","message":"Authorization check","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:57","userId":"6942a1542634b84b0ede402f","userRole":"Admin"}
+{"level":"info","message":"Admin 6942a1542634b84b0ede402f retrieved 5 audit logs","service":"ehr-backend","timestamp":"2025-12-17 23:25:57"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:25:57","userId":"6942a1552634b84b0ede4049"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:25:58","userId":"6942a1552634b84b0ede404b"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:25:58","userId":"6942a1552634b84b0ede404d"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:25:58","userId":"6942a1552634b84b0ede404f"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:58","userId":"6942a1552634b84b0ede4051"}
+{"level":"info","message":"Authorization check","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:58","userId":"6942a1552634b84b0ede404b","userRole":"Manager"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:58","userId":"6942a1552634b84b0ede404b","userRole":"Manager"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:25:59","userId":"6942a1562634b84b0ede4064"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:25:59","userId":"6942a1562634b84b0ede4066"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:25:59","userId":"6942a1562634b84b0ede4068"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:25:59","userId":"6942a1562634b84b0ede406a"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:25:59","userId":"6942a1562634b84b0ede406c"}
+{"level":"info","message":"Authorization check","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:59","userId":"6942a1562634b84b0ede4068","userRole":"Provider"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:25:59","userId":"6942a1562634b84b0ede4068","userRole":"Provider"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:00","userId":"6942a1572634b84b0ede407f"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:00","userId":"6942a1572634b84b0ede4081"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:00","userId":"6942a1572634b84b0ede4083"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:00","userId":"6942a1582634b84b0ede4085"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:00","userId":"6942a1582634b84b0ede4087"}
+{"level":"info","message":"Authorization check","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:00","userId":"6942a1582634b84b0ede4085","userRole":"Employee"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:00","userId":"6942a1582634b84b0ede4085","userRole":"Employee"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:01","userId":"6942a1582634b84b0ede409a"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:01","userId":"6942a1592634b84b0ede409c"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:01","userId":"6942a1592634b84b0ede409e"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:01","userId":"6942a1592634b84b0ede40a0"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:02","userId":"6942a1592634b84b0ede40a2"}
+{"level":"info","message":"Authorization check","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:02","userId":"6942a1592634b84b0ede40a2","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:02","userId":"6942a1592634b84b0ede40a2","userRole":"Patient"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:02","userId":"6942a15a2634b84b0ede40b5"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:02","userId":"6942a15a2634b84b0ede40b7"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:02","userId":"6942a15a2634b84b0ede40b9"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:03","userId":"6942a15a2634b84b0ede40bb"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:03","userId":"6942a15a2634b84b0ede40bd"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/assign-patient","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:03","userId":"6942a15a2634b84b0ede40b5","userRole":"Admin"}
+{"level":"info","message":"Patient 6942a15a2634b84b0ede40bd assigned to Provider 6942a15a2634b84b0ede40b9 by Admin 6942a15a2634b84b0ede40b5","service":"ehr-backend","timestamp":"2025-12-17 23:26:03"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:03","userId":"6942a15b2634b84b0ede40d2"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:04","userId":"6942a15b2634b84b0ede40d4"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:04","userId":"6942a15b2634b84b0ede40d6"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:04","userId":"6942a15b2634b84b0ede40d8"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:04","userId":"6942a15b2634b84b0ede40da"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/assign-patient","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:04","userId":"6942a15b2634b84b0ede40d4","userRole":"Manager"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","method":"POST","path":"/assign-patient","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:04","userId":"6942a15b2634b84b0ede40d4","userRole":"Manager"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:05","userId":"6942a15c2634b84b0ede40ed"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:05","userId":"6942a15c2634b84b0ede40ef"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:05","userId":"6942a15c2634b84b0ede40f1"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:05","userId":"6942a15c2634b84b0ede40f3"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:05","userId":"6942a15c2634b84b0ede40f5"}
+{"level":"info","message":"Authorization check","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:05","userId":"6942a15c2634b84b0ede40f5","userRole":"Patient"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:05","userId":"6942a15c2634b84b0ede40f5","userRole":"Patient"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:06","userId":"6942a15d2634b84b0ede4108"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:06","userId":"6942a15d2634b84b0ede410a"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:06","userId":"6942a15d2634b84b0ede410c"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:06","userId":"6942a15d2634b84b0ede410e"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:06","userId":"6942a15d2634b84b0ede4110"}
+{"level":"info","message":"Authorization check","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:06","userId":"6942a15d2634b84b0ede410e","userRole":"Employee"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:06","userId":"6942a15d2634b84b0ede410e","userRole":"Employee"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:07","userId":"6942a15e2634b84b0ede4123"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:07","userId":"6942a15e2634b84b0ede4125"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:07","userId":"6942a15f2634b84b0ede4127"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:07","userId":"6942a15f2634b84b0ede4129"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:07","userId":"6942a15f2634b84b0ede412b"}
+{"level":"info","message":"Authorization check","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:07","userId":"6942a15f2634b84b0ede4127","userRole":"Provider"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:07","userId":"6942a15f2634b84b0ede4127","userRole":"Provider"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:08","userId":"6942a15f2634b84b0ede413e"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:08","userId":"6942a1602634b84b0ede4140"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:09","userId":"6942a1602634b84b0ede4142"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:09","userId":"6942a1602634b84b0ede4144"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:09","userId":"6942a1602634b84b0ede4146"}
+{"level":"info","message":"Authorization check","method":"POST","path":"/assign-patient","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:09","userId":"6942a1602634b84b0ede4140","userRole":"Manager"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","method":"POST","path":"/assign-patient","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:09","userId":"6942a1602634b84b0ede4140","userRole":"Manager"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:10","userId":"6942a1612634b84b0ede4159"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:10","userId":"6942a1612634b84b0ede415b"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:10","userId":"6942a1612634b84b0ede415d"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:10","userId":"6942a1612634b84b0ede415f"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:10","userId":"6942a1612634b84b0ede4161"}
+{"level":"info","message":"Authorization check","method":"PUT","path":"/6942a1612634b84b0ede4161","requiredRoles":["Patient","Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:10","userId":"6942a1612634b84b0ede4159","userRole":"Admin"}
+{"level":"info","message":"Patient updated by staff","service":"ehr-backend","timestamp":"2025-12-17 23:26:10","updatedBy":"6942a1612634b84b0ede4159","updaterRole":"Admin","userId":"6942a1612634b84b0ede4161"}
+{"level":"info","message":"User updated successfully","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:10","updatedBy":"6942a1612634b84b0ede4159","userId":"6942a1612634b84b0ede4161"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:11","userId":"6942a1622634b84b0ede4176"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:11","userId":"6942a1622634b84b0ede4178"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:11","userId":"6942a1622634b84b0ede417a"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:11","userId":"6942a1622634b84b0ede417c"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:11","userId":"6942a1622634b84b0ede417e"}
+{"level":"info","message":"Authorization check","method":"PUT","path":"/6942a1622634b84b0ede417e","requiredRoles":["Patient","Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:11","userId":"6942a1622634b84b0ede4178","userRole":"Manager"}
+{"level":"info","message":"Patient updated by staff","service":"ehr-backend","timestamp":"2025-12-17 23:26:11","updatedBy":"6942a1622634b84b0ede4178","updaterRole":"Manager","userId":"6942a1622634b84b0ede417e"}
+{"level":"info","message":"User updated successfully","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:11","updatedBy":"6942a1622634b84b0ede4178","userId":"6942a1622634b84b0ede417e"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:12","userId":"6942a1632634b84b0ede4193"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:12","userId":"6942a1632634b84b0ede4195"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:12","userId":"6942a1642634b84b0ede4197"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:12","userId":"6942a1642634b84b0ede4199"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:12","userId":"6942a1642634b84b0ede419b"}
+{"level":"info","message":"Authorization check","method":"PUT","path":"/6942a1642634b84b0ede419b","requiredRoles":["Patient","Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:12","userId":"6942a1642634b84b0ede419b","userRole":"Patient"}
+{"fields":["phone","address"],"level":"info","message":"Patient self-update","service":"ehr-backend","timestamp":"2025-12-17 23:26:12","userId":"6942a1642634b84b0ede419b"}
+{"level":"info","message":"User updated successfully","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:12","updatedBy":"6942a1642634b84b0ede419b","userId":"6942a1642634b84b0ede419b"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:13","userId":"6942a1642634b84b0ede41b0"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:13","userId":"6942a1652634b84b0ede41b2"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:13","userId":"6942a1652634b84b0ede41b4"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:13","userId":"6942a1652634b84b0ede41b6"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:14","userId":"6942a1652634b84b0ede41b8"}
+{"level":"info","message":"Authorization check","method":"PUT","path":"/6942a1662634b84b0ede41c9","requiredRoles":["Patient","Employee","Manager","Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:14","userId":"6942a1652634b84b0ede41b8","userRole":"Patient"}
+{"level":"warn","message":"Update denied: Not authorized to update patient","requesterId":"6942a1652634b84b0ede41b8","requesterRole":"Patient","service":"ehr-backend","targetUserId":"6942a1662634b84b0ede41c9","timestamp":"2025-12-17 23:26:14"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:14","userId":"6942a1662634b84b0ede41cc"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:15","userId":"6942a1662634b84b0ede41ce"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:15","userId":"6942a1662634b84b0ede41d0"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:15","userId":"6942a1662634b84b0ede41d2"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:15","userId":"6942a1662634b84b0ede41d4"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:16","userId":"6942a1672634b84b0ede41e5"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:16","userId":"6942a1672634b84b0ede41e7"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:16","userId":"6942a1672634b84b0ede41e9"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:16","userId":"6942a1672634b84b0ede41eb"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:16","userId":"6942a1672634b84b0ede41ed"}
+{"level":"info","message":"Authorization check","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:16","userId":"6942a1672634b84b0ede41e9","userRole":"Provider"}
+{"level":"warn","message":"Authorization denied: Insufficient permissions","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:26:16","userId":"6942a1672634b84b0ede41e9","userRole":"Provider"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:23","userId":"6942a16ebaf41ef75902618d"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:23","userId":"6942a16fbaf41ef759026190"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:23","userId":"6942a16fbaf41ef759026192"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:24","userId":"6942a16fbaf41ef759026196"}
+{"creatorId":"6942a16fbaf41ef759026192","level":"info","message":"Record created successfully","patientId":"6942a16fbaf41ef759026196","recordId":"6942a170baf41ef7590261a6","service":"ehr-backend","timestamp":"2025-12-17 23:26:24"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:24","userId":"6942a170baf41ef7590261aa"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:24","userId":"6942a170baf41ef7590261ac"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:25","userId":"6942a170baf41ef7590261ae"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:25","userId":"6942a170baf41ef7590261b2"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:25","userId":"6942a171baf41ef7590261c2"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:26","userId":"6942a171baf41ef7590261c4"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:26","userId":"6942a171baf41ef7590261c6"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:26","userId":"6942a171baf41ef7590261ca"}
+{"creatorId":"6942a171baf41ef7590261c4","level":"info","message":"Record created successfully","patientId":"6942a171baf41ef7590261c8","recordId":"6942a172baf41ef7590261d9","service":"ehr-backend","timestamp":"2025-12-17 23:26:26"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:27","userId":"6942a172baf41ef7590261dd"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:27","userId":"6942a172baf41ef7590261df"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:27","userId":"6942a172baf41ef7590261e1"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:27","userId":"6942a172baf41ef7590261e5"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:28","userId":"6942a173baf41ef7590261f4"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:28","userId":"6942a173baf41ef7590261f6"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:28","userId":"6942a173baf41ef7590261f8"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:28","userId":"6942a174baf41ef7590261fc"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:29","userId":"6942a174baf41ef75902620b"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:29","userId":"6942a174baf41ef75902620d"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:29","userId":"6942a174baf41ef75902620f"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:29","userId":"6942a175baf41ef759026213"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:30","userId":"6942a175baf41ef759026222"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:30","userId":"6942a175baf41ef759026224"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:30","userId":"6942a176baf41ef759026226"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:30","userId":"6942a176baf41ef75902622a"}
+{"creatorId":"6942a176baf41ef759026226","level":"info","message":"Record created successfully","patientId":"6942a176baf41ef75902622a","recordId":"6942a176baf41ef75902623a","service":"ehr-backend","timestamp":"2025-12-17 23:26:30"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:31","userId":"6942a177baf41ef75902623e"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:31","userId":"6942a177baf41ef759026240"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:31","userId":"6942a177baf41ef759026242"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:32","userId":"6942a177baf41ef759026246"}
+{"level":"info","message":"Records retrieved","recordCount":1,"role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:32","userId":"6942a177baf41ef759026240"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:32","userId":"6942a178baf41ef75902625b"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:33","userId":"6942a178baf41ef75902625d"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:33","userId":"6942a178baf41ef75902625f"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:33","userId":"6942a178baf41ef759026263"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:33","userId":"6942a179baf41ef759026272"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:34","userId":"6942a179baf41ef759026274"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:34","userId":"6942a179baf41ef759026276"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:34","userId":"6942a179baf41ef75902627a"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:34","userId":"6942a17abaf41ef759026289"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:35","userId":"6942a17abaf41ef75902628b"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:35","userId":"6942a17abaf41ef75902628d"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:35","userId":"6942a17abaf41ef759026291"}
+{"level":"info","message":"Patient records retrieved","patientId":"6942a17abaf41ef759026291","recordCount":1,"service":"ehr-backend","timestamp":"2025-12-17 23:26:35"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:36","userId":"6942a17bbaf41ef7590262a6"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:36","userId":"6942a17bbaf41ef7590262a8"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:36","userId":"6942a17bbaf41ef7590262aa"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:36","userId":"6942a17bbaf41ef7590262ae"}
+{"level":"info","message":"Patient records retrieved","patientId":"6942a17bbaf41ef7590262ae","recordCount":1,"service":"ehr-backend","timestamp":"2025-12-17 23:26:36"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:37","userId":"6942a17cbaf41ef7590262c5"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:37","userId":"6942a17cbaf41ef7590262c7"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:37","userId":"6942a17cbaf41ef7590262c9"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:37","userId":"6942a17dbaf41ef7590262cd"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:38","userId":"6942a17dbaf41ef7590262de"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:38","userId":"6942a17ebaf41ef7590262e0"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:38","userId":"6942a17ebaf41ef7590262e2"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:38","userId":"6942a17ebaf41ef7590262e6"}
+{"level":"info","message":"Record retrieved by ID","recordId":"6942a17ebaf41ef7590262f5","service":"ehr-backend","timestamp":"2025-12-17 23:26:39","userId":"6942a17ebaf41ef7590262e2"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:39","userId":"6942a17fbaf41ef7590262fb"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:39","userId":"6942a17fbaf41ef7590262fd"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:40","userId":"6942a17fbaf41ef7590262ff"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:40","userId":"6942a17fbaf41ef759026303"}
+{"level":"info","message":"Record retrieved by ID","recordId":"6942a180baf41ef759026312","service":"ehr-backend","timestamp":"2025-12-17 23:26:40","userId":"6942a17fbaf41ef759026303"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:41","userId":"6942a180baf41ef759026318"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:41","userId":"6942a180baf41ef75902631a"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:41","userId":"6942a180baf41ef75902631c"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:41","userId":"6942a180baf41ef759026320"}
+{"level":"info","message":"Record retrieved by ID","recordId":"6942a181baf41ef75902632f","service":"ehr-backend","timestamp":"2025-12-17 23:26:41","userId":"6942a180baf41ef75902631a"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:42","userId":"6942a181baf41ef759026335"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:42","userId":"6942a181baf41ef759026337"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:42","userId":"6942a181baf41ef759026339"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:42","userId":"6942a182baf41ef75902633d"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:43","userId":"6942a182baf41ef759026352"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:43","userId":"6942a183baf41ef759026354"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:43","userId":"6942a183baf41ef759026356"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:43","userId":"6942a183baf41ef75902635a"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:44","userId":"6942a184baf41ef75902636c"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:44","userId":"6942a184baf41ef75902636e"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:45","userId":"6942a184baf41ef759026370"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:45","userId":"6942a184baf41ef759026374"}
+{"creatorId":"6942a184baf41ef759026370","level":"info","message":"Record created successfully","patientId":"6942a184baf41ef759026374","recordId":"6942a185baf41ef759026384","service":"ehr-backend","timestamp":"2025-12-17 23:26:45"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:45","userId":"6942a185baf41ef759026388"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:46","userId":"6942a185baf41ef75902638a"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:46","userId":"6942a185baf41ef75902638c"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:46","userId":"6942a185baf41ef759026390"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:47","userId":"6942a186baf41ef7590263a1"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:47","userId":"6942a186baf41ef7590263a3"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:47","userId":"6942a186baf41ef7590263a5"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:47","userId":"6942a186baf41ef7590263a9"}
+{"creatorId":"6942a186baf41ef7590263a5","level":"info","message":"Record created successfully","patientId":"6942a186baf41ef7590263a9","recordId":"6942a187baf41ef7590263b9","service":"ehr-backend","timestamp":"2025-12-17 23:26:47"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:48","userId":"6942a187baf41ef7590263be"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:48","userId":"6942a187baf41ef7590263c0"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:48","userId":"6942a187baf41ef7590263c2"}
+{"email":"assigned@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:48","userId":"6942a188baf41ef7590263c6"}
+{"level":"info","message":"Record retrieved by ID","recordId":"6942a188baf41ef7590263d5","service":"ehr-backend","timestamp":"2025-12-17 23:26:48","userId":"6942a187baf41ef7590263c2"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:55","userId":"6942a18f8c96554fcad29baa"}
+{"email":"manager@test.com","level":"info","message":"User login successful","role":"Manager","service":"ehr-backend","timestamp":"2025-12-17 23:26:56","userId":"6942a18f8c96554fcad29bb2"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:26:56","userId":"6942a1908c96554fcad29bb7"}
+{"email":"employee@test.com","level":"info","message":"User login successful","role":"Employee","service":"ehr-backend","timestamp":"2025-12-17 23:26:57","userId":"6942a1908c96554fcad29bbc"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:26:57","userId":"6942a1918c96554fcad29bc1"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:57","userId":"6942a1918c96554fcad29bc6"}
+{"email":"patient@test.com","ip":"::ffff:127.0.0.1","level":"warn","message":"Login attempt failed: Invalid password","service":"ehr-backend","timestamp":"2025-12-17 23:26:58","userId":"6942a1918c96554fcad29bcb"}
+{"email":"nonexistent@example.com","ip":"::ffff:127.0.0.1","level":"warn","message":"Login attempt failed: User not found","service":"ehr-backend","timestamp":"2025-12-17 23:26:58"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"Login attempt failed: User not found","service":"ehr-backend","timestamp":"2025-12-17 23:26:58"}
+{"email":"patient@test.com","error":"data and hash arguments required","level":"error","message":"Login error","service":"ehr-backend","timestamp":"2025-12-17 23:26:58"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:26:58","userId":"6942a1928c96554fcad29bd3"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"Authentication failed: Token missing","method":"GET","path":"/me","service":"ehr-backend","timestamp":"2025-12-17 23:26:58"}
+{"error":"jwt malformed","ip":"::ffff:127.0.0.1","level":"warn","message":"Authentication failed: JWT verification failed","method":"GET","path":"/me","service":"ehr-backend","timestamp":"2025-12-17 23:26:58"}
+{"error":"jwt expired","ip":"::ffff:127.0.0.1","level":"warn","message":"Authentication failed: JWT verification failed","method":"GET","path":"/me","service":"ehr-backend","timestamp":"2025-12-17 23:26:59"}
+{"error":"invalid token","ip":"::ffff:127.0.0.1","level":"warn","message":"Authentication failed: JWT verification failed","method":"GET","path":"/me","service":"ehr-backend","timestamp":"2025-12-17 23:26:59"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:27:00","userId":"6942a1938c96554fcad29be2"}
+{"level":"info","message":"User logout","service":"ehr-backend","timestamp":"2025-12-17 23:27:00"}
+{"level":"info","message":"User logout","service":"ehr-backend","timestamp":"2025-12-17 23:27:00"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:27:00","userId":"6942a1948c96554fcad29beb"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:27:01","userId":"6942a1948c96554fcad29bf0"}
+{"level":"info","message":"User logout","service":"ehr-backend","timestamp":"2025-12-17 23:27:01"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"Authentication failed: Token missing","method":"GET","path":"/me","service":"ehr-backend","timestamp":"2025-12-17 23:27:01"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:27:01","userId":"6942a1958c96554fcad29bf7"}
+{"level":"info","message":"Authorization check","method":"GET","path":"/audit-logs","requiredRoles":["Admin"],"service":"ehr-backend","timestamp":"2025-12-17 23:27:01","userId":"6942a1958c96554fcad29bf7","userRole":"Admin"}
+{"level":"info","message":"Admin 6942a1958c96554fcad29bf7 retrieved 1 audit logs","service":"ehr-backend","timestamp":"2025-12-17 23:27:01"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"Authentication failed: Token missing","method":"GET","path":"/audit-logs","service":"ehr-backend","timestamp":"2025-12-17 23:27:01"}
+{"error":"jwt expired","ip":"::ffff:127.0.0.1","level":"warn","message":"Authentication failed: JWT verification failed","method":"GET","path":"/audit-logs","service":"ehr-backend","timestamp":"2025-12-17 23:27:01"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://openbao:8200\",\"http://localhost:18200\"]","service":"ehr-backend","timestamp":"2025-12-17 23:27:06"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:27:07","userId":"6942a19af9089e0cdf368552"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:27:07","userId":"6942a19bf9089e0cdf36855a"}
+{"email":"nonexistent@test.com","ip":"::ffff:127.0.0.1","level":"warn","message":"Login attempt failed: User not found","service":"ehr-backend","timestamp":"2025-12-17 23:27:08"}
+{"email":"patient@test.com","ip":"::ffff:127.0.0.1","level":"warn","message":"Login attempt failed: Invalid password","service":"ehr-backend","timestamp":"2025-12-17 23:27:08","userId":"6942a19cf9089e0cdf368563"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"Login attempt failed: User not found","service":"ehr-backend","timestamp":"2025-12-17 23:27:08"}
+{"email":"patient@test.com","error":"data and hash arguments required","level":"error","message":"Login error","service":"ehr-backend","timestamp":"2025-12-17 23:27:08"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:27:09","userId":"6942a19cf9089e0cdf36856a"}
+{"email":"provider@test.com","level":"info","message":"User login successful","role":"Provider","service":"ehr-backend","timestamp":"2025-12-17 23:27:09","userId":"6942a19df9089e0cdf36856f"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:27:09","userId":"6942a19df9089e0cdf368574"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"Authentication failed: Token missing","method":"GET","path":"/me","service":"ehr-backend","timestamp":"2025-12-17 23:27:09"}
+{"error":"jwt malformed","ip":"::ffff:127.0.0.1","level":"warn","message":"Authentication failed: JWT verification failed","method":"GET","path":"/me","service":"ehr-backend","timestamp":"2025-12-17 23:27:09"}
+{"email":"patient@test.com","level":"info","message":"User login successful","role":"Patient","service":"ehr-backend","timestamp":"2025-12-17 23:27:10","userId":"6942a19ef9089e0cdf36857b"}
+{"level":"info","message":"User logout","service":"ehr-backend","timestamp":"2025-12-17 23:27:10"}
+{"level":"info","message":"User logout","service":"ehr-backend","timestamp":"2025-12-17 23:27:10"}
+{"email":"admin@test.com","level":"info","message":"User login successful","role":"Admin","service":"ehr-backend","timestamp":"2025-12-17 23:27:11","userId":"6942a19ef9089e0cdf368584"}
+{"level":"info","message":"User logout","service":"ehr-backend","timestamp":"2025-12-17 23:27:11"}
+{"ip":"::ffff:127.0.0.1","level":"warn","message":"Authentication failed: Token missing","method":"GET","path":"/me","service":"ehr-backend","timestamp":"2025-12-17 23:27:11"}
+{"keyVersion":1,"level":"info","message":"Public key retrieved successfully","service":"ehr-backend","timestamp":"2025-12-17 23:27:15"}
+{"keyVersion":1,"level":"info","message":"Public key retrieved successfully","service":"ehr-backend","timestamp":"2025-12-17 23:27:15"}
+{"keyVersion":1,"level":"info","message":"Public key retrieved successfully","service":"ehr-backend","timestamp":"2025-12-17 23:27:16"}
+{"keyVersion":1,"level":"info","message":"Public key retrieved successfully","service":"ehr-backend","timestamp":"2025-12-17 23:27:16"}
+{"keyVersion":1,"level":"info","message":"Public key retrieved successfully","service":"ehr-backend","timestamp":"2025-12-17 23:27:16"}
+{"error":"Service unavailable","level":"error","message":"Failed to retrieve public key","service":"ehr-backend","timestamp":"2025-12-17 23:27:16"}
+{"keyVersion":1,"level":"info","message":"Public key retrieved successfully","service":"ehr-backend","timestamp":"2025-12-17 23:27:16"}
+{"keyVersion":1,"level":"info","message":"Public key retrieved successfully","service":"ehr-backend","timestamp":"2025-12-17 23:27:16"}
+{"keyVersion":1,"level":"info","message":"Public key retrieved successfully","service":"ehr-backend","timestamp":"2025-12-17 23:27:16"}
+{"level":"info","message":"Health check performed","service":"ehr-backend","services":{"api":"operational","mongodb":"connected","openbao":"healthy"},"status":"healthy","timestamp":"2025-12-17 23:27:19"}
+{"level":"info","message":"Health check performed","service":"ehr-backend","services":{"api":"operational","mongodb":"connected","openbao":"healthy"},"status":"healthy","timestamp":"2025-12-17 23:27:19"}
+{"level":"info","message":"Health check performed","service":"ehr-backend","services":{"api":"operational","mongodb":"connected","openbao":"healthy"},"status":"healthy","timestamp":"2025-12-17 23:27:19"}
+{"level":"info","message":"Health check performed","service":"ehr-backend","services":{"api":"operational","mongodb":"connected","openbao":"healthy"},"status":"healthy","timestamp":"2025-12-17 23:27:19"}
+{"level":"info","message":"Health check performed","service":"ehr-backend","services":{"api":"operational","mongodb":"connected","openbao":"healthy"},"status":"healthy","timestamp":"2025-12-17 23:27:19"}
+{"level":"info","message":"Health check performed","service":"ehr-backend","services":{"api":"operational","mongodb":"connected","openbao":"unhealthy"},"status":"unhealthy","timestamp":"2025-12-17 23:27:19"}
+{"level":"info","message":"Health check performed","service":"ehr-backend","services":{"api":"operational","mongodb":"connected","openbao":"healthy"},"status":"healthy","timestamp":"2025-12-17 23:27:19"}
+{"level":"info","message":"Health check performed","service":"ehr-backend","services":{"api":"operational","mongodb":"connected","openbao":"healthy"},"status":"healthy","timestamp":"2025-12-17 23:27:19"}
+{"level":"info","message":"Health check performed","service":"ehr-backend","services":{"api":"operational","mongodb":"connected","openbao":"healthy"},"status":"healthy","timestamp":"2025-12-17 23:27:19"}
+{"level":"error","message":"Health check failed: Health check failed","service":"ehr-backend","stack":"Error: Health check failed\n    at Object.<anonymous> (/Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/test/integration/health.integration.test.js:254:55)\n    at Promise.finally.completed (/Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/node_modules/jest-circus/build/jestAdapterInit.js:1557:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/node_modules/jest-circus/build/jestAdapterInit.js:1497:10)\n    at _callCircusTest (/Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/node_modules/jest-circus/build/jestAdapterInit.js:1007:40)\n    at processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at _runTest (/Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/node_modules/jest-circus/build/jestAdapterInit.js:947:3)\n    at /Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/node_modules/jest-circus/build/jestAdapterInit.js:849:7\n    at _runTestsForDescribeBlock (/Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/node_modules/jest-circus/build/jestAdapterInit.js:862:11)\n    at _runTestsForDescribeBlock (/Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/node_modules/jest-circus/build/jestAdapterInit.js:857:11)\n    at _runTestsForDescribeBlock (/Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/node_modules/jest-circus/build/jestAdapterInit.js:857:11)\n    at run (/Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/node_modules/jest-circus/build/jestAdapterInit.js:761:3)\n    at runAndTransformResultsToJestFormat (/Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/node_modules/jest-circus/build/jestAdapterInit.js:1918:21)\n    at jestAdapter (/Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/node_modules/jest-circus/build/runner.js:101:19)\n    at runTestInternal (/Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/node_modules/jest-runner/build/index.js:275:16)\n    at runTest (/Users/user/Documents/Monash/CyberSecurity/Assesment2/Final Submission/TP6 25/EHR_draft/ehr-backend/node_modules/jest-runner/build/index.js:343:7)","timestamp":"2025-12-17 23:27:19"}
+{"level":"info","message":"Health check performed","service":"ehr-backend","services":{"api":"operational","mongodb":"connected","openbao":"unhealthy"},"status":"unhealthy","timestamp":"2025-12-17 23:27:19"}
+{"level":"info","message":"Health check performed","service":"ehr-backend","services":{"api":"operational","mongodb":"connected","openbao":"healthy"},"status":"healthy","timestamp":"2025-12-17 23:27:19"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://openbao:8200\",\"http://localhost:18200\"]","service":"ehr-backend","timestamp":"2025-12-17 12:46:02"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 12:46:03"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-17 12:46:03"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-17 12:46:03"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-17 12:46:03"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"EhrDB","service":"ehr-backend","timestamp":"2025-12-17 12:46:03"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 12:46:03"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-17 12:46:03"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://openbao:8200\",\"http://localhost:18200\"]","service":"ehr-backend","timestamp":"2025-12-17 12:53:14"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 12:53:14"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-17 12:53:14"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-17 12:53:14"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-17 12:53:14"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"EhrDB","service":"ehr-backend","timestamp":"2025-12-17 12:53:14"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 12:53:14"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-17 12:53:14"}
+{"level":"info","message":"Health check performed","service":"ehr-backend","services":{"api":"operational","mongodb":"connected","openbao":"healthy"},"status":"healthy","timestamp":"2025-12-17 12:53:38"}
+{"level":"http","message":"\u001b[0mGET /api/health \u001b[32m200\u001b[0m 15.289 ms - 433\u001b[0m","service":"ehr-backend","timestamp":"2025-12-17 12:53:38"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://openbao:8200\",\"http://localhost:18200\"]","service":"ehr-backend","timestamp":"2025-12-17 12:56:07"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 12:56:08"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-17 12:56:08"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-17 12:56:08"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-17 12:56:08"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"EhrDB","service":"ehr-backend","timestamp":"2025-12-17 12:56:08"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 12:56:08"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-17 12:56:08"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://openbao:8200\",\"http://localhost:18200\"]","service":"ehr-backend","timestamp":"2025-12-17 13:25:54"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 13:25:54"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-17 13:25:54"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-17 13:25:54"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-17 13:25:54"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 13:25:54"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-17 13:25:54"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"EhrDB","service":"ehr-backend","timestamp":"2025-12-17 13:25:54"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://openbao:8200\",\"http://localhost:18200\"]","service":"ehr-backend","timestamp":"2025-12-17 14:00:16"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 14:00:17"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-17 14:00:17"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-17 14:00:17"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-17 14:00:17"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"EhrDB","service":"ehr-backend","timestamp":"2025-12-17 14:00:17"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 14:00:18"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-17 14:00:18"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://openbao:8200\",\"http://localhost:18200\"]","service":"ehr-backend","timestamp":"2025-12-17 14:00:24"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 14:00:25"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-17 14:00:25"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-17 14:00:25"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-17 14:00:25"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"EhrDB","service":"ehr-backend","timestamp":"2025-12-17 14:00:25"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 14:00:25"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-17 14:00:25"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://openbao:8200\",\"http://localhost:18200\"]","service":"ehr-backend","timestamp":"2025-12-17 14:00:40"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 14:00:41"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-17 14:00:41"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-17 14:00:41"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-17 14:00:41"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"EhrDB","service":"ehr-backend","timestamp":"2025-12-17 14:00:42"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 14:00:42"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-17 14:00:42"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://openbao:8200\",\"http://localhost:18200\"]","service":"ehr-backend","timestamp":"2025-12-17 14:24:56"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 14:24:57"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-17 14:24:57"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-17 14:24:57"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-17 14:24:57"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"EhrDB","service":"ehr-backend","timestamp":"2025-12-17 14:24:57"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-17 14:24:57"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-17 14:24:57"}

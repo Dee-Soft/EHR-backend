@@ -1,9 +1,17 @@
-version: '3.8'
-
-# Development compose:
-# - Runs ehr-server + mongoDB
+# Development Docker Compose Configuration
+# - Runs ehr-server + mongoDB with hot reload
 # - Exposes API on localhost:3001 for Postman/httpie
-# - Connects to OpenBao Keys Management System running separately via host.docker.internal:18200
+# - Connects to OpenBao Keys Management System via ehr-keys-net network
+# - Environment variables loaded from .env file
+# 
+# IMPORTANT: Before running, ensure the ehr-keys-net network exists:
+#   Option 1: Run EHR Keys Management System first
+#   Option 2: Create local network: docker network create ehr-keys-net
+#   Option 3: Run ./scripts/check-network.sh to diagnose issues
+#
+# If OpenBao is not available, update .env file:
+#   OPENBAO_ADDR=http://localhost:18200
+#   OPENBAO_TOKEN=ehr-permanent-token
 services:
   mongoDB:
     image: mongo:latest
@@ -31,22 +39,24 @@ services:
       - "3001:3001"
     networks:
       - ehr-dev
+      - ehr-keys-net
     depends_on:
       mongoDB:
         condition: service_healthy
+    env_file:
+      - .env
     environment:
-      - NODE_ENV=development
-      - PORT=3001
-      - MONGO_URI=mongodb://mongoDB:27017/ehr-system
-      - OPENBAO_ADDR=${OPENBAO_ADDR:-http://host.docker.internal:18200}
-      - OPENBAO_TOKEN=${OPENBAO_TOKEN:-ehr-permanent-token}
-      - OPENBAO_TRANSIT_AES_KEY=${OPENBAO_TRANSIT_AES_KEY:-ehr-aes-master}
-      - OPENBAO_TRANSIT_RSA_KEY=${OPENBAO_TRANSIT_RSA_KEY:-ehr-rsa-exchange}
-      - JWT_SECRET=${JWT_SECRET:-dev-jwt-secret-change-me}
+      - NODE_ENV=${NODE_ENV:-development}
+      - PORT=${PORT:-3001}
+      - MONGO_URI=${MONGO_URI:-mongodb://mongoDB:27017/ehr-system}
+      # OpenBao connection via ehr-keys-net network
+      - OPENBAO_ADDR=${OPENBAO_ADDR:-http://openbao:8200}
+      - OPENBAO_TOKEN=${OPENBAO_TOKEN}
+      - OPENBAO_TRANSIT_AES_KEY=${OPENBAO_TRANSIT_AES_KEY}
+      - OPENBAO_TRANSIT_RSA_KEY=${OPENBAO_TRANSIT_RSA_KEY}
+      - JWT_SECRET=${JWT_SECRET}
       - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
       - LOG_LEVEL=${LOG_LEVEL:-debug}
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     volumes:
       - .:/app
       - /app/node_modules
@@ -56,6 +66,11 @@ services:
 networks:
   ehr-dev:
     driver: bridge
+  ehr-keys-net:
+    # Connect to the existing ehr-keys-management-system_ehr-keys-net network
+    # where OpenBao is running
+    external: true
+    name: ehr-keys-management-system_ehr-keys-net
 
 volumes:
   mongo-dev-data:

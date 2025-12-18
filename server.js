@@ -1,4 +1,21 @@
-require('dotenv').config();
+// Load environment variables based on NODE_ENV
+const path = require('path');
+const dotenv = require('dotenv');
+
+// Determine which .env file to load
+const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
+const envPath = path.resolve(__dirname, envFile);
+
+try {
+  // Try to load specific environment file
+  dotenv.config({ path: envPath });
+  console.log(`Loaded environment from: ${envPath}`);
+} catch (error) {
+  // Fall back to default .env file
+  console.log(`Falling back to default .env file: ${error.message}`);
+  dotenv.config();
+}
+
 const express = require('express');
 const cookieParser = require('cookie-parser');
 

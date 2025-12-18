@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -89,7 +89,16 @@
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -102,23 +111,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >module.exports = {</span>
-    canCreateRecord: <span class="fstat-no" title="function not covered" >(r</span>ole) =&gt; <span class="cstat-no" title="statement not covered" >['Provider', 'Manager'].includes(role),</span>
+    canCreateRecord: <span class="fstat-no" title="function not covered" >(r</span>ole) =&gt; <span class="cstat-no" title="statement not covered" >['Provider', 'Manager', 'Admin'].includes(role),</span>
 &nbsp;
-    canViewAllRecords: <span class="fstat-no" title="function not covered" >(r</span>ole) =&gt; <span class="cstat-no" title="statement not covered" >role === 'Manager',</span>
+    canViewAllRecords: <span class="fstat-no" title="function not covered" >(r</span>ole) =&gt; <span class="cstat-no" title="statement not covered" >['Manager', 'Admin'].includes(role),</span>
 &nbsp;
     canViewOwnRecord: <span class="fstat-no" title="function not covered" >(r</span>ole, requesterId, record) =&gt; {
 <span class="cstat-no" title="statement not covered" >        if (role === 'Patient' &amp;&amp; requesterId === record.patient._id.toString()) {</span>
@@ -128,17 +146,26 @@
     },
 &nbsp;
     canViewRecordById: <span class="fstat-no" title="function not covered" >(r</span>ole, requesterId, record) =&gt; {
+        // Admin can view any record
+<span class="cstat-no" title="statement not covered" >        if (role === 'Admin') {</span>
+<span class="cstat-no" title="statement not covered" >            return true;</span>
+        }
+        
+        // Patient can view their own record
 <span class="cstat-no" title="statement not covered" >        if (role === 'Patient' &amp;&amp; requesterId === record.patient._id.toString()) {</span>
 <span class="cstat-no" title="statement not covered" >            return true;</span>
         }
 &nbsp;
+        // Manager can view any record
 <span class="cstat-no" title="statement not covered" >        if (role === 'Manager') {</span>
 <span class="cstat-no" title="statement not covered" >            return true;</span>
         }
         
+        // Provider can view assigned patient records
 <span class="cstat-no" title="statement not covered" >        if (role === 'Provider') {</span>
 <span class="cstat-no" title="statement not covered" >            return record.patient.assignedProviderId?.toString() === requesterId;</span>
         }
+        
 <span class="cstat-no" title="statement not covered" >        return false;</span>
     }
 };</pre></td></tr></table></pre>
@@ -148,7 +175,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-15T05:33:15.095Z
+                at 2025-12-17T13:06:16.686Z
             </div>
         <script src="../prettify.js"></script>
         <script>

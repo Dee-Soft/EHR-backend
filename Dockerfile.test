@@ -9,12 +9,12 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
-# Copy application code
+# Copy application code (including test directory)
 COPY . .
 
 # Create coverage directory
 RUN mkdir -p /app/coverage
 
-# Run tests by default
+# Run tests by default (can be overridden)
 CMD ["npm", "run", "test:coverage"]
 

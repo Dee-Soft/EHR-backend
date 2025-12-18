@@ -1,13 +1,12 @@
 version: '3.8'
 
-# EHR Backend Docker Compose Configuration
+# EHR Backend Docker Compose Configuration - Production
 # 
-# Note: This configuration assumes the OpenBao Keys Management System is running separately.
-# The OpenBao system should be accessible at http://localhost:18200 when running locally,
-# or at http://host.docker.internal:18200 when running in Docker.
+# This configuration connects to the EHR Keys Management System via the ehr-keys-net network.
+# The OpenBao Keys Management System must be running separately.
 #
-# For production deployment, ensure proper network connectivity between this container
-# and the OpenBao Keys Management System.
+# Environment variables are loaded from the .env file in the project root.
+# Create .env file from env.example template before running.
 
 services:
   mongoDB:
@@ -36,24 +35,24 @@ services:
       - "3001:3001"
     networks:
       - ehr-backend
+      - ehr-keys-net
     depends_on:
       mongoDB:
         condition: service_healthy
+    env_file:
+      - .env
     environment:
       - NODE_ENV=${NODE_ENV:-production}
-      - PORT=3001
-      - MONGO_URI=mongodb://mongoDB:27017/ehr-system
-      # OpenBao Keys Management System runs separately on port 18200
-      # When running in Docker, use host.docker.internal to access localhost
-      - OPENBAO_ADDR=${OPENBAO_ADDR:-http://host.docker.internal:18200}
-      - OPENBAO_TOKEN=${OPENBAO_TOKEN:-ehr-permanent-token}
-      - OPENBAO_TRANSIT_AES_KEY=${OPENBAO_TRANSIT_AES_KEY:-ehr-aes-master}
-      - OPENBAO_TRANSIT_RSA_KEY=${OPENBAO_TRANSIT_RSA_KEY:-ehr-rsa-exchange}
+      - PORT=${PORT:-3001}
+      - MONGO_URI=${MONGO_URI:-mongodb://mongoDB:27017/ehr-system}
+      # OpenBao connection via ehr-keys-net network
+      - OPENBAO_ADDR=${OPENBAO_ADDR:-http://openbao:8200}
+      - OPENBAO_TOKEN=${OPENBAO_TOKEN}
+      - OPENBAO_TRANSIT_AES_KEY=${OPENBAO_TRANSIT_AES_KEY}
+      - OPENBAO_TRANSIT_RSA_KEY=${OPENBAO_TRANSIT_RSA_KEY}
       - JWT_SECRET=${JWT_SECRET}
       - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
       - LOG_LEVEL=${LOG_LEVEL:-info}
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     volumes:
       - ./logs:/app/logs
     healthcheck:
@@ -67,6 +66,9 @@ services:
 networks:
   ehr-backend:
     driver: bridge
+  ehr-keys-net:
+    external: true
+    name: ehr-keys-net
 
 volumes:
   mongo-data:

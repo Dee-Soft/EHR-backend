@@ -3,12 +3,12 @@ npm-debug.log
 .env
 .env.*
 !.env.example
+!.env.test
 .git
 .gitignore
 .husky
 logs
 *.log
-__tests__
 coverage
 .vscode
 .idea

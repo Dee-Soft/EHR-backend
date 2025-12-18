@@ -158,6 +158,41 @@ The server will start on `http://localhost:3001`
 
 ### Using Docker Compose
 
+#### Docker Compose Configurations
+
+The project includes multiple Docker Compose configurations for different environments:
+
+1. **Development** (`docker-compose.dev.yml`):
+   - Hot reload for rapid development
+   - Connects to EHR Keys Management System via `ehr-keys-net` network
+   - Uses `.env` file for environment variables
+   - Helper script: `./scripts/start-dev.sh` or `npm run dev:start`
+
+2. **Testing** (`docker-compose.test.yml`):
+   - Isolated test environment with mocked OpenBao
+   - Separate MongoDB container for tests
+   - Generates coverage reports
+   - Helper script: `./scripts/run-tests-docker.sh` or `npm run test:docker`
+
+3. **Production** (`docker-compose.yml`):
+   - Optimized for production deployment
+   - Connects to external OpenBao service
+   - Health checks and restart policies
+
+#### Recent Improvements
+
+##### Fixed Docker Network Issues
+- Added network validation scripts (`scripts/check-network.sh`)
+- Improved error messages for missing networks
+- Added fallback options for local development
+- Created helper scripts for easier development workflow
+
+##### Enhanced Testing Infrastructure
+- Created comprehensive test scripts (`scripts/run-tests-docker.sh`, `scripts/run-tests-local.sh`)
+- Added test infrastructure verification (`scripts/test-simple.sh`)
+- Improved documentation for troubleshooting test issues
+- Added npm scripts for common testing scenarios
+
 #### 1) Start OpenBao Keys Management System (separately)
 
 The OpenBao Keys Management System runs **outside** this backend compose in its own Docker network with PostgreSQL storage. The system is available at: [Dee-Soft/ehr-keys-management-system](https://github.com/Dee-Soft/ehr-keys-management-system).

@@ -2,6 +2,7 @@ version: '3.8'
 
 # Docker Compose configuration for running tests
 # Usage: docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+# Environment variables loaded from env.test file
 
 services:
   mongodb-test:
@@ -13,9 +14,10 @@ services:
       - ehr-test
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
+      interval: 2s
+      timeout: 2s
+      retries: 10
+      start_period: 5s
 
   test-runner:
     build:
@@ -29,6 +31,15 @@ services:
       - NODE_ENV=test
       - MONGO_URI=mongodb://mongodb-test:27017/ehr-test
       - JWT_SECRET=test-jwt-secret-key-for-testing-only
+      - OPENBAO_ADDR=http://localhost:18200
+      - OPENBAO_TOKEN=test-token
+      - OPENBAO_TRANSIT_AES_KEY=test-aes-key
+      - OPENBAO_TRANSIT_RSA_KEY=test-rsa-key
+      - SKIP_OPENBAO_INIT=true
+      - MONGO_CONNECT_TIMEOUT_MS=5000
+      - MONGO_SOCKET_TIMEOUT_MS=10000
+      - MONGOOSE_DEBUG=false
+      - SKIP_SERVER_LISTEN=true
     networks:
       - ehr-test
     command: npm run test:coverage

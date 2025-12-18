@@ -22,11 +22,28 @@ class OpenBaoConfig {
     };
     this.maxRetries = 3;
     this.retryDelay = 1000; // Start with 1 second
-    this.endpoints = [
-      process.env.OPENBAO_ADDR || 'http://localhost:18200',
-      'http://openbao:8200'
-    ];
+    
+    // Configure endpoints based on environment
+    // Priority: 1. OPENBAO_ADDR env var, 2. Docker network endpoint, 3. Localhost
+    this.endpoints = [];
+    
+    // Add OPENBAO_ADDR if specified
+    if (process.env.OPENBAO_ADDR) {
+      this.endpoints.push(process.env.OPENBAO_ADDR);
+    }
+    
+    // Add Docker network endpoint for container-to-container communication
+    this.endpoints.push('http://openbao:8200');
+    
+    // Add localhost endpoint as fallback
+    this.endpoints.push('http://localhost:18200');
+    
+    // Remove duplicates
+    this.endpoints = [...new Set(this.endpoints)];
+    
     this.currentEndpointIndex = 0;
+    
+    logger.info(`OpenBao endpoints configured: ${JSON.stringify(this.endpoints)}`);
   }
 
   /**

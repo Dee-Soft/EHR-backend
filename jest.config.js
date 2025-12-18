@@ -42,7 +42,7 @@ module.exports = {
   coverageReporters: ['text', 'lcov', 'html'],
 
   // Test timeout - increased for integration tests
-  testTimeout: 30000,
+  testTimeout: 60000,
 
   // Clear mocks between tests
   clearMocks: true,
