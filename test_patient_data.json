@@ -1,0 +1,7 @@
+{
+  "patient": "6944164f9f7e0cefead0d11a",
+  "diagnosis": "Hypertension Stage 1",
+  "notes": "Patient presents with elevated BP 145/95. No previous history. Recommended lifestyle changes and follow-up in 2 weeks.",
+  "medications": ["Lisinopril 10mg", "Hydrochlorothiazide 12.5mg"],
+  "visitDate": "2025-12-19"
+}
