@@ -44,7 +44,7 @@ services:
       mongoDB:
         condition: service_healthy
     env_file:
-      - .env.dev
+      - .env
     volumes:
       - .:/app
       - /app/node_modules
