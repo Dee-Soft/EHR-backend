@@ -358,3 +358,239 @@
 {"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 15:48:48"}
 {"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 15:48:48"}
 {"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 15:48:48"}
+{"keyVersion":1,"level":"info","message":"Public key retrieved successfully","service":"ehr-backend","timestamp":"2025-12-18 16:19:47"}
+{"keyVersion":1,"level":"info","message":"Public key retrieved successfully","service":"ehr-backend","timestamp":"2025-12-18 16:24:08"}
+{"error":"Unexpected token 'H', \"Hypertensi\"... is not valid JSON","level":"error","message":"Decryption failed","service":"ehr-backend","timestamp":"2025-12-18 16:24:08"}
+{"error":"Decryption failed","fields":["diagnosis","notes","medications"],"level":"error","message":"transitDecryptMiddleware error","service":"ehr-backend","timestamp":"2025-12-18 16:24:08"}
+{"level":"info","message":"Records retrieved","recordCount":1,"role":"Manager","service":"ehr-backend","timestamp":"2025-12-18 16:24:08","userId":"694415da9f7e0cefead0d104"}
+{"level":"info","message":"Patient records retrieved","patientId":"6944164f9f7e0cefead0d11a","recordCount":1,"service":"ehr-backend","timestamp":"2025-12-18 16:24:08"}
+{"error":"invalid ciphertext: no prefix","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-18 16:24:08"}
+{"error":"Invalid key material","level":"error","message":"Failed to load AES key","service":"ehr-backend","timestamp":"2025-12-18 16:24:08","userId":"694415da9f7e0cefead0d104"}
+{"keyVersion":1,"level":"info","message":"Public key retrieved successfully","service":"ehr-backend","timestamp":"2025-12-18 16:24:58"}
+{"keyVersion":1,"level":"info","message":"Public key retrieved successfully","service":"ehr-backend","timestamp":"2025-12-18 16:25:18"}
+{"level":"info","message":"Records retrieved","recordCount":1,"role":"Manager","service":"ehr-backend","timestamp":"2025-12-18 16:25:27","userId":"694415da9f7e0cefead0d104"}
+{"keyVersion":1,"level":"info","message":"Public key retrieved successfully","service":"ehr-backend","timestamp":"2025-12-18 16:25:55"}
+{"creatorId":"694415da9f7e0cefead0d104","level":"info","message":"Record created successfully","patientId":"6944164f9f7e0cefead0d11a","recordId":"69442b13827edee04225a924","service":"ehr-backend","timestamp":"2025-12-18 16:25:55"}
+{"level":"info","message":"Records retrieved","recordCount":2,"role":"Manager","service":"ehr-backend","timestamp":"2025-12-18 16:26:17","userId":"694415da9f7e0cefead0d104"}
+{"level":"info","message":"Records retrieved","recordCount":2,"role":"Manager","service":"ehr-backend","timestamp":"2025-12-18 16:26:24","userId":"694415da9f7e0cefead0d104"}
+{"level":"info","message":"Records retrieved","recordCount":2,"role":"Manager","service":"ehr-backend","timestamp":"2025-12-18 16:26:34","userId":"694415da9f7e0cefead0d104"}
+{"level":"info","message":"Records retrieved","recordCount":2,"role":"Manager","service":"ehr-backend","timestamp":"2025-12-18 16:26:42","userId":"694415da9f7e0cefead0d104"}
+{"level":"info","message":"Records retrieved","recordCount":2,"role":"Manager","service":"ehr-backend","timestamp":"2025-12-18 16:26:52","userId":"694415da9f7e0cefead0d104"}
+{"level":"info","message":"Patient records retrieved","patientId":"6944164f9f7e0cefead0d11a","recordCount":2,"service":"ehr-backend","timestamp":"2025-12-18 16:27:12"}
+{"level":"info","message":"Records retrieved","recordCount":2,"role":"Manager","service":"ehr-backend","timestamp":"2025-12-18 16:27:51","userId":"694415da9f7e0cefead0d104"}
+{"level":"info","message":"Records retrieved","recordCount":2,"role":"Manager","service":"ehr-backend","timestamp":"2025-12-18 16:28:14","userId":"694415da9f7e0cefead0d104"}
+{"error":"invalid ciphertext: no prefix","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-18 16:30:07"}
+{"error":"Invalid key material","level":"error","message":"Failed to load AES key","service":"ehr-backend","timestamp":"2025-12-18 16:30:07","userId":"694415da9f7e0cefead0d104"}
+{"error":"1 error occurred:\n\t* failed to RSA decrypt the ciphertext: crypto/rsa: decryption error\n\n","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-18 16:30:07"}
+{"error":"Invalid key material","level":"error","message":"Failed to load AES key","service":"ehr-backend","timestamp":"2025-12-18 16:30:07","userId":"694415da9f7e0cefead0d104"}
+{"body":{},"ip":"::ffff:192.168.65.1","level":"error","message":"Expected ',' or '}' after property value in JSON at position 104 (line 5 column 5)","method":"POST","service":"ehr-backend","stack":"SyntaxError: Expected ',' or '}' after property value in JSON at position 104 (line 5 column 5)\n    at JSON.parse (<anonymous>)\n    at parse (/app/node_modules/body-parser/lib/types/json.js:92:19)\n    at /app/node_modules/body-parser/lib/read.js:128:18\n    at AsyncResource.runInAsyncScope (node:async_hooks:214:14)\n    at invokeCallback (/app/node_modules/raw-body/index.js:238:16)\n    at done (/app/node_modules/raw-body/index.js:227:7)\n    at IncomingMessage.onEnd (/app/node_modules/raw-body/index.js:287:7)\n    at IncomingMessage.emit (node:events:508:28)\n    at endReadableNT (node:internal/streams/readable:1701:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)","timestamp":"2025-12-18 16:30:07","url":"/api/patient-records"}
+{"error":"1 error occurred:\n\t* failed to RSA decrypt the ciphertext: crypto/rsa: decryption error\n\n","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-18 16:30:07"}
+{"error":"Invalid key material","level":"error","message":"Failed to load AES key","service":"ehr-backend","timestamp":"2025-12-18 16:30:07","userId":"694416dd9f7e0cefead0d127"}
+{"error":"1 error occurred:\n\t* failed to RSA decrypt the ciphertext: crypto/rsa: decryption error\n\n","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-18 16:30:07"}
+{"error":"Invalid key material","level":"error","message":"Failed to load AES key","service":"ehr-backend","timestamp":"2025-12-18 16:30:07","userId":"694415ee9f7e0cefead0d10c"}
+{"error":"Invalid AES key format after unwrapping","level":"error","message":"Failed to load AES key","service":"ehr-backend","timestamp":"2025-12-18 16:30:08","userId":"694415da9f7e0cefead0d104"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 17:57:04"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 17:57:04"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 17:57:05"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 17:57:05"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 17:57:05"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:57:05"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 17:57:05"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 17:57:05"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:57:06"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 17:57:06"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 3/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:57:08"}
+{"level":"warn","message":"All connection attempts to http://localhost:18200 failed, trying next endpoint if available","service":"ehr-backend","timestamp":"2025-12-18 17:57:08"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:57:08"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:57:08"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 17:57:08"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 17:57:38"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 17:57:39"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 17:57:39"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 17:57:39"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 17:57:39"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 17:57:39"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:57:39"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 17:57:39"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:57:40"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 17:57:40"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 3/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:57:42"}
+{"level":"warn","message":"All connection attempts to http://localhost:18200 failed, trying next endpoint if available","service":"ehr-backend","timestamp":"2025-12-18 17:57:42"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:57:42"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:57:42"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 17:57:42"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 17:58:00"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 17:58:01"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 17:58:01"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 17:58:01"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 17:58:01"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 17:58:01"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:58:01"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 17:58:01"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:58:02"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 17:58:02"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 3/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:58:04"}
+{"level":"warn","message":"All connection attempts to http://localhost:18200 failed, trying next endpoint if available","service":"ehr-backend","timestamp":"2025-12-18 17:58:04"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:58:04"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:58:04"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 17:58:04"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 17:58:21"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 17:58:22"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 17:58:22"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 17:58:22"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 17:58:22"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 17:58:23"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:58:23"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 17:58:23"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:58:24"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 17:58:24"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 3/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:58:26"}
+{"level":"warn","message":"All connection attempts to http://localhost:18200 failed, trying next endpoint if available","service":"ehr-backend","timestamp":"2025-12-18 17:58:26"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:58:26"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:58:26"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 17:58:26"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 17:58:54"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 17:58:55"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 17:58:55"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 17:58:55"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 17:58:55"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 17:58:55"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:58:55"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 17:58:55"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:58:56"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 17:58:56"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 3/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:58:58"}
+{"level":"warn","message":"All connection attempts to http://localhost:18200 failed, trying next endpoint if available","service":"ehr-backend","timestamp":"2025-12-18 17:58:58"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:58:58"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:58:58"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 17:58:58"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 17:59:02"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 17:59:03"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 17:59:03"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 17:59:03"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 17:59:03"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 17:59:04"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:59:04"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 17:59:04"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:59:05"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 17:59:05"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 17:59:10"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 17:59:10"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 17:59:10"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 17:59:10"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 17:59:10"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:59:11"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 17:59:11"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 17:59:11"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:59:12"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 17:59:12"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 3/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:59:14"}
+{"level":"warn","message":"All connection attempts to http://localhost:18200 failed, trying next endpoint if available","service":"ehr-backend","timestamp":"2025-12-18 17:59:14"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:59:14"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:59:14"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 17:59:14"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 17:59:17"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 17:59:18"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 17:59:18"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 17:59:18"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 17:59:18"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 17:59:18"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:59:18"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 17:59:18"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:59:19"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 17:59:19"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 3/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:59:21"}
+{"level":"warn","message":"All connection attempts to http://localhost:18200 failed, trying next endpoint if available","service":"ehr-backend","timestamp":"2025-12-18 17:59:21"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:59:21"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:59:21"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 17:59:21"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 17:59:51"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 17:59:51"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 17:59:51"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 17:59:51"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 17:59:51"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 17:59:52"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:59:52"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 17:59:52"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:59:53"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 17:59:53"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 3/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 17:59:55"}
+{"level":"warn","message":"All connection attempts to http://localhost:18200 failed, trying next endpoint if available","service":"ehr-backend","timestamp":"2025-12-18 17:59:55"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:59:55"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 17:59:55"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 17:59:55"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 18:00:10"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 18:00:10"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 18:00:11"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 18:00:11"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 18:00:11"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 18:00:11"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:00:11"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 18:00:11"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:00:12"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 18:00:12"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 3/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:00:14"}
+{"level":"warn","message":"All connection attempts to http://localhost:18200 failed, trying next endpoint if available","service":"ehr-backend","timestamp":"2025-12-18 18:00:14"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 18:00:14"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 18:00:14"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 18:00:14"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 18:01:15"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 18:01:15"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 18:01:15"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 18:01:15"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 18:01:15"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 18:01:16"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:01:16"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 18:01:16"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:01:17"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 18:01:17"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 3/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:01:19"}
+{"level":"warn","message":"All connection attempts to http://localhost:18200 failed, trying next endpoint if available","service":"ehr-backend","timestamp":"2025-12-18 18:01:19"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 18:01:19"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 18:01:19"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 18:01:19"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 18:01:37"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 18:01:38"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 18:01:38"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 18:01:38"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 18:01:38"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 18:01:38"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:01:38"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 18:01:38"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:01:39"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 18:01:39"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 3/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:01:41"}
+{"level":"warn","message":"All connection attempts to http://localhost:18200 failed, trying next endpoint if available","service":"ehr-backend","timestamp":"2025-12-18 18:01:41"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 18:01:41"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 18:01:41"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 18:01:41"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 18:02:00"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 18:02:01"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 18:02:01"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 18:02:01"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 18:02:01"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 18:02:01"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:02:01"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 18:02:01"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:02:02"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 18:02:02"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 3/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:02:04"}
+{"level":"warn","message":"All connection attempts to http://localhost:18200 failed, trying next endpoint if available","service":"ehr-backend","timestamp":"2025-12-18 18:02:04"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 18:02:04"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 18:02:04"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 18:02:04"}
+{"level":"info","message":"OpenBao endpoints configured: [\"http://localhost:18200\",\"http://openbao:8200\"]","service":"ehr-backend","timestamp":"2025-12-18 18:04:27"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://localhost:18200","service":"ehr-backend","timestamp":"2025-12-18 18:04:28"}
+{"level":"info","message":"Server running on port 3001","service":"ehr-backend","timestamp":"2025-12-18 18:04:28"}
+{"level":"info","message":"Environment: development","service":"ehr-backend","timestamp":"2025-12-18 18:04:28"}
+{"level":"info","message":"API Documentation: http://localhost:3001/api/docs","service":"ehr-backend","timestamp":"2025-12-18 18:04:28"}
+{"host":"mongodb","level":"info","message":"MongoDB connected","name":"ehr","service":"ehr-backend","timestamp":"2025-12-18 18:04:28"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 1/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:04:28"}
+{"level":"info","message":"Retrying OpenBao connection in 1000ms","service":"ehr-backend","timestamp":"2025-12-18 18:04:28"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 2/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:04:29"}
+{"level":"info","message":"Retrying OpenBao connection in 2000ms","service":"ehr-backend","timestamp":"2025-12-18 18:04:29"}
+{"error":"","level":"warn","message":"OpenBao connection attempt 3/3 to http://localhost:18200 failed","service":"ehr-backend","timestamp":"2025-12-18 18:04:31"}
+{"level":"warn","message":"All connection attempts to http://localhost:18200 failed, trying next endpoint if available","service":"ehr-backend","timestamp":"2025-12-18 18:04:31"}
+{"level":"info","message":"Attempting to connect to OpenBao at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 18:04:31"}
+{"level":"info","message":"OpenBao connection established at http://openbao:8200","service":"ehr-backend","timestamp":"2025-12-18 18:04:31"}
+{"level":"info","message":"OpenBao initialized successfully","service":"ehr-backend","timestamp":"2025-12-18 18:04:31"}

@@ -13,8 +13,10 @@ jest.mock('../../config/openbao.config', () => {
   return {
     getTransitClient: () => mockVault,
     keys: {
-      aesMaster: 'test-aes-key',
-      rsaExchange: 'test-rsa-key'
+      aesMasterBackend: 'test-aes-backend-key',
+      aesMasterFrontend: 'test-aes-frontend-key',
+      rsaExchangeBackend: 'test-rsa-backend-key',
+      rsaExchangeFrontend: 'test-rsa-frontend-key'
     },
     init: jest.fn().mockResolvedValue(true),
     initialized: true,
@@ -124,6 +126,44 @@ describe('Integration: Key Exchange API', () => {
       
       const duration = Date.now() - startTime;
       expect(duration).toBeLessThan(1000);
+    });
+  });
+
+  describe('GET /api/key-exchange/frontend-public-key', () => {
+    test('should return frontend RSA public key', async () => {
+      const response = await request(app)
+        .get('/api/key-exchange/frontend-public-key');
+      
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('publicKey');
+      expect(response.body).toHaveProperty('keyVersion');
+      expect(response.body).toHaveProperty('algorithm');
+      expect(response.body.publicKey).toContain('BEGIN PUBLIC KEY');
+    });
+
+    test('should return RSA-2048 algorithm', async () => {
+      const response = await request(app)
+        .get('/api/key-exchange/frontend-public-key');
+      
+      expect(response.body.algorithm).toBe('RSA-2048');
+    });
+
+    test('should include key validity period', async () => {
+      const response = await request(app)
+        .get('/api/key-exchange/frontend-public-key');
+      
+      expect(response.body).toHaveProperty('validUntil');
+      expect(new Date(response.body.validUntil)).toBeInstanceOf(Date);
+    });
+
+    test('should return different key than backend public key', async () => {
+      const backendResponse = await request(app)
+        .get('/api/key-exchange/public-key');
+      
+      const frontendResponse = await request(app)
+        .get('/api/key-exchange/frontend-public-key');
+      
+      expect(backendResponse.body.publicKey).not.toBe(frontendResponse.body.publicKey);
     });
   });
 });

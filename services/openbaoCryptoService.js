@@ -21,7 +21,7 @@ class OpenBaoCryptoService {
   async generateDataKey() {
     try {
       const result = await this.vault.write(
-        `transit/datakey/plaintext/${this.keyNames.aesMaster}`
+        `transit/datakey/plaintext/${this.keyNames.aesMasterBackend}`
       );
       
       return {
@@ -54,7 +54,7 @@ class OpenBaoCryptoService {
       }
       
       const result = await this.vault.write(
-        `transit/encrypt/${this.keyNames.aesMaster}`,
+        `transit/encrypt/${this.keyNames.aesMasterBackend}`,
         payload
       );
       
@@ -86,7 +86,7 @@ class OpenBaoCryptoService {
       }
       
       const result = await this.vault.write(
-        `transit/decrypt/${this.keyNames.aesMaster}`,
+        `transit/decrypt/${this.keyNames.aesMasterBackend}`,
         payload
       );
       
@@ -142,7 +142,7 @@ class OpenBaoCryptoService {
   async getKeyVersion() {
     try {
       const result = await this.vault.read(
-        `transit/keys/${this.keyNames.aesMaster}`
+        `transit/keys/${this.keyNames.aesMasterBackend}`
       );
       
       return {

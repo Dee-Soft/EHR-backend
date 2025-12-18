@@ -44,7 +44,7 @@ class KeyExchangeService {
   async wrapAESKeyForFrontend(plaintextKey) {
     try {
       const result = await this.vault.write(
-        `transit/encrypt/${this.keyNames.rsaExchange}`,
+        `transit/encrypt/${this.keyNames.rsaExchangeFrontend}`,
         {
           plaintext: plaintextKey,
           key_version: 1
@@ -72,7 +72,7 @@ class KeyExchangeService {
   async unwrapAESKeyFromFrontend(wrappedKey) {
     try {
       const result = await this.vault.write(
-        `transit/decrypt/${this.keyNames.rsaExchange}`,
+        `transit/decrypt/${this.keyNames.rsaExchangeBackend}`,
         {
           ciphertext: wrappedKey
         }
@@ -100,6 +100,28 @@ class KeyExchangeService {
       return true;
     } catch (error) {
       return false;
+    }
+  }
+
+  /**
+   * Get frontend's RSA public key from OpenBao
+   * Frontend can use this to verify its public key matches OpenBao
+   * @returns {Object} { publicKey, keyVersion, algorithm, validUntil }
+   */
+  async getFrontendPublicKey() {
+    try {
+      const result = await this.vault.read(`transit/keys/${this.keyNames.rsaExchangeFrontend}`);
+      const latestVersion = result.data.latest_version;
+      
+      return {
+        publicKey: result.data.keys[latestVersion].public_key.trim(),
+        keyVersion: latestVersion,
+        algorithm: 'RSA-2048',
+        validUntil: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+      };
+    } catch (error) {
+      logger.error('Failed to get frontend public key', { error: error.message });
+      throw new Error('Frontend public key unavailable');
     }
   }
 
