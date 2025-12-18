@@ -17,6 +17,14 @@ fi
 
 echo "✓ .env file found"
 
+# Clean up any existing development containers with volumes
+echo "Cleaning up existing development containers and volumes..."
+docker-compose -f docker-compose.dev.yml down -v --remove-orphans 2>/dev/null || true
+
+# Also clean up any dangling containers
+echo "Removing any dangling containers..."
+docker ps -a -q --filter "name=ehr-" | xargs docker rm -f 2>/dev/null || true
+
 # Check Docker network connectivity
 echo "Checking Docker network..."
 if ! ./scripts/check-network.sh; then
@@ -29,7 +37,7 @@ fi
 
 echo ""
 echo "Starting Docker Compose development environment..."
-echo "Using: docker-compose -f docker-compose.dev.yml up"
+echo "Using: docker-compose -f docker-compose.dev.yml up --remove-orphans"
 echo ""
 echo "Services will be available at:"
 echo "  - EHR API: http://localhost:3001"
@@ -39,5 +47,5 @@ echo ""
 echo "Press Ctrl+C to stop all services"
 echo "========================================="
 
-# Start Docker Compose
-docker-compose -f docker-compose.dev.yml up
+# Start Docker Compose with orphan removal
+docker-compose -f docker-compose.dev.yml up --remove-orphans

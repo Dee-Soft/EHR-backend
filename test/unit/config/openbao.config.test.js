@@ -208,11 +208,11 @@ describe('OpenBao Configuration', () => {
 
   describe('Key Names Configuration', () => {
     test('should have configured AES master key name', () => {
-      expect(OpenBaoConfig.keys.aesMaster).toBe('ehr-aes-master');
+      expect(OpenBaoConfig.keys.aesMaster).toBe('test-aes-key');
     });
 
     test('should have configured RSA exchange key name', () => {
-      expect(OpenBaoConfig.keys.rsaExchange).toBe('ehr-rsa-exchange');
+      expect(OpenBaoConfig.keys.rsaExchange).toBe('test-rsa-key');
     });
   });
 

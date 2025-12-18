@@ -7,9 +7,9 @@ echo "========================================="
 echo "Simple Docker Test Verification"
 echo "========================================="
 
-# Clean up any existing containers
-echo "Cleaning up..."
-docker-compose -f docker-compose.test.yml down 2>/dev/null || true
+# Clean up any existing containers with volumes
+echo "Cleaning up existing containers and volumes..."
+docker-compose -f docker-compose.test.yml down -v --remove-orphans 2>/dev/null || true
 
 echo ""
 echo "Starting MongoDB test container..."
@@ -52,7 +52,7 @@ fi
 
 echo ""
 echo "Cleaning up..."
-docker-compose -f docker-compose.test.yml down
+docker-compose -f docker-compose.test.yml down -v --remove-orphans
 
 echo ""
 echo "========================================="

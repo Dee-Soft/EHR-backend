@@ -81,7 +81,7 @@ const openBaoTestData = {
   // Mock encryption metadata
   mockEncryptionMetadata: {
     algorithm: 'aes256-gcm96',
-    keyId: 'ehr-aes-master',
+    keyId: 'test-aes-key',
     keyVersion: 1,
     encryptedAt: new Date('2024-01-01T00:00:00.000Z').toISOString()
   },
@@ -98,7 +98,7 @@ const openBaoTestData = {
     transitKeyVersion: 1,
     encryptionMetadata: {
       algorithm: 'aes256-gcm96',
-      keyId: 'ehr-aes-master'
+      keyId: 'test-aes-key'
     }
   }
 };

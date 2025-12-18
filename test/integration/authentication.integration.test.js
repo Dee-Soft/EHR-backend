@@ -16,8 +16,8 @@ jest.mock('../../config/openbao.config', () => {
   return {
     getTransitClient: () => mockVault,
     keys: {
-      aesMaster: 'ehr-aes-master',
-      rsaExchange: 'ehr-rsa-exchange'
+      aesMaster: 'test-aes-key',
+      rsaExchange: 'test-rsa-key'
     },
     init: jest.fn().mockResolvedValue(true),
     initialized: true,

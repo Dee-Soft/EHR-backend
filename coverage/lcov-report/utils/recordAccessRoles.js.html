@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>12/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">78.57% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>11/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>12/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -98,72 +98,72 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >module.exports = {</span>
-    canCreateRecord: <span class="fstat-no" title="function not covered" >(r</span>ole) =&gt; <span class="cstat-no" title="statement not covered" >['Provider', 'Manager', 'Admin'].includes(role),</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">module.exports = {
+    canCreateRecord: (role) =&gt; ['Provider', 'Manager', 'Admin'].includes(role),
 &nbsp;
-    canViewAllRecords: <span class="fstat-no" title="function not covered" >(r</span>ole) =&gt; <span class="cstat-no" title="statement not covered" >['Manager', 'Admin'].includes(role),</span>
+    canViewAllRecords: (role) =&gt; ['Manager', 'Admin'].includes(role),
 &nbsp;
-    canViewOwnRecord: <span class="fstat-no" title="function not covered" >(r</span>ole, requesterId, record) =&gt; {
-<span class="cstat-no" title="statement not covered" >        if (role === 'Patient' &amp;&amp; requesterId === record.patient._id.toString()) {</span>
-<span class="cstat-no" title="statement not covered" >            return true;</span>
+    canViewOwnRecord: (role, requesterId, record) =&gt; {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (role === 'Patient' &amp;&amp; requesterId === record.patient._id.toString()) {
+            return true;
         }
 <span class="cstat-no" title="statement not covered" >        return false;</span>
     },
 &nbsp;
-    canViewRecordById: <span class="fstat-no" title="function not covered" >(r</span>ole, requesterId, record) =&gt; {
+    canViewRecordById: (role, requesterId, record) =&gt; {
         // Admin can view any record
-<span class="cstat-no" title="statement not covered" >        if (role === 'Admin') {</span>
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (role === 'Admin') {
 <span class="cstat-no" title="statement not covered" >            return true;</span>
         }
         
         // Patient can view their own record
-<span class="cstat-no" title="statement not covered" >        if (role === 'Patient' &amp;&amp; requesterId === record.patient._id.toString()) {</span>
-<span class="cstat-no" title="statement not covered" >            return true;</span>
+        if (role === 'Patient' &amp;&amp; requesterId === record.patient._id.toString()) {
+            return true;
         }
 &nbsp;
         // Manager can view any record
-<span class="cstat-no" title="statement not covered" >        if (role === 'Manager') {</span>
-<span class="cstat-no" title="statement not covered" >            return true;</span>
+        if (role === 'Manager') {
+            return true;
         }
         
         // Provider can view assigned patient records
-<span class="cstat-no" title="statement not covered" >        if (role === 'Provider') {</span>
-<span class="cstat-no" title="statement not covered" >            return record.patient.assignedProviderId?.toString() === requesterId;</span>
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (role === 'Provider') {
+            return record.patient.assignedProviderId?.toString() === requesterId;
         }
         
 <span class="cstat-no" title="statement not covered" >        return false;</span>
@@ -175,7 +175,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-17T13:06:16.686Z
+                at 2025-12-18T12:13:30.823Z
             </div>
         <script src="../prettify.js"></script>
         <script>

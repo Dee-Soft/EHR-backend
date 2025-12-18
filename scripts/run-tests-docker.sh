@@ -8,25 +8,29 @@ echo "EHR Backend Docker Test Runner"
 echo "========================================="
 
 # Check if env.test exists
-if [ ! -f env.test ]; then
+if [ ! -f .env.test ]; then
     echo "❌ Error: env.test file not found!"
     echo "Please ensure env.test exists with test configuration"
     exit 1
 fi
 
-echo "✓ env.test file found"
+echo "✓ .env.test file found"
 
-# Clean up any existing test containers
-echo "Cleaning up existing test containers..."
-docker-compose -f docker-compose.test.yml down 2>/dev/null || true
+# Clean up any existing test containers with volumes
+echo "Cleaning up existing test containers and volumes..."
+docker-compose -f docker-compose.test.yml down -v --remove-orphans 2>/dev/null || true
+
+# Also clean up any dangling containers
+echo "Removing any dangling containers..."
+docker ps -a -q --filter "name=ehr-" | xargs docker rm -f 2>/dev/null || true
 
 echo ""
 echo "Building and starting test environment..."
 echo "This may take a few minutes on first run..."
 echo ""
 
-# Build and run tests
-docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit
+# Build and run tests with orphan removal
+docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit --remove-orphans
 
 # Capture exit code
 TEST_EXIT_CODE=$?

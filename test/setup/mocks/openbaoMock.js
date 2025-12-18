@@ -10,14 +10,14 @@ class OpenBaoMock {
     this.initialized = true;
     this.sealed = false;
     this.keys = {
-      'ehr-aes-master': {
+      'test-aes-key': {
         version: 1,
         type: 'aes256-gcm96',
         keys: {
           1: { creation_time: new Date().toISOString() }
         }
       },
-      'ehr-rsa-exchange': {
+      'test-rsa-key': {
         version: 1,
         type: 'rsa-2048',
         keys: {

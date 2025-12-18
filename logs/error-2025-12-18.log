@@ -1,0 +1,1 @@
+{"endpointsTried":["http://openbao:8200","http://localhost:18200"],"error":"Unknown error","level":"error","message":"OpenBao connection failed after trying all endpoints","service":"ehr-backend","timestamp":"2025-12-18 10:14:29"}

@@ -1,36 +1,37 @@
-# EHR Backend System
+# Electronic Health Record (EHR) Backend System
 
-> A secure, HIPAA-compliant Electronic Health Record (EHR) backend system built with Node.js, Express, MongoDB, and OpenBao Transit Engine for cryptographic operations.
+A secure, HIPAA-compliant Electronic Health Record backend system implementing role-based access control with end-to-end encryption. Built with Node.js, Express, MongoDB, and OpenBao Transit Engine for cryptographic operations.
 
 ## Table of Contents
 
 - [Features](#features)
 - [Architecture](#architecture)
 - [Technology Stack](#technology-stack)
-- [Security](#security)
-- [Getting Started](#getting-started)
+- [Security Overview](#security-overview)
+- [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
 - [Docker Deployment](#docker-deployment)
-- [Environment Variables](#environment-variables)
-- [API Documentation](#api-documentation)
+- [Configuration](#configuration)
+- [API Reference](#api-reference)
 - [Testing](#testing)
-- [Logging](#logging)
-- [Health Checks](#health-checks)
-- [Development](#development)
-- [Contributing](#contributing)
+- [Project Structure](#project-structure)
+- [License](#license)
 
 ## Features
 
-- **Role-Based Access Control (RBAC)**: Five distinct roles (Admin, Manager, Provider, Employee, Patient)
-- **End-to-End Encryption**: OpenBao Transit Engine for all cryptographic operations
-- **Secure Authentication**: JWT-based authentication with httpOnly cookies
-- **Audit Logging**: Comprehensive audit trails for all sensitive operations
-- **Health Monitoring**: Kubernetes-ready health check endpoints
-- **Structured Logging**: Winston logger with daily rotation
-- **Error Handling**: Centralized error handling with detailed logging
-- **Rate Limiting**: Protection against brute-force attacks
-- **Docker Ready**: Complete Docker and Docker Compose configuration
+- **Role-Based Access Control (RBAC)**: Five distinct user roles with granular permissions (Admin, Manager, Provider, Employee, Patient)
+- **End-to-End Encryption**: All sensitive data encrypted using OpenBao Transit Engine
+- **Secure Authentication**: JWT-based authentication with HTTP-only cookies and SameSite protection
+- **Comprehensive Audit Logging**: Detailed audit trails for all sensitive operations
+- **Health Monitoring**: Kubernetes-ready health check endpoints with readiness and liveness probes
+- **Structured Logging**: Winston logger with daily rotation and 30-day retention
+- **Centralized Error Handling**: Consistent error responses with detailed logging
+- **Rate Limiting Protection**: Defense against brute-force attacks with configurable limits
+- **Containerization Support**: Complete Docker and Docker Compose configurations for development, testing, and production
 
 ## Architecture
+
+The system follows a three-tier architecture with separate key management:
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
@@ -46,259 +47,170 @@
                     └─────────────────────┘
 ```
 
-### OpenBao Keys Management System
+### Key Management System
 
-The EHR backend now uses a standalone OpenBao Keys Management System that runs independently with PostgreSQL storage. This system provides:
+The EHR backend utilizes a standalone OpenBao Keys Management System that operates independently with PostgreSQL storage. This architecture provides:
 
-- **Centralized Key Management**: All cryptographic keys managed separately
-- **PostgreSQL Storage**: Persistent key storage with audit logging
-- **Independent Docker Network**: Runs in its own isolated network
-- **Fixed Development Token**: `ehr-permanent-token` for development
+- **Centralized Key Management**: Cryptographic keys managed separately from application data
+- **Persistent Storage**: PostgreSQL-based key storage with audit logging capabilities
+- **Network Isolation**: Independent Docker network for enhanced security
 - **Dual Endpoint Support**: 
-  - `http://localhost:18200` for local development
-  - `http://openbao:8200` for Docker network access
+  - `http://localhost:18200` for local development environments
+  - `http://openbao:8200` for Docker network communication
 
-### Key Components
+### System Components
 
-1. **Controllers**: Handle HTTP requests and business logic
-2. **Services**: Encapsulate business logic and external service interactions
-3. **Middlewares**: Handle authentication, encryption, decryption, and validation
-4. **Models**: MongoDB schemas with Mongoose
-5. **Utils**: Helper functions and utilities
+1. **Controllers**: HTTP request handlers implementing business logic
+2. **Services**: Business logic encapsulation and external service interactions
+3. **Middlewares**: Authentication, encryption, decryption, and validation layers
+4. **Models**: MongoDB schemas defined using Mongoose ODM
+5. **Utilities**: Helper functions and shared utilities
 
 ## Technology Stack
 
-- **Runtime**: Node.js 24.x
-- **Framework**: Express.js 4.x
-- **Database**: MongoDB 7.x
-- **Encryption**: OpenBao Transit Engine
-- **Authentication**: JWT (jsonwebtoken)
-- **Logging**: Winston with daily rotation
-- **Testing**: Jest with Supertest
-- **Containerization**: Docker & Docker Compose
+| Component | Technology | Version |
+|-----------|------------|---------|
+| Runtime | Node.js | 24.x |
+| Framework | Express.js | 4.x |
+| Database | MongoDB | 7.x |
+| Encryption | OpenBao Transit Engine | - |
+| Authentication | JSON Web Tokens (JWT) | - |
+| Logging | Winston with Daily Rotate File | - |
+| Testing | Jest with Supertest | - |
+| Containerization | Docker & Docker Compose | - |
 
-## Security
+## Security Overview
 
 ### Encryption Strategy
 
-- **OpenBao Transit Engine**: All cryptographic operations
-- **AES-256-GCM**: Data encryption at rest
-- **RSA-2048**: Key exchange with frontend
-- **Key Versioning**: Automatic key rotation support
-- **Envelope Encryption**: Data keys encrypted with master key
+- **OpenBao Transit Engine**: All cryptographic operations delegated to dedicated key management
+- **AES-256-GCM**: Data encryption at rest with authenticated encryption
+- **RSA-2048**: Secure key exchange mechanism with frontend applications
+- **Key Versioning**: Support for automatic key rotation and version management
+- **Envelope Encryption**: Data keys encrypted with master keys for enhanced security
 
 ### Authentication & Authorization
 
-- **JWT Tokens**: Secure, stateless authentication
-- **HttpOnly Cookies**: XSS protection
-- **SameSite Strict**: CSRF protection
-- **Role-Based Access**: Granular permissions per role
-- **Audit Logging**: All authentication attempts logged
+- **JWT Tokens**: Stateless authentication with configurable expiration
+- **HTTP-Only Cookies**: Cross-site scripting (XSS) protection
+- **SameSite Strict**: Cross-site request forgery (CSRF) protection
+- **Role-Based Access Control**: Granular permissions based on five distinct roles
+- **Audit Logging**: Comprehensive logging of all authentication attempts
 
 ### Security Headers
 
-- **Helmet**: Security headers (CSP, HSTS, etc.)
-- **CORS**: Configured for trusted origins
-- **Rate Limiting**: 100 requests per 15 minutes per IP
-- **Auth Rate Limiting**: 5 login attempts per 15 minutes
+- **Helmet.js**: Security headers including Content Security Policy (CSP) and HTTP Strict Transport Security (HSTS)
+- **CORS Configuration**: Restrictive Cross-Origin Resource Sharing for trusted origins only
+- **Rate Limiting**: 100 requests per 15 minutes per IP address
+- **Authentication Rate Limiting**: 5 login attempts per 15 minutes per IP address
 
-## Getting Started
-
-### Prerequisites
+## Prerequisites
 
 - Node.js 24.x or higher
 - MongoDB 7.x
-- OpenBao (or HashiCorp Vault)
-- npm or yarn
+- OpenBao Keys Management System (or HashiCorp Vault)
+- npm or yarn package manager
 
-### Installation
+## Quick Start
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourorg/ehr-backend.git
-   cd ehr-backend
-   ```
+### 1. Clone Repository
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+```bash
+git clone https://github.com/yourorg/ehr-backend.git
+cd ehr-backend
+```
 
-3. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
+### 2. Install Dependencies
 
-4. **Start OpenBao** (if running locally)
-   ```bash
-   # In dev mode
-   openbao server -dev -dev-root-token-id="your-token"
-   ```
+```bash
+npm install
+```
 
-5. **Initialize OpenBao Transit Engine**
-   ```bash
-   chmod +x scripts/init-openbao.sh
-   ./scripts/init-openbao.sh
-   ```
+### 3. Configure Environment
 
-6. **Seed Admin User**
-   ```bash
-   npm run seed:admin
-   ```
+Create a `.env` file in the project root with the required environment variables. Refer to the [Configuration Guide](CONFIGURATION.md) for detailed variable definitions.
 
-7. **Start the server**
-   ```bash
-   npm run dev
-   ```
+### 4. Initialize OpenBao Transit Engine
 
-The server will start on `http://localhost:3001`
+```bash
+chmod +x scripts/init-openbao.sh
+./scripts/init-openbao.sh
+```
+
+### 5. Seed Administrative User
+
+```bash
+npm run seed:admin
+```
+
+### 6. Start Development Server
+
+```bash
+npm run dev
+```
+
+The server will be available at `http://localhost:3001`.
 
 ## Docker Deployment
 
-### Using Docker Compose
+### Development Environment
 
-#### Docker Compose Configurations
-
-The project includes multiple Docker Compose configurations for different environments:
-
-1. **Development** (`docker-compose.dev.yml`):
-   - Hot reload for rapid development
-   - Connects to EHR Keys Management System via `ehr-keys-net` network
-   - Uses `.env` file for environment variables
-   - Helper script: `./scripts/start-dev.sh` or `npm run dev:start`
-
-2. **Testing** (`docker-compose.test.yml`):
-   - Isolated test environment with mocked OpenBao
-   - Separate MongoDB container for tests
-   - Generates coverage reports
-   - Helper script: `./scripts/run-tests-docker.sh` or `npm run test:docker`
-
-3. **Production** (`docker-compose.yml`):
-   - Optimized for production deployment
-   - Connects to external OpenBao service
-   - Health checks and restart policies
-
-#### Recent Improvements
-
-##### Fixed Docker Network Issues
-- Added network validation scripts (`scripts/check-network.sh`)
-- Improved error messages for missing networks
-- Added fallback options for local development
-- Created helper scripts for easier development workflow
-
-##### Enhanced Testing Infrastructure
-- Created comprehensive test scripts (`scripts/run-tests-docker.sh`, `scripts/run-tests-local.sh`)
-- Added test infrastructure verification (`scripts/test-simple.sh`)
-- Improved documentation for troubleshooting test issues
-- Added npm scripts for common testing scenarios
-
-#### 1) Start OpenBao Keys Management System (separately)
-
-The OpenBao Keys Management System runs **outside** this backend compose in its own Docker network with PostgreSQL storage. The system is available at: [Dee-Soft/ehr-keys-management-system](https://github.com/Dee-Soft/ehr-keys-management-system).
-
-**Key Features:**
-- Runs on port 18200 (default)
-- Uses PostgreSQL for persistent storage
-- Fixed development token: `ehr-permanent-token`
-- Independent Docker network
-
-#### 2) Configure Environment Variables
-
-Copy the example environment file and update it:
+For development with hot reload:
 
 ```bash
-cp .env.example .env
-# Edit .env with your OpenBao configuration
-```
-
-**Important Environment Variables:**
-```bash
-# For local development (EHR backend running locally)
-OPENBAO_ADDR=http://localhost:18200
-
-# For Docker deployment (EHR backend in container)
-OPENBAO_ADDR=http://host.docker.internal:18200
-
-# Fixed development token
-OPENBAO_TOKEN=ehr-permanent-token
-
-# Transit key names
-OPENBAO_TRANSIT_AES_KEY=ehr-aes-master
-OPENBAO_TRANSIT_RSA_KEY=ehr-rsa-exchange
-```
-
-#### 2) Start backend + MongoDB (this repo)
-
-This repo’s default compose starts only:
-- EHR Backend Server (port 3001)
-- MongoDB (port 27017)
-
-```bash
-docker compose up -d --build
-```
-
-**Important networking note:** inside Docker, `localhost` refers to the container itself. To reach OpenBao running on your laptop at `http://localhost:8200`, the backend container must use `http://host.docker.internal:8200` (macOS/Windows). This compose config already defaults to that.
-
-#### 3) Development compose (recommended for Postman/httpie)
-
-Use `docker-compose.dev.yml` for live reload (nodemon) and easy manual endpoint testing:
-
-```bash
-# Provide the OpenBao token from your separate OpenBao stack
-export OPENBAO_TOKEN="dev-openbao-token"
-
 docker compose -f docker-compose.dev.yml up --build
 ```
 
-#### 4) View logs / stop services
+### Testing Environment
 
-```bash
-docker compose logs -f ehr-server
-docker compose down
-```
-
-### Production Deployment
-
-```bash
-# Build production image
-docker build -t ehr-backend:latest .
-
-# Run with environment file
-docker-compose --env-file .env.production up -d
-```
-
-### Run Tests in Docker
+For isolated testing with mocked services:
 
 ```bash
 docker compose -f docker-compose.test.yml up --build --abort-on-container-exit
 ```
 
-## Environment Variables
+### Production Deployment
 
-### Required Variables
+For production deployment:
+
+```bash
+docker compose --env-file .env.production up -d --build
+```
+
+### OpenBao Keys Management System
+
+The EHR backend requires a separate OpenBao Keys Management System. This system operates independently with PostgreSQL storage and provides cryptographic services. For deployment instructions, refer to the [EHR Keys Management System repository](https://github.com/Dee-Soft/ehr-keys-management-system).
+
+**Key Configuration Notes:**
+- Default port: 18200
+- Development token: `ehr-permanent-token`
+- Network configuration required for Docker communication
+
+## Configuration
+
+### Required Environment Variables
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `NODE_ENV` | Environment | `production` |
+| `NODE_ENV` | Application environment | `production` |
 | `PORT` | Server port | `3001` |
 | `MONGO_URI` | MongoDB connection string | `mongodb://localhost:27017/ehr` |
 | `OPENBAO_ADDR` | OpenBao Keys Management System address | `http://localhost:18200` (local) / `http://host.docker.internal:18200` (Docker) |
-| `OPENBAO_TOKEN` | OpenBao authentication token | `ehr-permanent-token` (dev) / `your-token` (prod) |
+| `OPENBAO_TOKEN` | OpenBao authentication token | `ehr-permanent-token` (development) |
 | `JWT_SECRET` | JWT signing secret | `your-secret-key` |
-| `FRONTEND_URL` | Frontend URL for CORS | `http://localhost:3000` |
+| `FRONTEND_URL` | Frontend URL for CORS configuration | `http://localhost:3000` |
 
-### Optional Variables
+### Optional Environment Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `LOG_LEVEL` | Logging level | `info` |
-| `OPENBAO_TRANSIT_AES_KEY` | AES key name | `ehr-aes-master` |
-| `OPENBAO_TRANSIT_RSA_KEY` | RSA key name | `ehr-rsa-exchange` |
+| `LOG_LEVEL` | Logging verbosity level | `info` |
+| `OPENBAO_TRANSIT_AES_KEY` | AES key name in OpenBao | `ehr-aes-master` |
+| `OPENBAO_TRANSIT_RSA_KEY` | RSA key name in OpenBao | `ehr-rsa-exchange` |
 
-See `.env.example` for complete configuration.
+Refer to the [Configuration Guide](CONFIGURATION.md) for complete configuration options and environment variable definitions.
 
-## API Documentation
+## API Reference
 
 ### Base URL
 
@@ -308,46 +220,49 @@ http://localhost:3001/api
 
 ### Authentication Endpoints
 
-- `POST /auth/login` - User login
-- `POST /auth/logout` - User logout
-- `GET /auth/me` - Get current user
+- `POST /auth/login` - Authenticate user and establish session
+- `POST /auth/logout` - Terminate user session
+- `GET /auth/me` - Retrieve current authenticated user information
 
 ### User Management
 
-- `POST /users/register` - Register new user (RBAC)
-- `PUT /users/:id` - Update user (RBAC)
+- `POST /users/register` - Register new user (role-based permissions apply)
+- `PUT /users/:id` - Update user information (role-based permissions apply)
 
 ### Patient Records
 
-- `POST /patient-records` - Create record (Provider/Manager)
-- `GET /patient-records` - Get all records (Manager only)
-- `GET /patient-records/my-records` - Get own records (Patient)
-- `GET /patient-records/:id` - Get specific record (RBAC)
+- `POST /patient-records` - Create new patient record (Provider/Manager roles)
+- `GET /patient-records` - Retrieve all patient records (Manager role only)
+- `GET /patient-records/my-records` - Retrieve patient's own records (Patient role)
+- `GET /patient-records/:id` - Retrieve specific patient record (role-based access)
 
-### Admin Endpoints
+### Administrative Functions
 
-- `GET /admin/audit-logs` - View audit logs (Admin only)
-- `GET /admin/audit-logs/export` - Export CSV (Admin only)
-- `POST /admin/assign-patient` - Assign patient to provider (Admin only)
+- `GET /admin/audit-logs` - View system audit logs (Admin role only)
+- `GET /admin/audit-logs/export` - Export audit logs as CSV (Admin role only)
+- `POST /admin/assign-patient` - Assign patient to healthcare provider (Admin role only)
 
-### Health Checks
+### Health Monitoring
 
-- `GET /health` - Overall health status
-- `GET /health/ready` - Readiness probe (K8s)
-- `GET /health/live` - Liveness probe (K8s)
+- `GET /health` - Comprehensive health status
+- `GET /health/ready` - Readiness probe for Kubernetes
+- `GET /health/live` - Liveness probe for Kubernetes
 
 ### Key Exchange
 
-- `GET /key-exchange/public-key` - Get RSA public key
+- `GET /key-exchange/public-key` - Retrieve RSA public key for secure communication
 
-For detailed API documentation, see [API.md](docs/API.md) or run:
+For detailed API documentation including request/response schemas and examples, generate documentation locally:
+
 ```bash
 npm run docs
 ```
 
 ## Testing
 
-### Run All Tests
+### Test Execution
+
+Run complete test suite:
 
 ```bash
 npm test
@@ -355,16 +270,28 @@ npm test
 
 ### Test Coverage
 
+Generate test coverage report:
+
 ```bash
 npm run test:coverage
 ```
 
-### Test Types
+### Test Categories
+
+Execute specific test categories:
 
 ```bash
 npm run test:unit          # Unit tests
 npm run test:integration   # Integration tests
 npm run test:security      # Security tests
+```
+
+### Docker-Based Testing
+
+Execute tests in isolated Docker environment:
+
+```bash
+npm run test:docker
 ```
 
 ### Test Structure
@@ -377,197 +304,36 @@ test/
 └── setup/
     ├── mocks/            # Mock implementations
     ├── fixtures/         # Test data
-    └── testDb.js         # Test database setup
+    └── testDb.js         # Test database configuration
 ```
 
-### Coverage Goals
+### Coverage Requirements
 
-- **Overall**: 80%+ coverage
-- **Critical Paths**: 100% (auth, encryption, RBAC)
-
-## Logging
-
-### Winston Logger
-
-Structured logging with daily rotation:
-
-```javascript
-const logger = require('./config/logger');
-
-logger.info('User logged in', { userId: user.id });
-logger.error('Operation failed', { error: err.message });
-logger.warn('Rate limit exceeded', { ip: req.ip });
-```
-
-### Log Levels
-
-- `error`: Error conditions
-- `warn`: Warning conditions
-- `info`: Informational messages
-- `http`: HTTP requests (Morgan)
-- `debug`: Debug messages
-
-### Log Files
-
-```
-logs/
-├── error-YYYY-MM-DD.log    # Error logs
-└── combined-YYYY-MM-DD.log # All logs
-```
-
-Logs are retained for 30 days with automatic rotation.
-
-## Health Checks
-
-### Kubernetes Probes
-
-**Liveness Probe**
-```yaml
-livenessProbe:
-  httpGet:
-    path: /api/health/live
-    port: 3001
-  initialDelaySeconds: 40
-  periodSeconds: 30
-```
-
-**Readiness Probe**
-```yaml
-readinessProbe:
-  httpGet:
-    path: /api/health/ready
-    port: 3001
-  initialDelaySeconds: 10
-  periodSeconds: 10
-```
-
-### Health Check Response
-
-```json
-{
-  "status": "healthy",
-  "timestamp": "2024-01-15T10:30:00.000Z",
-  "services": {
-    "api": {
-      "status": "operational",
-      "uptime": 3600,
-      "memory": {...}
-    },
-    "mongodb": {
-      "status": "connected",
-      "readyState": 1
-    },
-    "openbao": {
-      "healthy": true,
-      "initialized": true,
-      "sealed": false
-    }
-  }
-}
-```
-
-## Development
-
-### Code Style
-
-- **Linter**: ESLint
-- **Formatter**: Prettier (if configured)
-- **Commits**: Conventional Commits (Commitizen)
-
-### Git Hooks
-
-- **pre-commit**: Runs linter (optional)
-- **commit-msg**: Validates commit message format
-
-### Commit Messages
-
-```bash
-npm run commit
-```
-
-Follows Conventional Commits specification:
-- `feat:` New feature
-- `fix:` Bug fix
-- `docs:` Documentation changes
-- `test:` Test additions/changes
-- `refactor:` Code refactoring
-
-### Development Workflow
-
-1. Create feature branch
-2. Make changes with tests
-3. Run tests locally
-4. Commit using Commitizen
-5. Push and create PR
-6. CI/CD runs tests
-7. Review and merge
-
-## RBAC Matrix
-
-| Role | Register Users | Create Records | View All Records | View Own Records | Admin Access |
-|------|----------------|----------------|------------------|------------------|--------------|
-| Admin | All | ✓ | ✓ | - | ✓ |
-| Manager | Employee, Provider, Patient | ✓ | ✓ | - | - |
-| Employee | Patient | - | - | - | - |
-| Provider | - | Assigned Patients | Assigned Patients | - | - |
-| Patient | - | - | - | ✓ | - |
+- **Overall Coverage**: Minimum 80% test coverage
+- **Critical Paths**: 100% coverage for authentication, encryption, and RBAC components
 
 ## Project Structure
 
 ```
 ehr-backend/
 ├── config/              # Configuration files
-│   ├── db.js           # MongoDB connection
-│   ├── logger.js       # Winston configuration
-│   └── openbao.config.js
+│   ├── db.js           # MongoDB connection configuration
+│   ├── logger.js       # Winston logging configuration
+│   └── openbao.config.js # OpenBao client configuration
 ├── controllers/        # Request handlers
-├── middlewares/        # Custom middleware
-├── models/            # Mongoose schemas
-├── routes/            # API routes
-├── services/          # Business logic
-├── utils/             # Helper functions
+├── middlewares/        # Custom middleware functions
+├── models/            # Mongoose schemas and models
+├── routes/            # API route definitions
+├── services/          # Business logic services
+├── utils/             # Utility functions
 ├── test/              # Test suites
-├── logs/              # Log files
+├── logs/              # Application logs
 ├── scripts/           # Utility scripts
-├── docker-compose.yml # Docker Compose config
+├── docker-compose.yml # Docker Compose configuration
 ├── Dockerfile         # Production Dockerfile
-└── server.js          # Entry point
+└── server.js          # Application entry point
 ```
-
-## Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`npm run commit`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### Guidelines
-
-- Follow existing code style
-- Write tests for new features
-- Update documentation
-- Ensure all tests pass
-- Follow conventional commits
 
 ## License
 
-ISC License - See LICENSE file for details
-
-## Support
-
-For issues and questions:
-- GitHub Issues: [Report Bug](https://github.com/yourorg/ehr-backend/issues)
-- Email: support@ehr-system.com
-
-## Acknowledgments
-
-- OpenBao Team for secure key management
-- Express.js Community
-- MongoDB Team
-- All contributors
-
----
-
-**Built with ❤️ for secure healthcare data management**
-
+This project is licensed under the ISC License.

@@ -1,5 +1,3 @@
-version: '3.8'
-
 # EHR Backend Docker Compose Configuration - Production
 # 
 # This configuration connects to the EHR Keys Management System via the ehr-keys-net network.
@@ -41,18 +39,6 @@ services:
         condition: service_healthy
     env_file:
       - .env
-    environment:
-      - NODE_ENV=${NODE_ENV:-production}
-      - PORT=${PORT:-3001}
-      - MONGO_URI=${MONGO_URI:-mongodb://mongoDB:27017/ehr-system}
-      # OpenBao connection via ehr-keys-net network
-      - OPENBAO_ADDR=${OPENBAO_ADDR:-http://openbao:8200}
-      - OPENBAO_TOKEN=${OPENBAO_TOKEN}
-      - OPENBAO_TRANSIT_AES_KEY=${OPENBAO_TRANSIT_AES_KEY}
-      - OPENBAO_TRANSIT_RSA_KEY=${OPENBAO_TRANSIT_RSA_KEY}
-      - JWT_SECRET=${JWT_SECRET}
-      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
-      - LOG_LEVEL=${LOG_LEVEL:-info}
     volumes:
       - ./logs:/app/logs
     healthcheck:
@@ -68,7 +54,7 @@ networks:
     driver: bridge
   ehr-keys-net:
     external: true
-    name: ehr-keys-net
+    name: ehr-keys-management-system_ehr-keys-net
 
 volumes:
   mongo-data:
