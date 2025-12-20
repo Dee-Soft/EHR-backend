@@ -20,7 +20,7 @@ class KeyExchangeService {
    */
   async getPublicKeyForFrontend() {
     try {
-      const result = await this.vault.read(`transit/keys/${this.keyNames.rsaExchange}`);
+      const result = await this.vault.read(`transit/keys/${this.keyNames.rsaExchangeBackend}`);
       const latestVersion = result.data.latest_version;
       
       return {
@@ -60,6 +60,40 @@ class KeyExchangeService {
     } catch (error) {
       logger.error('Key wrapping failed', { error: error.message });
       throw new Error('Key exchange failed');
+    }
+  }
+
+  /**
+   * Wrap backend's AES key with frontend's RSA public key
+   * Used when backend needs to send its AES key to frontend for decryption
+   * @param {String} backendAesKey - Backend's AES key to wrap (base64)
+   * @param {String} frontendPublicKey - Frontend's RSA public key (PEM format)
+   * @returns {Object} { wrappedKey, keyVersion, algorithm, wrappedAt }
+   */
+  async wrapBackendAESKeyForFrontend(backendAesKey, frontendPublicKey) {
+    try {
+      // Note: This is a simplified implementation
+      // In a real scenario, we would need to use the frontend's RSA public key
+      // to encrypt the backend's AES key. However, OpenBao Transit Engine
+      // requires the key to be managed by OpenBao.
+      // For now, we'll use the frontend's RSA key in OpenBao
+      const result = await this.vault.write(
+        `transit/encrypt/${this.keyNames.rsaExchangeFrontend}`,
+        {
+          plaintext: backendAesKey,
+          key_version: 1
+        }
+      );
+      
+      return {
+        wrappedKey: result.data.ciphertext,
+        keyVersion: result.data.key_version,
+        algorithm: 'RSA-OAEP-2048',
+        wrappedAt: new Date().toISOString()
+      };
+    } catch (error) {
+      logger.error('Failed to wrap backend AES key for frontend', { error: error.message });
+      throw new Error('Key wrapping failed');
     }
   }
 
