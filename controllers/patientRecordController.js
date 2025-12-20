@@ -18,7 +18,7 @@ const {
 
 const { loadAESKey } = require('../middlewares/loadAESKey');
 const transitEncryptMiddleware = require('../middlewares/transitEncryptMiddleware');
-const transitDecryptMiddleware = require('../middlewares/transitDecryptMiddleware');
+const frontendDecryptMiddleware = require('../middlewares/frontendDecryptMiddleware');
 
 /**
  * Create a new patient record
@@ -28,8 +28,8 @@ exports.createRecord = [
   // Step 1: Unwrap frontend's AES key
   loadAESKey,
   
-  // Step 2: Decrypt fields that frontend encrypted
-  transitDecryptMiddleware(['diagnosis', 'notes', 'medications']),
+  // Step 2: Decrypt fields that frontend encrypted using frontend AES key
+  frontendDecryptMiddleware(['diagnosis', 'notes', 'medications']),
   
   // Step 3: Validate and prepare for DB encryption
   async (req, res, next) => {
@@ -41,7 +41,7 @@ exports.createRecord = [
       // Validate permissions
       if (!canCreateRecord(role)) {
         return res.status(403).json({ 
-          message: 'Only providers and managers can create patient records' 
+          message: 'Only providers can create patient records' 
         });
       }
 
@@ -103,35 +103,49 @@ exports.createRecord = [
     const frontendPublicKey = req.frontendPublicKey;
 
     try {
-      // Generate data key for this record
+      // Generate data key for this record (backend's AES key)
       const dataKey = await cryptoService.generateDataKey();
       
-      // Wrap the data key for frontend (if public key provided)
+      // Wrap the backend's AES key for frontend (if frontend public key provided)
       let encryptedDbAESKey;
+      let frontendPublicKeyStored = null;
+      
       if (frontendPublicKey) {
-        const wrapped = await keyExchangeService.wrapAESKeyForFrontend(dataKey.plaintextKey);
+        // Use the new method to wrap backend's AES key with frontend's RSA public key
+        const wrapped = await keyExchangeService.wrapBackendAESKeyForFrontend(
+          dataKey.plaintextKey,
+          frontendPublicKey
+        );
         encryptedDbAESKey = wrapped.wrappedKey;
+        frontendPublicKeyStored = frontendPublicKey;
       } else {
         // Fallback: use encrypted data key from OpenBao
         encryptedDbAESKey = dataKey.ciphertextKey;
       }
 
       // Create record with encrypted fields
-      const record = await PatientRecord.create({
+      const recordData = {
         patient,
-        diagnosis, // Already encrypted by middleware
-        notes, // Already encrypted by middleware
-        medications, // Already encrypted by middleware
+        diagnosis, // Already encrypted by middleware (with backend's AES key)
+        notes, // Already encrypted by middleware (with backend's AES key)
+        medications, // Already encrypted by middleware (with backend's AES key)
         visitDate,
         createdBy: creatorId,
         encryptedAesKey: encryptedDbAESKey,
         transitKeyVersion: dataKey.keyVersion,
         encryptionMetadata: {
           algorithm: 'aes256-gcm96',
-          keyId: 'ehr-aes-master',
+          keyId: 'ehr-aes-master-backend',
           encryptedAt: new Date()
         }
-      });
+      };
+      
+      // Store frontend's RSA public key if provided
+      if (frontendPublicKeyStored) {
+        recordData.frontendPublicKey = frontendPublicKeyStored;
+      }
+      
+      const record = await PatientRecord.create(recordData);
 
       // Audit log
       await AuditLog.create({
@@ -148,18 +162,25 @@ exports.createRecord = [
         patientId: patient
       });
 
+      const responseRecord = {
+        patient: record.patient,
+        diagnosis: record.diagnosis,
+        notes: record.notes,
+        medications: record.medications,
+        visitDate: record.visitDate,
+        encryptedAesKey: record.encryptedAesKey,
+        transitKeyVersion: record.transitKeyVersion
+      };
+      
+      // Include frontend public key in response if stored
+      if (record.frontendPublicKey) {
+        responseRecord.frontendPublicKey = record.frontendPublicKey;
+      }
+      
       return res.status(201).json({
         message: 'Record created successfully',
         recordId: record._id,
-        record: {
-          patient: record.patient,
-          diagnosis: record.diagnosis,
-          notes: record.notes,
-          medications: record.medications,
-          visitDate: record.visitDate,
-          encryptedAesKey: record.encryptedAesKey,
-          transitKeyVersion: record.transitKeyVersion
-        }
+        record: responseRecord
       });
     } catch (error) {
       logger.error('Error saving record', { 
@@ -176,74 +197,13 @@ exports.createRecord = [
 ];
 
 /**
- * Get all patient records (Manager only)
+ * Get all patient records (NO ONE can view all records)
  */
 exports.getAllRecords = async (req, res) => {
-  const { role, id: requesterId } = req.user;
-  
-  try {
-    let records;
-    let message;
-
-    // Admin and Manager can view all records
-    if (canViewAllRecords(role)) {
-      records = await PatientRecord.find().populate({ path: 'patient' });
-      message = 'All records retrieved successfully';
-      
-      // Audit log
-      await AuditLog.create({
-        action: 'VIEW_ALL_RECORDS',
-        actorId: requesterId,
-        targetType: 'PatientRecord',
-        details: `${role} viewed all patient records`,
-      });
-    }
-    // Other roles not allowed
-    else {
-      return res.status(403).json({ 
-        message: 'You do not have permission to view all records' 
-      });
-    }
-    
-    if (!records) {
-      records = [];
-    }
-
-    // Return encrypted records (frontend will decrypt)
-    const responseRecords = records.map(record => ({
-      id: record._id,
-      patient: record.patient,
-      diagnosis: record.diagnosis, // Encrypted
-      notes: record.notes, // Encrypted
-      medications: record.medications, // Encrypted
-      visitDate: record.visitDate,
-      createdBy: record.createdBy,
-      createdAt: record.createdAt,
-      updatedAt: record.updatedAt,
-      encryptedAesKey: record.encryptedAesKey,
-      transitKeyVersion: record.transitKeyVersion
-    }));
-
-    logger.info('Records retrieved', {
-      userId: requesterId,
-      role: role,
-      recordCount: responseRecords.length
-    });
-
-    res.status(200).json({
-      message: message,
-      records: responseRecords
-    });
-  } catch (error) {
-    logger.error('Error retrieving records', { 
-      error: error.message,
-      userId: req.user.id
-    });
-    return res.status(500).json({ 
-      message: 'Failed to retrieve all records', 
-      error: error.message 
-    });
-  }
+  // No one can view all records
+  return res.status(403).json({ 
+    message: 'Access denied. No role has permission to view all records.' 
+  });
 };
 
 /**
@@ -379,6 +339,76 @@ exports.getRecordById = async (req, res) => {
     });
     return res.status(500).json({ 
       message: 'Failed to retrieve record', 
+      error: error.message 
+    });
+  }
+};
+
+/**
+ * Get records for provider's assigned patients
+ * @route GET /api/patient-records/provider/assigned
+ * @access Provider only
+ */
+exports.getAssignedPatientRecords = async (req, res) => {
+  const { role, id: providerId } = req.user;
+  
+  if (role !== 'Provider') {
+    return res.status(403).json({ 
+      message: 'Only providers can view assigned patient records' 
+    });
+  }
+  
+  try {
+    // Get provider's assigned patients
+    const provider = await User.findById(providerId).select('assignedPatients');
+    
+    if (!provider || !provider.assignedPatients || provider.assignedPatients.length === 0) {
+      return res.status(404).json({ 
+        message: 'No patients assigned to this provider' 
+      });
+    }
+    
+    // Get records for assigned patients
+    const records = await PatientRecord.find({ 
+      patient: { $in: provider.assignedPatients } 
+    }).populate({ path: 'patient' });
+    
+    // Return encrypted records
+    const responseRecords = records.map(record => ({
+      id: record._id,
+      patient: record.patient,
+      diagnosis: record.diagnosis,
+      notes: record.notes,
+      medications: record.medications,
+      visitDate: record.visitDate,
+      encryptedAesKey: record.encryptedAesKey,
+      transitKeyVersion: record.transitKeyVersion
+    }));
+    
+    // Audit log
+    await AuditLog.create({
+      action: 'VIEW_ASSIGNED_RECORDS',
+      actorId: providerId,
+      targetType: 'PatientRecord',
+      details: `Provider viewed assigned patient records`,
+    });
+
+    logger.info('Assigned patient records retrieved', {
+      providerId: providerId,
+      recordCount: responseRecords.length
+    });
+
+    res.status(200).json({
+      message: 'Assigned patient records retrieved successfully',
+      records: responseRecords
+    });
+  } catch (error) {
+    logger.error('Error retrieving assigned patient records', { 
+      error: error.message,
+      providerId 
+    });
+    res.status(500).json({ 
+      message: 'Failed to retrieve assigned patient records',
       error: error.message 
     });
   }

@@ -21,7 +21,7 @@ router.delete('/users/:id', authMiddleware, requiredRole('Admin'), deleteUser);
 router.post(
   '/assign-patient',
   authMiddleware,
-  requiredRole('Admin'),
+  requiredRole('Admin', 'Manager', 'Employee'),
   assignPatientToProvider
 );
 

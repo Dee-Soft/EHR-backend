@@ -57,6 +57,7 @@ networks:
 ## OpenBao Configuration
 
 The `config/openbao.config.js` is configured to:
+- Use dual-key architecture with separate RSA and AES keys for frontend and backend
 - Prioritize environment variables from `.env` files
 - Support multiple endpoint fallbacks with automatic retry:
   1. `OPENBAO_ADDR` environment variable (highest priority)
@@ -64,6 +65,13 @@ The `config/openbao.config.js` is configured to:
   3. `http://localhost:18200` (local development fallback)
 - Provide detailed logging for connection attempts and failures
 - Implement exponential backoff retry logic (3 attempts per endpoint)
+
+### Dual-Key Architecture
+The system uses separate cryptographic keys for frontend and backend operations:
+- **Backend RSA Key**: Used by backend to unwrap AES keys sent by frontend
+- **Frontend RSA Key**: Used by backend to wrap AES keys for frontend to decrypt
+- **Backend AES Key**: Used by backend for encrypting/decrypting patient data
+- **Frontend AES Key**: Used by frontend for its own encryption operations
 
 ## Setup Instructions
 
@@ -132,8 +140,10 @@ docker-compose up -d
 ### Required Variables
 - `OPENBAO_ADDR`: OpenBao API address (e.g., `http://openbao:8200`)
 - `OPENBAO_TOKEN`: OpenBao authentication token
-- `OPENBAO_TRANSIT_AES_KEY`: AES key name in OpenBao transit engine
-- `OPENBAO_TRANSIT_RSA_KEY`: RSA key name in OpenBao transit engine
+- `OPENBAO_TRANSIT_AES_BACKEND_KEY`: Backend AES key name in OpenBao transit engine
+- `OPENBAO_TRANSIT_AES_FRONTEND_KEY`: Frontend AES key name in OpenBao transit engine
+- `OPENBAO_TRANSIT_RSA_BACKEND_KEY`: Backend RSA key name in OpenBao transit engine
+- `OPENBAO_TRANSIT_RSA_FRONTEND_KEY`: Frontend RSA key name in OpenBao transit engine
 - `JWT_SECRET`: Secret for JWT token generation
 - `MONGO_URI`: MongoDB connection string
 

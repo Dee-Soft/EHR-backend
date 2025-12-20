@@ -42,6 +42,40 @@ exports.getBackendPublicKey = async (req, res) => {
 };
 
 /**
+ * Get frontend's RSA public key from OpenBao
+ * Frontend can use this to verify its public key matches OpenBao
+ * @route GET /api/key-exchange/frontend-public-key
+ * @access Private
+ */
+exports.getFrontendPublicKey = async (req, res) => {
+  try {
+    const publicKeyData = await keyExchangeService.getFrontendPublicKey();
+    
+    logger.info('Frontend public key retrieved successfully', { 
+      userId: req.user?.id,
+      keyVersion: publicKeyData.keyVersion 
+    });
+    
+    res.status(200).json({
+      message: 'Frontend public key retrieved successfully',
+      publicKey: publicKeyData.publicKey,
+      keyVersion: publicKeyData.keyVersion,
+      algorithm: publicKeyData.algorithm,
+      validUntil: publicKeyData.validUntil
+    });
+  } catch (error) {
+    logger.error('Failed to retrieve frontend public key', { 
+      error: error.message,
+      userId: req.user?.id 
+    });
+    res.status(500).json({ 
+      message: 'Failed to retrieve frontend public key', 
+      error: error.message 
+    });
+  }
+};
+
+/**
  * Manual key rotation trigger (for admin use)
  * @route POST /api/key-exchange/rotate
  * @access Private (Admin only)

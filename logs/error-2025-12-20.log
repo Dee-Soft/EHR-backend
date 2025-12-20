@@ -1,0 +1,5 @@
+{"endpointsTried":["http://localhost:18200","http://openbao:8200"],"error":"connect ECONNREFUSED 172.19.0.2:8200","level":"error","message":"OpenBao connection failed after trying all endpoints","service":"ehr-backend","timestamp":"2025-12-20 09:00:20"}
+{"error":"no handler for route \"transit/keys/ehr-rsa-exchange-backend\". route entry not found.","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-20 09:04:14"}
+{"error":"Public key unavailable","level":"error","message":"Failed to retrieve public key","service":"ehr-backend","timestamp":"2025-12-20 09:04:14"}
+{"error":"invalid ciphertext: could not decode base64","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-20 09:09:34"}
+{"error":"Invalid key material","level":"error","message":"Failed to load AES key","service":"ehr-backend","timestamp":"2025-12-20 09:09:34","userId":"6946666507833cc40c0f27d6"}

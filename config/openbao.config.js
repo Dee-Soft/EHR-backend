@@ -17,8 +17,10 @@ class OpenBaoConfig {
   constructor() {
     this.initialized = false;
     this.keys = {
-      aesMaster: process.env.OPENBAO_TRANSIT_AES_KEY || 'ehr-aes-master',
-      rsaExchange: process.env.OPENBAO_TRANSIT_RSA_KEY || 'ehr-rsa-exchange'
+      aesMasterBackend: process.env.OPENBAO_TRANSIT_AES_BACKEND_KEY || 'ehr-aes-master-backend',
+      aesMasterFrontend: process.env.OPENBAO_TRANSIT_AES_FRONTEND_KEY || 'ehr-aes-master-frontend',
+      rsaExchangeBackend: process.env.OPENBAO_TRANSIT_RSA_BACKEND_KEY || 'ehr-rsa-exchange-backend',
+      rsaExchangeFrontend: process.env.OPENBAO_TRANSIT_RSA_FRONTEND_KEY || 'ehr-rsa-exchange-frontend'
     };
     this.maxRetries = 3;
     this.retryDelay = 1000; // Start with 1 second

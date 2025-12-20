@@ -6,7 +6,7 @@ set -e
 
 # Wait for OpenBao to be ready
 echo "Waiting for OpenBao to be ready..."
-until wget --spider -q http://localhost:8200/v1/sys/health 2>/dev/null; do
+until wget --spider -q http://localhost:18200/v1/sys/health 2>/dev/null; do
   echo "OpenBao is unavailable - sleeping"
   sleep 2
 done
@@ -14,7 +14,7 @@ done
 echo "OpenBao is up - initializing..."
 
 # Set OpenBao address and token
-export VAULT_ADDR='http://localhost:8200'
+export VAULT_ADDR='http://localhost:18200'
 export VAULT_TOKEN="${OPENBAO_TOKEN:-s.JfR6axjtdGedQeblSsppTMds}"
 
 # Enable Transit Engine

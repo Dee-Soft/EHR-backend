@@ -205,8 +205,10 @@ The EHR backend requires a separate OpenBao Keys Management System. This system 
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `LOG_LEVEL` | Logging verbosity level | `info` |
-| `OPENBAO_TRANSIT_AES_KEY` | AES key name in OpenBao | `ehr-aes-master` |
-| `OPENBAO_TRANSIT_RSA_KEY` | RSA key name in OpenBao | `ehr-rsa-exchange` |
+| `OPENBAO_TRANSIT_AES_BACKEND_KEY` | Backend AES key name in OpenBao | `ehr-aes-master-backend` |
+| `OPENBAO_TRANSIT_AES_FRONTEND_KEY` | Frontend AES key name in OpenBao | `ehr-aes-master-frontend` |
+| `OPENBAO_TRANSIT_RSA_BACKEND_KEY` | Backend RSA key name in OpenBao | `ehr-rsa-exchange-backend` |
+| `OPENBAO_TRANSIT_RSA_FRONTEND_KEY` | Frontend RSA key name in OpenBao | `ehr-rsa-exchange-frontend` |
 
 Refer to the [Configuration Guide](CONFIGURATION.md) for complete configuration options and environment variable definitions.
 
@@ -250,7 +252,8 @@ http://localhost:3001/api
 
 ### Key Exchange
 
-- `GET /key-exchange/public-key` - Retrieve RSA public key for secure communication
+- `GET /key-exchange/public-key` - Retrieve backend RSA public key for secure communication
+- `GET /key-exchange/frontend-public-key` - Retrieve frontend RSA public key from OpenBao
 
 For detailed API documentation including request/response schemas and examples, generate documentation locally:
 

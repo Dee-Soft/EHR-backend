@@ -3,7 +3,8 @@ const {
     createRecord,
     getAllRecords,
     getMyRecord,
-    getRecordById
+    getRecordById,
+    getAssignedPatientRecords
 } = require('../controllers/patientRecordController');
 const { authMiddleware } = require('../middlewares/authMiddleware');
 
@@ -17,6 +18,9 @@ router.get('/', authMiddleware, getAllRecords);
 
 // Get my patient record
 router.get('/my-records', authMiddleware, getMyRecord);
+
+// Get assigned patient records (Provider only)
+router.get('/provider/assigned', authMiddleware, getAssignedPatientRecords);
 
 // Get a patient record by ID
 router.get('/:id', authMiddleware, getRecordById);

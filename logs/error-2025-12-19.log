@@ -1,0 +1,14 @@
+{"endpointsTried":["http://localhost:18200","http://openbao:8200"],"error":"getaddrinfo ENOTFOUND openbao","level":"error","message":"OpenBao connection failed after trying all endpoints","service":"ehr-backend","timestamp":"2025-12-19 09:51:39"}
+{"error":"Status 404","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-19 11:37:06"}
+{"error":"Public key unavailable","level":"error","message":"Failed to retrieve public key","service":"ehr-backend","timestamp":"2025-12-19 11:37:06"}
+{"error":"Status 404","level":"error","message":"Failed to get public key","service":"ehr-backend","timestamp":"2025-12-19 11:37:35"}
+{"error":"Public key unavailable","level":"error","message":"Failed to retrieve public key","service":"ehr-backend","timestamp":"2025-12-19 11:37:35"}
+{"error":"1 error occurred:\n\t* failed to RSA decrypt the ciphertext: crypto/rsa: decryption error\n\n","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-19 11:41:32"}
+{"error":"Invalid key material","level":"error","message":"Failed to load AES key","service":"ehr-backend","timestamp":"2025-12-19 11:41:32","userId":"694415da9f7e0cefead0d104"}
+{"error":"invalid ciphertext: no prefix","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-19 11:48:21"}
+{"error":"Invalid key material","level":"error","message":"Failed to load AES key","service":"ehr-backend","timestamp":"2025-12-19 11:48:21","userId":"694415da9f7e0cefead0d104"}
+{"error":"invalid ciphertext: no prefix","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-19 11:48:21"}
+{"error":"Invalid key material","level":"error","message":"Failed to load AES key","service":"ehr-backend","timestamp":"2025-12-19 11:48:21","userId":"694415da9f7e0cefead0d104"}
+{"error":"invalid ciphertext: no prefix","level":"error","message":"Key unwrapping failed","service":"ehr-backend","timestamp":"2025-12-19 11:48:21"}
+{"error":"Invalid key material","level":"error","message":"Failed to load AES key","service":"ehr-backend","timestamp":"2025-12-19 11:48:21","userId":"694416dd9f7e0cefead0d127"}
+{"error":"Cast to ObjectId failed for value \"invalid-id-format\" (type string) at path \"_id\" for model \"PatientRecord\"","level":"error","message":"Error retrieving record by ID","recordId":"invalid-id-format","service":"ehr-backend","timestamp":"2025-12-19 11:48:21","userId":"694415da9f7e0cefead0d104"}
