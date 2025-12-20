@@ -3,27 +3,51 @@
  */
 const testRecords = {
   record1: {
-    patientId: null, // Will be set to actual patient ObjectId in tests
+    patient: null, // Will be set to actual patient ObjectId in tests
     diagnosis: 'Hypertension',
-    treatment: 'Prescribed medication and lifestyle changes',
     notes: 'Patient showing good response to treatment',
-    providerId: null, // Will be set to actual provider ObjectId in tests
+    medications: JSON.stringify(['Lisinopril', 'Aspirin']),
+    visitDate: new Date('2024-01-15'),
+    createdBy: null, // Will be set to actual provider ObjectId in tests
+    encryptedAesKey: 'vault:v1:mock-encrypted-aes-key-1',
+    transitKeyVersion: 1,
+    encryptionMetadata: {
+      algorithm: 'aes256-gcm96',
+      keyId: 'test-aes-key',
+      encryptedAt: new Date('2024-01-15T10:30:00.000Z')
+    }
   },
   
   record2: {
-    patientId: null,
+    patient: null,
     diagnosis: 'Type 2 Diabetes',
-    treatment: 'Insulin therapy and dietary management',
     notes: 'Regular monitoring required',
-    providerId: null,
+    medications: JSON.stringify(['Insulin', 'Metformin']),
+    visitDate: new Date('2024-02-20'),
+    createdBy: null,
+    encryptedAesKey: 'vault:v1:mock-encrypted-aes-key-2',
+    transitKeyVersion: 1,
+    encryptionMetadata: {
+      algorithm: 'aes256-gcm96',
+      keyId: 'test-aes-key',
+      encryptedAt: new Date('2024-02-20T14:45:00.000Z')
+    }
   },
   
   record3: {
-    patientId: null,
+    patient: null,
     diagnosis: 'Seasonal Allergies',
-    treatment: 'Antihistamines as needed',
     notes: 'Mild symptoms during spring season',
-    providerId: null,
+    medications: JSON.stringify(['Antihistamine']),
+    visitDate: new Date('2024-03-10'),
+    createdBy: null,
+    encryptedAesKey: 'vault:v1:mock-encrypted-aes-key-3',
+    transitKeyVersion: 1,
+    encryptionMetadata: {
+      algorithm: 'aes256-gcm96',
+      keyId: 'test-aes-key',
+      encryptedAt: new Date('2024-03-10T09:15:00.000Z')
+    }
   },
 };
 
@@ -31,16 +55,31 @@ const testRecords = {
  * Invalid record data for testing validation
  */
 const invalidRecords = {
-  missingPatientId: {
+  missingPatient: {
     diagnosis: 'Test Diagnosis',
-    treatment: 'Test Treatment',
     notes: 'Test Notes',
+    medications: JSON.stringify(['Test Med']),
+    visitDate: new Date(),
+    createdBy: 'someId',
+    encryptedAesKey: 'vault:v1:test-key',
   },
   
   missingDiagnosis: {
-    patientId: 'someId',
-    treatment: 'Test Treatment',
+    patient: 'someId',
     notes: 'Test Notes',
+    medications: JSON.stringify(['Test Med']),
+    visitDate: new Date(),
+    createdBy: 'someId',
+    encryptedAesKey: 'vault:v1:test-key',
+  },
+  
+  missingEncryptedAesKey: {
+    patient: 'someId',
+    diagnosis: 'Test Diagnosis',
+    notes: 'Test Notes',
+    medications: JSON.stringify(['Test Med']),
+    visitDate: new Date(),
+    createdBy: 'someId',
   },
 };
 
@@ -50,11 +89,19 @@ const invalidRecords = {
 const encryptedRecordSamples = {
   // These would contain actual encrypted data in real scenarios
   sampleEncrypted: {
-    patientId: null,
-    diagnosis: 'iv:encrypted', // Format: iv:encryptedData
-    treatment: 'iv:encrypted',
-    notes: 'iv:encrypted',
-    providerId: null,
+    patient: null,
+    diagnosis: 'vault:v1:encrypted-diagnosis',
+    notes: 'vault:v1:encrypted-notes',
+    medications: 'vault:v1:encrypted-medications',
+    visitDate: new Date('2024-01-15'),
+    createdBy: null,
+    encryptedAesKey: 'vault:v1:encrypted-aes-key',
+    transitKeyVersion: 1,
+    encryptionMetadata: {
+      algorithm: 'aes256-gcm96',
+      keyId: 'test-aes-key',
+      encryptedAt: new Date('2024-01-15T10:30:00.000Z')
+    }
   },
 };
 

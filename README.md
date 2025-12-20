@@ -7,7 +7,6 @@ A secure, HIPAA-compliant Electronic Health Record backend system implementing r
 - [Features](#features)
 - [Architecture](#architecture)
 - [Technology Stack](#technology-stack)
-- [Security Overview](#security-overview)
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
 - [Docker Deployment](#docker-deployment)
@@ -16,6 +15,7 @@ A secure, HIPAA-compliant Electronic Health Record backend system implementing r
 - [Testing](#testing)
 - [Project Structure](#project-structure)
 - [License](#license)
+- [About](#about)
 
 ## Features
 
@@ -26,8 +26,10 @@ A secure, HIPAA-compliant Electronic Health Record backend system implementing r
 - **Health Monitoring**: Kubernetes-ready health check endpoints with readiness and liveness probes
 - **Structured Logging**: Winston logger with daily rotation and 30-day retention
 - **Centralized Error Handling**: Consistent error responses with detailed logging
-- **Rate Limiting Protection**: Defense against brute-force attacks with configurable limits
-- **Containerization Support**: Complete Docker and Docker Compose configurations for development, testing, and production
+- **Rate Limiting Protection**: Defense against brute-force attacks
+- **Containerization Support**: Docker and Docker Compose configurations
+- **Role-Specific APIs**: Separate endpoints for different user roles
+- **Patient Record Management**: Secure creation and retrieval of medical records
 
 ## Architecture
 
@@ -37,14 +39,7 @@ The system follows a three-tier architecture with separate key management:
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │   Frontend  │────▶│  EHR Server │────▶│   MongoDB   │
 │  (React)    │     │  (Express)  │     │  (Database) │
-└─────────────┘     └──────┬──────┘     └─────────────┘
-                           │
-                           ▼
-                    ┌─────────────────────┐
-                    │ OpenBao Keys        │
-                    │ Management System   │
-                    │ (Transit + Postgres)│
-                    └─────────────────────┘
+└─────────────┘     └─────────────┘     └─────────────┘
 ```
 
 ### Key Management System
@@ -64,7 +59,9 @@ The EHR backend utilizes a standalone OpenBao Keys Management System that operat
 2. **Services**: Business logic encapsulation and external service interactions
 3. **Middlewares**: Authentication, encryption, decryption, and validation layers
 4. **Models**: MongoDB schemas defined using Mongoose ODM
-5. **Utilities**: Helper functions and shared utilities
+5. **Services**: Business logic and external service interactions
+6. **Utilities**: Helper functions and shared utilities
+7. **Cron Jobs**: Scheduled tasks for system maintenance
 
 ## Technology Stack
 
@@ -78,6 +75,8 @@ The EHR backend utilizes a standalone OpenBao Keys Management System that operat
 | Logging | Winston with Daily Rotate File | - |
 | Testing | Jest with Supertest | - |
 | Containerization | Docker & Docker Compose | - |
+| ODM | Mongoose | 7.3.1 |
+| Security | Helmet.js, bcrypt, rate limiting | - |
 
 ## Security Overview
 
@@ -116,7 +115,7 @@ The EHR backend utilizes a standalone OpenBao Keys Management System that operat
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourorg/ehr-backend.git
+git clone https://github.com/Dee-Soft/EHR-backend.git
 cd ehr-backend
 ```
 
@@ -155,7 +154,7 @@ The server will be available at `http://localhost:3001`.
 
 ### Development Environment
 
-For development with hot reload:
+For development with MongoDB:
 
 ```bash
 docker compose -f docker-compose.dev.yml up --build
@@ -163,7 +162,7 @@ docker compose -f docker-compose.dev.yml up --build
 
 ### Testing Environment
 
-For isolated testing with mocked services:
+For isolated testing:
 
 ```bash
 docker compose -f docker-compose.test.yml up --build --abort-on-container-exit
@@ -192,7 +191,7 @@ The EHR backend requires a separate OpenBao Keys Management System. This system 
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `NODE_ENV` | Application environment | `production` |
+| `NODE_ENV` | Application environment | `development`, `production`, `test` |
 | `PORT` | Server port | `3001` |
 | `MONGO_URI` | MongoDB connection string | `mongodb://localhost:27017/ehr` |
 | `OPENBAO_ADDR` | OpenBao Keys Management System address | `http://localhost:18200` (local) / `http://host.docker.internal:18200` (Docker) |
@@ -228,21 +227,52 @@ http://localhost:3001/api
 
 ### User Management
 
-- `POST /users/register` - Register new user (role-based permissions apply)
-- `PUT /users/:id` - Update user information (role-based permissions apply)
+- `GET /users` - Get all users (Admin/Manager roles)
+- `POST /users/register` - Register new user (Admin/Manager/Employee roles)
+- `PUT /users/:id` - Update user information (role-based permissions)
 
 ### Patient Records
 
-- `POST /patient-records` - Create new patient record (Provider/Manager roles)
-- `GET /patient-records` - Retrieve all patient records (Manager role only)
+- `POST /patient-records` - Create new patient record (authenticated users)
+- `GET /patient-records` - Retrieve all patient records (role-based access)
 - `GET /patient-records/my-records` - Retrieve patient's own records (Patient role)
 - `GET /patient-records/:id` - Retrieve specific patient record (role-based access)
+- `GET /patient-records/provider/assigned` - Get assigned patient records (Provider role)
 
-### Administrative Functions
+### Employee Routes
 
-- `GET /admin/audit-logs` - View system audit logs (Admin role only)
-- `GET /admin/audit-logs/export` - Export audit logs as CSV (Admin role only)
-- `POST /admin/assign-patient` - Assign patient to healthcare provider (Admin role only)
+- `GET /employees/providers` - Get all available providers
+- `GET /employees/patients` - Get all patients
+- `GET /employees/assignments` - Get all patient-provider assignments
+- `POST /employees/assignments` - Assign patient to provider
+
+### Manager Routes
+
+- `GET /managers/employees` - Get all employees
+- `PUT /managers/employees/:id` - Update employee information
+- `DELETE /managers/employees/:id` - Delete employee
+- `PUT /managers/providers/:id` - Update provider information
+- `GET /managers/system-stats` - Get system statistics
+- `GET /managers/providers` - Get all providers (inherited from employee routes)
+- `GET /managers/patients` - Get all patients (inherited from employee routes)
+- `GET /managers/assignments` - Get all assignments (inherited from employee routes)
+- `POST /managers/assignments` - Assign patient to provider (inherited from employee routes)
+
+### Provider Routes
+
+- `GET /providers/profile` - Get provider's own profile
+- `PUT /providers/availability` - Update provider availability
+- `GET /providers/assigned-patients` - Get provider's assigned patients
+- `GET /providers/patient-records` - Get patient records for assigned patients
+
+### Admin Routes
+
+- `GET /admin/users` - Get all users (Admin only)
+- `GET /admin/users/:id` - Get user by ID (Admin only)
+- `DELETE /admin/users/:id` - Delete user by ID (Admin only)
+- `GET /admin/audit-logs` - Get all audit logs (Admin only)
+- `GET /admin/audit-logs/export` - Export audit logs as CSV (Admin only)
+- `GET /admin/audit-logs/export/json` - Export audit logs as JSON (Admin only)
 
 ### Health Monitoring
 
@@ -255,7 +285,7 @@ http://localhost:3001/api
 - `GET /key-exchange/public-key` - Retrieve backend RSA public key for secure communication
 - `GET /key-exchange/frontend-public-key` - Retrieve frontend RSA public key from OpenBao
 
-For detailed API documentation including request/response schemas and examples, generate documentation locally:
+For detailed API documentation, generate documentation locally:
 
 ```bash
 npm run docs
@@ -297,16 +327,40 @@ Execute tests in isolated Docker environment:
 npm run test:docker
 ```
 
+### Local Testing Scripts
+
+Run tests with local setup:
+
+```bash
+npm run test:local          # All tests
+npm run test:local:unit     # Unit tests only
+npm run test:local:integration  # Integration tests only
+npm run test:local:security # Security tests only
+npm run test:local:coverage # Coverage report
+```
+
 ### Test Structure
 
 ```
 test/
 ├── unit/                  # Unit tests
-├── integration/           # Integration tests
-├── security/              # Security tests
-└── setup/
+│   ├── config/           # Configuration tests
+│   ├── middlewares/      # Middleware tests
+│   ├── services/         # Service tests
+│   └── utils/            # Utility tests
+├── integration/          # Integration tests
+│   ├── auth.integration.test.js
+│   ├── authentication.integration.test.js
+│   ├── authorization.integration.test.js
+│   ├── health.integration.test.js
+│   ├── keyExchange.integration.test.js
+│   └── patientRecords.integration.test.js
+├── security/             # Security tests
+│   ├── encryption.security.test.js
+│   └── rbac.security.test.js
+└── setup/                # Test setup
+    ├── fixtures/         # Test data fixtures
     ├── mocks/            # Mock implementations
-    ├── fixtures/         # Test data
     └── testDb.js         # Test database configuration
 ```
 
@@ -322,21 +376,67 @@ ehr-backend/
 ├── config/              # Configuration files
 │   ├── db.js           # MongoDB connection configuration
 │   ├── logger.js       # Winston logging configuration
-│   └── openbao.config.js # OpenBao client configuration
+│   ├── openbao.config.js # OpenBao client configuration
+│   └── security.js     # Security configuration
 ├── controllers/        # Request handlers
+├── crons/              # Scheduled tasks
+├── docs/               # Documentation
+├── logs/               # Application logs
 ├── middlewares/        # Custom middleware functions
-├── models/            # Mongoose schemas and models
-├── routes/            # API route definitions
-├── services/          # Business logic services
-├── utils/             # Utility functions
-├── test/              # Test suites
-├── logs/              # Application logs
-├── scripts/           # Utility scripts
-├── docker-compose.yml # Docker Compose configuration
-├── Dockerfile         # Production Dockerfile
-└── server.js          # Application entry point
+├── models/             # Mongoose schemas and models
+│   ├── AuditLog.js     # Audit log model
+│   ├── PatientRecord.js # Patient record model
+│   └── User.js         # User model
+├── routes/             # API route definitions
+│   ├── adminRoutes.js      # Admin routes
+│   ├── authRoutes.js       # Authentication routes
+│   ├── employeeRoutes.js   # Employee routes
+│   ├── healthRoutes.js     # Health check routes
+│   ├── keyExchangeRoutes.js # Key exchange routes
+│   ├── managerRoutes.js    # Manager routes
+│   ├── patientRecordRoutes.js # Patient record routes
+│   ├── providerRoutes.js   # Provider routes
+│   └── userRoutes.js       # User routes
+├── scripts/            # Utility scripts
+├── services/           # Business logic services
+├── test/               # Test suites
+├── utils/              # Utility functions
+├── docker-compose.yml  # Docker Compose configuration
+├── Dockerfile          # Production Dockerfile
+├── env.example         # Environment variables template
+├── package.json        # Dependencies and scripts
+├── README.md           # This documentation
+└── server.js           # Application entry point
 ```
 
 ## License
 
 This project is licensed under the ISC License.
+
+## About
+
+This EHR Backend System was developed by Sarfaraj Shahjahan as part of a cybersecurity assessment project. The system implements role-based access control with five distinct user roles and provides secure healthcare data management.
+
+### GitHub Repository
+
+- **Repository**: https://github.com/Dee-Soft/EHR-backend
+- **Author**: Sarfaraj Shahjahan
+- **Version**: 1.0.0
+
+### Key Features Implemented
+
+1. **Five User Roles**: Admin, Manager, Provider, Employee, Patient
+2. **Role-Based APIs**: Separate endpoints for different user roles
+3. **Secure Authentication**: JWT-based authentication with HTTP-only cookies
+4. **Audit Logging**: Comprehensive logging of all sensitive operations
+5. **Health Monitoring**: Health endpoints
+6. **Docker Support**: Complete containerization with Docker Compose
+7. **Comprehensive Testing**: Unit, integration, and security tests
+
+### Development Notes
+
+- The system uses MongoDB as the primary database
+- Winston logger with daily rotation for structured logging
+- Helmet.js for security headers and protection
+- Rate limiting for API and authentication endpoints
+- Comprehensive error handling and validation

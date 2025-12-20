@@ -1,5 +1,5 @@
 {
-  "name": "ehr-rbac-backend",
+  "name": "ehr-backend-server",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
