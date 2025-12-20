@@ -39,8 +39,16 @@ The system follows a three-tier architecture with separate key management:
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │   Frontend  │────▶│  EHR Server │────▶│   MongoDB   │
 │  (React)    │     │  (Express)  │     │  (Database) │
-└─────────────┘     └─────────────┘     └─────────────┘
+└─────────────┘     └──────┬──────┘     └─────────────┘
+                           │
+                           ▼
+                    ┌─────────────────────┐
+                    │ OpenBao Keys        │
+                    │ Management System   │
+                    │ (Transit + Postgres)│
+                    └─────────────────────┘
 ```
+
 
 ### Key Management System
 
