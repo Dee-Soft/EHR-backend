@@ -4,46 +4,6 @@ const User = require('../models/User');
 const logger = require('../config/logger');
 const { AppError } = require('../middlewares/errorHandler');
 
-/**
- * Assign a patient to a provider
- * @route POST /api/admin/assign-patient
- * @access Admin only
- */
-exports.assignPatientToProvider = async (req, res, next) => {
-  const { providerId, patientId } = req.body;
-
-  try {
-    const provider = await User.findById(providerId);
-    const patient = await User.findById(patientId);
-
-    if (!provider || provider.role !== 'Provider') {
-      logger.warn(`Invalid provider assignment attempt: ${providerId}`);
-      throw new AppError('Provider not found or invalid role', 400);
-    }
-
-    if (!patient || patient.role !== 'Patient') {
-      logger.warn(`Invalid patient assignment attempt: ${patientId}`);
-      throw new AppError('Patient not found or invalid role', 400);
-    }
-
-    // Add patient to provider's assigned list
-    if (!provider.assignedPatients.includes(patientId)) {
-      provider.assignedPatients.push(patientId);
-      await provider.save();
-    }
-
-    // Assign provider to patient
-    if (!patient.assignedProviderId || patient.assignedProviderId.toString() !== providerId) {
-      patient.assignedProviderId = providerId;
-      await patient.save();
-    }
-
-    logger.info(`Patient ${patientId} assigned to Provider ${providerId} by Admin ${req.user.id}`);
-    res.status(200).json({ message: 'Patient assigned to provider successfully' });
-  } catch (err) {
-    next(err);
-  }
-};
 
 /**
  * Get all audit logs

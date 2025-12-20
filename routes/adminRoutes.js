@@ -4,7 +4,6 @@ const {
     getAuditLogs,
     exportAuditLogs,
     exportAuditLogsJson,
-    assignPatientToProvider,
     getAllUsers,
     getUserById,
     deleteUser
@@ -12,22 +11,51 @@ const {
 
 const router = express.Router();
 
-// User management routes
-router.get('/users', authMiddleware, requiredRole('Admin'), getAllUsers);
-router.get('/users/:id', authMiddleware, requiredRole('Admin'), getUserById);
-router.delete('/users/:id', authMiddleware, requiredRole('Admin'), deleteUser);
+// Apply authentication middleware to all routes
+router.use(authMiddleware);
 
-// Assign a patient to a provider
-router.post(
-  '/assign-patient',
-  authMiddleware,
-  requiredRole('Admin', 'Manager', 'Employee'),
-  assignPatientToProvider
-);
+// User management routes (Admin only)
+/**
+ * @route   GET /api/admin/users
+ * @desc    Get all users
+ * @access  Admin only
+ */
+router.get('/users', requiredRole('Admin'), getAllUsers);
 
-// Fetch audit logs for a specific user or all users
-router.get('/audit-logs', authMiddleware, requiredRole('Admin'), getAuditLogs);
-router.get('/audit-logs/export', authMiddleware, requiredRole('Admin'), exportAuditLogs);
-router.get('/audit-logs/export/json', authMiddleware, requiredRole('Admin'), exportAuditLogsJson);
+/**
+ * @route   GET /api/admin/users/:id
+ * @desc    Get user by ID
+ * @access  Admin only
+ */
+router.get('/users/:id', requiredRole('Admin'), getUserById);
+
+/**
+ * @route   DELETE /api/admin/users/:id
+ * @desc    Delete user by ID
+ * @access  Admin only
+ */
+router.delete('/users/:id', requiredRole('Admin'), deleteUser);
+
+// Audit logs (Admin only)
+/**
+ * @route   GET /api/admin/audit-logs
+ * @desc    Get all audit logs
+ * @access  Admin only
+ */
+router.get('/audit-logs', requiredRole('Admin'), getAuditLogs);
+
+/**
+ * @route   GET /api/admin/audit-logs/export
+ * @desc    Export audit logs as CSV
+ * @access  Admin only
+ */
+router.get('/audit-logs/export', requiredRole('Admin'), exportAuditLogs);
+
+/**
+ * @route   GET /api/admin/audit-logs/export/json
+ * @desc    Export audit logs as JSON
+ * @access  Admin only
+ */
+router.get('/audit-logs/export/json', requiredRole('Admin'), exportAuditLogsJson);
 
 module.exports = router;

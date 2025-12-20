@@ -3,8 +3,28 @@ const { registerUser, updateUser, getAllUsers } = require('../controllers/userCo
 const { authMiddleware, requiredRole } = require('../middlewares/authMiddleware');
 const router = express.Router();
 
-router.get('/', authMiddleware, getAllUsers);
-router.post('/register', authMiddleware, requiredRole('Employee', 'Manager', 'Admin'), registerUser);
-router.put('/:id', authMiddleware, requiredRole('Patient', 'Employee', 'Manager', 'Admin'), updateUser);
+// Apply authentication middleware to all routes
+router.use(authMiddleware);
+
+/**
+ * @route   GET /api/users
+ * @desc    Get all users (with RBAC in controller)
+ * @access  Admin, Manager
+ */
+router.get('/', requiredRole('Admin', 'Manager'), getAllUsers);
+
+/**
+ * @route   POST /api/users/register
+ * @desc    Register a new user
+ * @access  Admin, Manager, Employee
+ */
+router.post('/register', requiredRole('Admin', 'Manager', 'Employee'), registerUser);
+
+/**
+ * @route   PUT /api/users/:id
+ * @desc    Update user information (RBAC handled in controller)
+ * @access  Authenticated users (RBAC in controller)
+ */
+router.put('/:id', updateUser);
 
 module.exports = router;

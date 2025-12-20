@@ -39,6 +39,10 @@ const patientRecordRoutes = require('./routes/patientRecordRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const keyExchangeRoutes = require('./routes/keyExchangeRoutes');
 const healthRoutes = require('./routes/healthRoutes');
+// New role-based routes
+const employeeRoutes = require('./routes/employeeRoutes');
+const managerRoutes = require('./routes/managerRoutes');
+const providerRoutes = require('./routes/providerRoutes');
 
 const app = express();
 
@@ -96,6 +100,10 @@ app.use('/api/patient-records', patientRecordRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/key-exchange', keyExchangeRoutes);
+// New role-based routes
+app.use('/api/employees', employeeRoutes);
+app.use('/api/managers', managerRoutes);
+app.use('/api/providers', providerRoutes);
 
 // Error handling middleware (must be after all routes)
 app.use(notFound);
