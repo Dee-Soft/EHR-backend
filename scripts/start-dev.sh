@@ -37,7 +37,7 @@ fi
 
 echo ""
 echo "Starting Docker Compose development environment..."
-echo "Using: docker-compose -f docker-compose.dev.yml up --remove-orphans"
+echo "Using: docker-compose -f docker-compose.dev.yml up --build --remove-orphans"
 echo ""
 echo "Services will be available at:"
 echo "  - EHR API: http://localhost:3001"
@@ -48,4 +48,4 @@ echo "Press Ctrl+C to stop all services"
 echo "========================================="
 
 # Start Docker Compose with orphan removal
-docker-compose -f docker-compose.dev.yml up --remove-orphans
+docker-compose -f docker-compose.dev.yml up --build --remove-orphans
