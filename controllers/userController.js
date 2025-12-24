@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const AuditLog = require('../models/AuditLog');
 const { canRegister } = require('../utils/registrationRoles');
+const { canUserUpdate, getAllowedUpdateFields } = require('../utils/updateRoles');
 const logger = require('../config/logger');
 
 /**
@@ -56,7 +57,7 @@ exports.registerUser = async (req, res) => {
   const { 
     name, email, password, role,
     phone, address, dateOfBirth, gender,
-    employeeId, providerId
+    employeeId, providerId, managerId, adminId
   } = req.body;
   try {
     if (!canRegister[role]?.includes(creator.role)) {
@@ -79,7 +80,9 @@ exports.registerUser = async (req, res) => {
       phone, address, gender,
       dateOfBirth: role === 'Patient' ? dateOfBirth : undefined,
       employeeId: role === 'Employee' ? employeeId : undefined,
-      providerId: role === 'Provider' ? providerId : undefined
+      providerId: role === 'Provider' ? providerId : undefined,
+      managerId: role === 'Manager' ? managerId : undefined,
+      adminId: role === 'Admin' ? adminId : undefined
     });
 
     await user.save();
@@ -101,7 +104,18 @@ exports.registerUser = async (req, res) => {
     });
 
     res.status(201).json({
-      message: 'User registered successfully'
+      success: true,
+      message: 'User registered successfully',
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        ...(user.employeeId && { employeeId: user.employeeId }),
+        ...(user.providerId && { providerId: user.providerId }),
+        ...(user.managerId && { managerId: user.managerId }),
+        ...(user.adminId && { adminId: user.adminId })
+      }
     });
   } catch (err) {
     logger.error('User registration failed', { 
@@ -130,72 +144,52 @@ exports.updateUser = async (req, res) => {
     }
 
     const isSelf = requester.id === user.id;
-    const isAdmin = requester.role === 'Admin';
-    const isManager = requester.role === 'Manager';
-    const isEmployee = requester.role === 'Employee';
-
-    // Patient can only update their own phone/address
-    if (user.role === 'Patient') {
-      if(isSelf) {
-        // Allow self to update phone/address only
-        const { phone, address } = req.body;
-        user.phone = phone || user.phone;
-        user.address = address || user.address;
-        logger.info('Patient self-update', { userId: user._id, fields: ['phone', 'address'] });
-      }
-      else if (isAdmin || isManager || isEmployee) {
-        // Allow admin/manager/employee to update any field
-        Object.assign(user, req.body);
-        logger.info('Patient updated by staff', { 
-          userId: user._id, 
-          updatedBy: requester.id,
-          updaterRole: requester.role 
-        });
-      }
-      else {
-        logger.warn('Update denied: Not authorized to update patient', {
-          requesterId: requester.id,
-          requesterRole: requester.role,
-          targetUserId: user._id
-        });
-        return res.status(403).json({ message: 'Not authorized to update this patient' });
-      }
-    }
     
-    // Employee details can only be updated by Admin or Manager
-    else if (user.role === 'Employee') {
-      if (!(isAdmin || isManager)) {
-        logger.warn('Update denied: Not authorized to update employee', {
-          requesterId: requester.id,
-          requesterRole: requester.role
-        });
-        return res.status(403).json({ message: 'Only admin or manager authorized to update this employee' });
-      }
-      Object.assign(user, req.body);
+    // Check if requester can update this user
+    if (!canUserUpdate(requester.role, user.role, isSelf)) {
+      logger.warn('Update denied: Not authorized to update user', {
+        requesterId: requester.id,
+        requesterRole: requester.role,
+        targetUserId: user._id,
+        targetUserRole: user.role,
+        isSelf
+      });
+      return res.status(403).json({ message: 'Not authorized to update this user' });
     }
 
-    // Provider details can only be updated by Admin or Manager
-    else if (user.role === 'Provider') {
-      if (!(isAdmin || isManager)) {
-        logger.warn('Update denied: Not authorized to update provider', {
-          requesterId: requester.id,
-          requesterRole: requester.role
-        });
-        return res.status(403).json({ message: 'Only admin or manager authorized to update this provider' });
+    // Get allowed update fields based on requester role and target role
+    const allowedFields = getAllowedUpdateFields(requester.role, user.role, isSelf);
+    
+    // Filter updates to only include allowed fields
+    const updates = {};
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
       }
-      Object.assign(user, req.body);
     }
 
-    // Manager details can only be updated by Admin
-    else if (user.role === 'Manager') {
-      if (!isAdmin) {
-        logger.warn('Update denied: Not authorized to update manager', {
-          requesterId: requester.id,
-          requesterRole: requester.role
-        });
-        return res.status(403).json({ message: 'Only admin authorized to update this manager' });
-      }
-      Object.assign(user, req.body);
+    // Special handling for role-specific ID fields
+    // Ensure ID fields are only set for the correct role
+    if (user.role === 'Employee' && updates.employeeId !== undefined) {
+      user.employeeId = updates.employeeId;
+    }
+    if (user.role === 'Provider' && updates.providerId !== undefined) {
+      user.providerId = updates.providerId;
+    }
+    if (user.role === 'Manager' && updates.managerId !== undefined) {
+      user.managerId = updates.managerId;
+    }
+    if (user.role === 'Admin' && updates.adminId !== undefined) {
+      user.adminId = updates.adminId;
+    }
+
+    // Apply other updates (excluding role-specific ID fields which were handled above)
+    const otherFields = Object.keys(updates).filter(field => 
+      !['employeeId', 'providerId', 'managerId', 'adminId'].includes(field)
+    );
+    
+    for (const field of otherFields) {
+      user[field] = updates[field];
     }
 
     await user.save();
@@ -212,18 +206,33 @@ exports.updateUser = async (req, res) => {
     logger.info('User updated successfully', {
       userId: user._id,
       updatedBy: requester.id,
-      role: user.role
+      requesterRole: requester.role,
+      targetRole: user.role,
+      updatedFields: Object.keys(updates),
+      isSelf
     });
 
     res.json({
-      message: `User ${user.name} with role ${user.role} updated successfully`
+      success: true,
+      message: `User ${user.name} with role ${user.role} updated successfully`,
+      data: {
+        id: user._id,
+        name: user.name,
+        role: user.role,
+        updatedFields: Object.keys(updates)
+      }
     });
   } catch (err) {
     logger.error('User update failed', { 
       error: err.message,
       userId: id,
-      requesterId: requester.id
+      requesterId: requester.id,
+      requesterRole: requester.role
     });
-    res.status(500).json({ message: 'User update failed', error: err.message });
+    res.status(500).json({ 
+      success: false,
+      message: 'User update failed', 
+      error: err.message 
+    });
   }
 };

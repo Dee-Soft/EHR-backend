@@ -15,7 +15,7 @@ router.get('/', requiredRole('Admin', 'Manager'), getAllUsers);
 
 /**
  * @route   POST /api/users/register
- * @desc    Register a new user
+ * @desc    Register a new user (RBAC handled in controller - checks canRegister permissions)
  * @access  Admin, Manager, Employee
  */
 router.post('/register', requiredRole('Admin', 'Manager', 'Employee'), registerUser);

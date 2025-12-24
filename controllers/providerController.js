@@ -4,6 +4,21 @@ const AuditLog = require('../models/AuditLog');
 const logger = require('../config/logger');
 
 /**
+ * Format date to dd-mm-yyyy HH:MM format
+ * @param {Date} date - Date object to format
+ * @returns {string} Formatted date string
+ */
+const formatDate = (date) => {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+  return `${day}-${month}-${year} ${hours}:${minutes}`;
+};
+
+/**
  * Get provider's assigned patients
  * @route GET /api/providers/assigned-patients
  * @access Provider only
@@ -83,8 +98,8 @@ exports.getPatientRecords = async (req, res) => {
       diagnosis: record.diagnosis, // Encrypted
       notes: record.notes, // Encrypted
       medications: record.medications, // Encrypted
-      visitDate: record.visitDate,
-      createdAt: record.createdAt,
+      visitDate: formatDate(record.visitDate),
+      createdAt: formatDate(record.createdAt),
       encryptedAesKey: record.encryptedAesKey,
       transitKeyVersion: record.transitKeyVersion
     }));
@@ -169,7 +184,7 @@ exports.updateAvailability = async (req, res) => {
         name: provider.name,
         isAvailable: provider.isAvailable,
         availabilityNotes: provider.availabilityNotes,
-        updatedAt: provider.updatedAt
+        updatedAt: formatDate(provider.updatedAt)
       }
     });
   } catch (error) {
@@ -229,8 +244,8 @@ exports.getProviderProfile = async (req, res) => {
           patient: { $in: provider.assignedPatients || [] }
         })
       },
-      createdAt: provider.createdAt,
-      updatedAt: provider.updatedAt
+      createdAt: formatDate(provider.createdAt),
+      updatedAt: formatDate(provider.updatedAt)
     };
 
     logger.info('Provider profile retrieved', {

@@ -8,6 +8,11 @@ const {
     getUserById,
     deleteUser
 } = require('../controllers/adminController');
+const {
+    registerUser,
+    registerUsersBulk
+} = require('../controllers/adminRegistrationController');
+const { updateUser } = require('../controllers/userController');
 
 const router = express.Router();
 
@@ -36,6 +41,14 @@ router.get('/users/:id', requiredRole('Admin'), getUserById);
  */
 router.delete('/users/:id', requiredRole('Admin'), deleteUser);
 
+/**
+ * @route   PUT /api/admin/users/:id/update
+ * @desc    Update user information (Admin can update all roles)
+ * @access  Admin only
+ * @note    Uses the updateUser controller with RBAC validation
+ */
+router.put('/users/:id/update', requiredRole('Admin'), updateUser);
+
 // Audit logs (Admin only)
 /**
  * @route   GET /api/admin/audit-logs
@@ -57,5 +70,20 @@ router.get('/audit-logs/export', requiredRole('Admin'), exportAuditLogs);
  * @access  Admin only
  */
 router.get('/audit-logs/export/json', requiredRole('Admin'), exportAuditLogsJson);
+
+// User registration routes (Admin only)
+/**
+ * @route   POST /api/admin/register
+ * @desc    Register a new user (Admin can register all roles)
+ * @access  Admin only
+ */
+router.post('/register', requiredRole('Admin'), registerUser);
+
+/**
+ * @route   POST /api/admin/register/bulk
+ * @desc    Register multiple users at once
+ * @access  Admin only
+ */
+router.post('/register/bulk', requiredRole('Admin'), registerUsersBulk);
 
 module.exports = router;

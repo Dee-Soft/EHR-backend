@@ -43,6 +43,7 @@ const healthRoutes = require('./routes/healthRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
 const managerRoutes = require('./routes/managerRoutes');
 const providerRoutes = require('./routes/providerRoutes');
+const patientRoutes = require('./routes/patientRoutes');
 
 const app = express();
 
@@ -104,6 +105,7 @@ app.use('/api/key-exchange', keyExchangeRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/managers', managerRoutes);
 app.use('/api/providers', providerRoutes);
+app.use('/api/patients', patientRoutes);
 
 // Error handling middleware (must be after all routes)
 app.use(notFound);

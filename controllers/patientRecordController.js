@@ -21,6 +21,47 @@ const transitEncryptMiddleware = require('../middlewares/transitEncryptMiddlewar
 const frontendDecryptMiddleware = require('../middlewares/frontendDecryptMiddleware');
 
 /**
+ * Parse date string in dd-mm-yyyy Hr:min format
+ * @param {string} dateStr - Date string in format "dd-mm-yyyy HH:MM"
+ * @returns {Date} Parsed Date object
+ */
+const parseVisitDate = (dateStr) => {
+  const [datePart, timePart] = dateStr.split(' ');
+  const [day, month, year] = datePart.split('-').map(Number);
+  const [hour, minute] = timePart ? timePart.split(':').map(Number) : [0, 0];
+  
+  // Note: month is 0-indexed in JavaScript Date
+  return new Date(year, month - 1, day, hour, minute);
+};
+
+/**
+ * Compare only date portion (ignoring time)
+ * @param {Date} date1 - First date
+ * @param {Date} date2 - Second date
+ * @returns {boolean} True if dates are the same day
+ */
+const isSameDate = (date1, date2) => {
+  return date1.getFullYear() === date2.getFullYear() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getDate() === date2.getDate();
+};
+
+/**
+ * Format date to dd-mm-yyyy HH:MM format
+ * @param {Date} date - Date object to format
+ * @returns {string} Formatted date string
+ */
+const formatDate = (date) => {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+  return `${day}-${month}-${year} ${hours}:${minutes}`;
+};
+
+/**
  * Create a new patient record
  * Flow: Frontend sends encrypted data → Decrypt → Encrypt for DB → Store
  */
@@ -50,14 +91,33 @@ exports.createRecord = [
         return res.status(400).json({ message: 'All fields are required' });
       }
 
-      // Validate visit date (must be today)
-      const today = new Date();
-      const tzOffsetMs = today.getTimezoneOffset() * 60 * 1000;
-      const localISO = new Date(today.getTime() - tzOffsetMs).toISOString().split('T')[0];
-
-      if (visitDate !== localISO) {
-        return res.status(400).json({ message: 'Can only create records for today' });
+      // Validate visit date format and ensure it's today
+      let visitDateObj;
+      try {
+        visitDateObj = parseVisitDate(visitDate);
+        
+        // Validate date components
+        if (isNaN(visitDateObj.getTime())) {
+          return res.status(400).json({ 
+            message: 'Invalid date format. Use dd-mm-yyyy HH:MM format (e.g., 23-12-2025 14:30)' 
+          });
+        }
+      } catch (error) {
+        return res.status(400).json({ 
+          message: 'Invalid date format. Use dd-mm-yyyy HH:MM format (e.g., 23-12-2025 14:30)' 
+        });
       }
+
+      // Check if visit date is today
+      const today = new Date();
+      if (!isSameDate(visitDateObj, today)) {
+        return res.status(400).json({ 
+          message: 'Can only create records for today. Today is ' + formatDate(today) 
+        });
+      }
+
+      // Store parsed date object for use in save middleware
+      req.parsedVisitDate = visitDateObj;
 
       // Validate provider assignment
       if (role === 'Provider') {
@@ -129,7 +189,7 @@ exports.createRecord = [
         diagnosis, // Already encrypted by middleware (with backend's AES key)
         notes, // Already encrypted by middleware (with backend's AES key)
         medications, // Already encrypted by middleware (with backend's AES key)
-        visitDate,
+        visitDate: req.parsedVisitDate, // Use parsed Date object
         createdBy: creatorId,
         encryptedAesKey: encryptedDbAESKey,
         transitKeyVersion: dataKey.keyVersion,
@@ -167,7 +227,7 @@ exports.createRecord = [
         diagnosis: record.diagnosis,
         notes: record.notes,
         medications: record.medications,
-        visitDate: record.visitDate,
+        visitDate: formatDate(record.visitDate),
         encryptedAesKey: record.encryptedAesKey,
         transitKeyVersion: record.transitKeyVersion
       };
@@ -246,7 +306,7 @@ exports.getMyRecord = async (req, res) => {
       diagnosis: record.diagnosis, // Encrypted
       notes: record.notes, // Encrypted
       medications: record.medications, // Encrypted
-      visitDate: record.visitDate,
+      visitDate: formatDate(record.visitDate),
       encryptedAesKey: record.encryptedAesKey,
       transitKeyVersion: record.transitKeyVersion
     }));
@@ -308,7 +368,7 @@ exports.getRecordById = async (req, res) => {
       diagnosis: record.diagnosis, // Encrypted
       notes: record.notes, // Encrypted
       medications: record.medications, // Encrypted
-      visitDate: record.visitDate,
+      visitDate: formatDate(record.visitDate),
       encryptedAesKey: record.encryptedAesKey,
       transitKeyVersion: record.transitKeyVersion
     };
@@ -380,7 +440,7 @@ exports.getAssignedPatientRecords = async (req, res) => {
       diagnosis: record.diagnosis,
       notes: record.notes,
       medications: record.medications,
-      visitDate: record.visitDate,
+      visitDate: formatDate(record.visitDate),
       encryptedAesKey: record.encryptedAesKey,
       transitKeyVersion: record.transitKeyVersion
     }));

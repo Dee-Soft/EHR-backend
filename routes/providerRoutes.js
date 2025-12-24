@@ -6,6 +6,7 @@ const {
   updateAvailability,
   getProviderProfile
 } = require('../controllers/providerController');
+const { createRecord } = require('../controllers/patientRecordController');
 
 const router = express.Router();
 
@@ -41,5 +42,12 @@ router.get('/assigned-patients', requiredRole('Provider'), getMyAssignedPatients
  * @access  Provider only
  */
 router.get('/patient-records', requiredRole('Provider'), getPatientRecords);
+
+/**
+ * @route   POST /api/providers/patient-records
+ * @desc    Create a new patient record for assigned patient
+ * @access  Provider only
+ */
+router.post('/patient-records', requiredRole('Provider'), createRecord);
 
 module.exports = router;

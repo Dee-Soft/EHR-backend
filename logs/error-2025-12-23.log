@@ -1,0 +1,1 @@
+{"endpointsTried":["http://localhost:18200","http://openbao:8200"],"error":"connect ECONNREFUSED 172.19.0.2:8200","level":"error","message":"OpenBao connection failed after trying all endpoints","service":"ehr-backend","timestamp":"2025-12-23 09:03:46"}

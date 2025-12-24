@@ -9,9 +9,11 @@ const userSchema = new mongoose.Schema({
   phone: { type: String},
   address: { type: String},
   dateOfBirth: { type: Date},
-  gender: { type: { type: String}, enum: ['Male', 'Female', 'Other']},
+  gender: { type: String, enum: ['Male', 'Female', 'Other']},
   employeeId: { type: String}, // For employees
   providerId: { type: String}, // For providers
+  managerId: { type: String}, // For managers
+  adminId: { type: String}, // For admins
   assignedProviderId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // For patients
   assignedPatients: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // For providers
 }, {

@@ -6,12 +6,17 @@ const {
   deleteEmployee,
   manageProvider,
   getSystemStats,
-  // Re-exported from employeeController
   getAllProviders,
   getAllPatients,
   getAssignments,
   assignPatientToProvider
 } = require('../controllers/managerController');
+const {
+  registerUser,
+  registerEmployee,
+  registerProvider
+} = require('../controllers/managerRegistrationController');
+const { updateUser } = require('../controllers/userController');
 
 const router = express.Router();
 
@@ -47,6 +52,14 @@ router.delete('/employees/:id', requiredRole('Manager', 'Admin'), deleteEmployee
  * @access  Manager, Admin
  */
 router.put('/providers/:id', requiredRole('Manager', 'Admin'), manageProvider);
+
+/**
+ * @route   PUT /api/managers/users/:id/update
+ * @desc    Update user information (Manager can update Patient, Employee, Provider)
+ * @access  Manager, Admin
+ * @note    Uses the updateUser controller with RBAC validation
+ */
+router.put('/users/:id/update', requiredRole('Manager', 'Admin'), updateUser);
 
 // System statistics
 /**
@@ -84,5 +97,27 @@ router.get('/assignments', requiredRole('Manager', 'Admin'), getAssignments);
  * @access  Manager, Admin
  */
 router.post('/assignments', requiredRole('Manager', 'Admin'), assignPatientToProvider);
+
+// User registration routes (Manager, Admin)
+/**
+ * @route   POST /api/managers/register
+ * @desc    Register a new user (Manager can register Patient, Provider, Employee)
+ * @access  Manager, Admin
+ */
+router.post('/register', requiredRole('Manager', 'Admin'), registerUser);
+
+/**
+ * @route   POST /api/managers/register/employee
+ * @desc    Register a new employee
+ * @access  Manager, Admin
+ */
+router.post('/register/employee', requiredRole('Manager', 'Admin'), registerEmployee);
+
+/**
+ * @route   POST /api/managers/register/provider
+ * @desc    Register a new provider
+ * @access  Manager, Admin
+ */
+router.post('/register/provider', requiredRole('Manager', 'Admin'), registerProvider);
 
 module.exports = router;
