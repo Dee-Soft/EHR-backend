@@ -70,12 +70,12 @@ exports.createRecord = [
   loadAESKey,
   
   // Step 2: Decrypt fields that frontend encrypted using frontend AES key
-  frontendDecryptMiddleware(['diagnosis', 'notes', 'medications']),
+  frontendDecryptMiddleware(['diagnosis', 'treatment', 'notes', 'medications']),
   
   // Step 3: Validate and prepare for DB encryption
   async (req, res, next) => {
     const { role, id: creatorId } = req.user;
-    const { patient, diagnosis, notes, medications, visitDate } = req.body;
+    const { patient, diagnosis, treatment, notes, medications, visitDate } = req.body;
     const frontendPublicKeyBase64 = req.headers['x-client-public-key'];
 
     try {
@@ -87,7 +87,7 @@ exports.createRecord = [
       }
 
       // Validate required fields
-      if (!diagnosis || !notes || !medications || !visitDate) {
+      if (!diagnosis || !treatment || !notes || !medications || !visitDate) {
         return res.status(400).json({ message: 'All fields are required' });
       }
 
@@ -154,11 +154,11 @@ exports.createRecord = [
   },
 
   // Step 4: Encrypt fields for database storage using OpenBao
-  transitEncryptMiddleware(['diagnosis', 'notes', 'medications']),
+  transitEncryptMiddleware(['diagnosis', 'treatment', 'notes', 'medications']),
 
   // Step 5: Save to database
   async (req, res) => {
-    const { patient, diagnosis, notes, medications, visitDate } = req.body;
+    const { patient, diagnosis, treatment, notes, medications, visitDate } = req.body;
     const { id: creatorId } = req.user;
     const frontendPublicKey = req.frontendPublicKey;
 
@@ -225,6 +225,7 @@ exports.createRecord = [
       const responseRecord = {
         patient: record.patient,
         diagnosis: record.diagnosis,
+        treatment: record.treatment,
         notes: record.notes,
         medications: record.medications,
         visitDate: formatDate(record.visitDate),
@@ -304,6 +305,7 @@ exports.getMyRecord = async (req, res) => {
       _id: record._id,
       patient: record.patient,
       diagnosis: record.diagnosis, // Encrypted
+      treatment: record.treatment, // Encrypted
       notes: record.notes, // Encrypted
       medications: record.medications, // Encrypted
       visitDate: formatDate(record.visitDate),
@@ -366,6 +368,7 @@ exports.getRecordById = async (req, res) => {
       _id: record._id,
       patient: record.patient,
       diagnosis: record.diagnosis, // Encrypted
+      treatment: record.treatment, // Encrypted
       notes: record.notes, // Encrypted
       medications: record.medications, // Encrypted
       visitDate: formatDate(record.visitDate),
@@ -438,6 +441,7 @@ exports.getAssignedPatientRecords = async (req, res) => {
       id: record._id,
       patient: record.patient,
       diagnosis: record.diagnosis,
+      treatment: record.treatment,
       notes: record.notes,
       medications: record.medications,
       visitDate: formatDate(record.visitDate),

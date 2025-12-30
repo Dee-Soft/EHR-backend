@@ -178,19 +178,24 @@ Create a new patient medical record (Provider only).
 
 ```json
 {
-  "patientId": "patient_user_id",
-  "recordType": "Consultation",
+  "patient": "patient_user_object_id",
   "diagnosis": "Common cold",
   "treatment": "Rest and fluids",
-  "medications": ["Paracetamol 500mg"],
   "notes": "Patient presented with fever and cough",
-  "vitalSigns": {
-    "temperature": 38.5,
-    "bloodPressure": "120/80",
-    "heartRate": 72
-  }
+  "medications": ["Paracetamol 500mg"],
+  "visitDate": "30-12-2025 14:30"
 }
 ```
+
+**Required Headers:**
+- `x-encrypted-aes-key`: Frontend's AES key wrapped with backend's RSA public key (vault:v1:format)
+- `x-client-public-key`: Frontend's RSA public key (base64 encoded)
+
+**Field Notes:**
+- `patient`: Patient's ObjectId (must be assigned to the provider for RBAC)
+- `diagnosis`, `treatment`, `notes`: Encrypted fields (sent encrypted by frontend)
+- `medications`: Array of medication strings (encrypted as JSON array)
+- `visitDate`: Must be in `dd-mm-yyyy HH:MM` format and must be today's date
 
 ### Get Patient's Own Records
 
@@ -739,18 +744,20 @@ async function initializeApp() {
 // Example: Provider creating a patient record
 async function createMedicalRecord(patientId, diagnosis, treatment) {
   try {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    const hours = String(today.getHours()).padStart(2, '0');
+    const minutes = String(today.getMinutes()).padStart(2, '0');
+    
     const recordData = {
-      patientId,
-      recordType: 'Consultation',
+      patient: patientId,
       diagnosis,
       treatment,
       medications: [],
       notes: 'Patient consultation completed',
-      vitalSigns: {
-        temperature: 36.8,
-        bloodPressure: '120/80',
-        heartRate: 72
-      }
+      visitDate: `${day}-${month}-${year} ${hours}:${minutes}`
     };
     
     const result = await api.createPatientRecord(recordData);
@@ -951,14 +958,16 @@ describe('Patient Records API', () => {
       .post('/api/patient-records')
       .set('Cookie', `token=${providerToken}`)
       .send({
-        patientId: 'patient123',
-        recordType: 'Consultation',
+        patient: 'patient123',
         diagnosis: 'Common cold',
-        treatment: 'Rest and fluids'
+        treatment: 'Rest and fluids',
+        notes: 'Patient consultation notes',
+        medications: ['Paracetamol 500mg'],
+        visitDate: '30-12-2025 14:30'
       });
     
     expect(response.status).toBe(201);
-    expect(response.body.data.recordType).toBe('Consultation');
+    expect(response.body.data.diagnosis).toBeDefined();
   });
   
   it('should prevent Patient from creating records', async () => {
@@ -966,9 +975,12 @@ describe('Patient Records API', () => {
       .post('/api/patient-records')
       .set('Cookie', `token=${patientToken}`)
       .send({
-        patientId: 'patient123',
-        recordType: 'Self-diagnosis',
-        diagnosis: 'Headache'
+        patient: 'patient123',
+        diagnosis: 'Headache',
+        treatment: 'Rest',
+        notes: 'Self-diagnosis notes',
+        medications: ['Pain reliever'],
+        visitDate: '30-12-2025 14:30'
       });
     
     expect(response.status).toBe(403);

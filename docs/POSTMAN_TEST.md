@@ -130,6 +130,24 @@ Create a new Postman environment with these variables:
 | Manager | Admin | Employee, Provider, Patient, Manager |
 | Admin | Admin | All other roles |
 
+### Role-Specific ID Fields
+
+When registering users, include the appropriate role-specific ID field based on the target role:
+
+| Role | Required ID Field | Example |
+|------|-------------------|---------|
+| Patient | (none) | - |
+| Employee | `employeeId` | `"employeeId": "EMP-001"` |
+| Provider | `providerId` | `"providerId": "PROV-001"` |
+| Manager | `managerId` | `"managerId": "MGR-001"` |
+| Admin | `adminId` | `"adminId": "ADMIN-001"` |
+
+**Important Notes**:
+1. Only include the ID field that matches the target role
+2. Patient registration can optionally include `assignedProviderId` to assign to a provider
+3. Provider registration can include `assignedPatients` array (list of patient IDs)
+4. All roles can include optional fields: `phone`, `address`, `dateOfBirth`, `gender`
+
 ### Test Case 1: Employee Registering Patient (Allowed)
 
 **Prerequisite**: Login as Employee
@@ -145,9 +163,15 @@ Create a new Postman environment with these variables:
   "phone": "555-0105",
   "address": "101 Test Road",
   "dateOfBirth": "1995-05-20",
-  "gender": "Male"
+  "gender": "Male",
+  "assignedProviderId": "{{provider_id}}"  // Optional: assign to a provider
 }
 ```
+
+**Field Notes**:
+- `assignedProviderId` is optional for Patient registration
+- Role-specific ID fields (`employeeId`, `providerId`, `managerId`, `adminId`) are NOT included for Patient role
+- Date format for `dateOfBirth`: YYYY-MM-DD
 
 **Expected Response**: 201 Created
 
@@ -164,9 +188,14 @@ Create a new Postman environment with these variables:
   "password": "Password123!",
   "role": "Provider",
   "phone": "555-0106",
-  "address": "202 Test Avenue"
+  "address": "202 Test Avenue",
+  "providerId": "PROV-002"  // Required for Provider role
 }
 ```
+
+**Field Notes**:
+- `providerId` is REQUIRED for Provider registration
+- Employee cannot register Providers (RBAC violation)
 
 **Expected Response**: 403 Forbidden
 ```json
@@ -209,9 +238,15 @@ Create a new Postman environment with these variables:
   "password": "Password123!",
   "role": "Patient",
   "phone": "555-0108",
-  "address": "404 Test Circle"
+  "address": "404 Test Circle",
+  "dateOfBirth": "1990-01-01",
+  "gender": "Female"
 }
 ```
+
+**Field Notes**:
+- Provider cannot register any users (RBAC violation)
+- Patient registration includes optional fields: `dateOfBirth`, `gender`
 
 **Expected Response**: 403 Forbidden
 

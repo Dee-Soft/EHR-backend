@@ -104,12 +104,18 @@ describe('Integration: Patient Records', () => {
     // Helper to get today's date in local timezone (same as controller logic)
     const getTodayDate = () => {
       const today = new Date();
-      const tzOffsetMs = today.getTimezoneOffset() * 60 * 1000;
-      return new Date(today.getTime() - tzOffsetMs).toISOString().split('T')[0];
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const year = today.getFullYear();
+      const hours = String(today.getHours()).padStart(2, '0');
+      const minutes = String(today.getMinutes()).padStart(2, '0');
+      
+      return `${day}-${month}-${year} ${hours}:${minutes}`;
     };
 
     const getRecordData = () => ({
       diagnosis: 'Hypertension',
+      treatment: 'Continue current medication and monitor blood pressure',
       notes: 'Patient stable, continue medication',
       medications: ['Lisinopril 10mg'],
       visitDate: getTodayDate()
@@ -181,8 +187,10 @@ describe('Integration: Patient Records', () => {
     test('Should reject record with past visit date', async () => {
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
-      const tzOffsetMs = yesterday.getTimezoneOffset() * 60 * 1000;
-      const pastDate = new Date(yesterday.getTime() - tzOffsetMs).toISOString().split('T')[0];
+      const day = String(yesterday.getDate()).padStart(2, '0');
+      const month = String(yesterday.getMonth() + 1).padStart(2, '0');
+      const year = yesterday.getFullYear();
+      const pastDate = `${day}-${month}-${year} 12:00`;
 
       const response = await request(app)
         .post('/api/patient-records')
@@ -416,8 +424,13 @@ describe('Integration: Patient Records', () => {
     // Helper to get today's date in local timezone (same as controller logic)
     const getTodayDate = () => {
       const today = new Date();
-      const tzOffsetMs = today.getTimezoneOffset() * 60 * 1000;
-      return new Date(today.getTime() - tzOffsetMs).toISOString().split('T')[0];
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const year = today.getFullYear();
+      const hours = String(today.getHours()).padStart(2, '0');
+      const minutes = String(today.getMinutes()).padStart(2, '0');
+      
+      return `${day}-${month}-${year} ${hours}:${minutes}`;
     };
 
     test('Record contains encrypted fields in vault format', async () => {
@@ -432,6 +445,7 @@ describe('Integration: Patient Records', () => {
         .send({
           patient: assignedPatientUser._id,
           diagnosis: 'Type 2 Diabetes',
+          treatment: 'Adjust medication dosage and monitor glucose levels',
           notes: 'Blood sugar elevated',
           medications: ['Metformin 500mg'],
           visitDate: getTodayDate()
@@ -470,8 +484,13 @@ describe('Integration: Patient Records', () => {
     // Helper to get today's date in local timezone (same as controller logic)
     const getTodayDate = () => {
       const today = new Date();
-      const tzOffsetMs = today.getTimezoneOffset() * 60 * 1000;
-      return new Date(today.getTime() - tzOffsetMs).toISOString().split('T')[0];
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const year = today.getFullYear();
+      const hours = String(today.getHours()).padStart(2, '0');
+      const minutes = String(today.getMinutes()).padStart(2, '0');
+      
+      return `${day}-${month}-${year} ${hours}:${minutes}`;
     };
 
     test('Record creation creates audit log', async () => {
@@ -488,6 +507,7 @@ describe('Integration: Patient Records', () => {
         .send({
           patient: assignedPatientUser._id,
           diagnosis: 'Test',
+          treatment: 'Test Treatment',
           notes: 'Test',
           medications: ['Test'],
           visitDate: getTodayDate()

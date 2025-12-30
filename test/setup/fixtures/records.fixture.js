@@ -5,8 +5,9 @@ const testRecords = {
   record1: {
     patient: null, // Will be set to actual patient ObjectId in tests
     diagnosis: 'Hypertension',
+    treatment: 'Continue current medication and monitor blood pressure weekly',
     notes: 'Patient showing good response to treatment',
-    medications: JSON.stringify(['Lisinopril', 'Aspirin']),
+    medications: ['Lisinopril', 'Aspirin'],
     visitDate: new Date('2024-01-15'),
     createdBy: null, // Will be set to actual provider ObjectId in tests
     encryptedAesKey: 'vault:v1:mock-encrypted-aes-key-1',
@@ -21,8 +22,9 @@ const testRecords = {
   record2: {
     patient: null,
     diagnosis: 'Type 2 Diabetes',
+    treatment: 'Adjust insulin dosage based on glucose readings',
     notes: 'Regular monitoring required',
-    medications: JSON.stringify(['Insulin', 'Metformin']),
+    medications: ['Insulin', 'Metformin'],
     visitDate: new Date('2024-02-20'),
     createdBy: null,
     encryptedAesKey: 'vault:v1:mock-encrypted-aes-key-2',
@@ -37,8 +39,9 @@ const testRecords = {
   record3: {
     patient: null,
     diagnosis: 'Seasonal Allergies',
+    treatment: 'Take antihistamine as needed during allergy season',
     notes: 'Mild symptoms during spring season',
-    medications: JSON.stringify(['Antihistamine']),
+    medications: ['Antihistamine'],
     visitDate: new Date('2024-03-10'),
     createdBy: null,
     encryptedAesKey: 'vault:v1:mock-encrypted-aes-key-3',
@@ -57,8 +60,9 @@ const testRecords = {
 const invalidRecords = {
   missingPatient: {
     diagnosis: 'Test Diagnosis',
+    treatment: 'Test Treatment',
     notes: 'Test Notes',
-    medications: JSON.stringify(['Test Med']),
+    medications: ['Test Med'],
     visitDate: new Date(),
     createdBy: 'someId',
     encryptedAesKey: 'vault:v1:test-key',
@@ -66,8 +70,9 @@ const invalidRecords = {
   
   missingDiagnosis: {
     patient: 'someId',
+    treatment: 'Test Treatment',
     notes: 'Test Notes',
-    medications: JSON.stringify(['Test Med']),
+    medications: ['Test Med'],
     visitDate: new Date(),
     createdBy: 'someId',
     encryptedAesKey: 'vault:v1:test-key',
@@ -76,8 +81,9 @@ const invalidRecords = {
   missingEncryptedAesKey: {
     patient: 'someId',
     diagnosis: 'Test Diagnosis',
+    treatment: 'Test Treatment',
     notes: 'Test Notes',
-    medications: JSON.stringify(['Test Med']),
+    medications: ['Test Med'],
     visitDate: new Date(),
     createdBy: 'someId',
   },
@@ -91,6 +97,7 @@ const encryptedRecordSamples = {
   sampleEncrypted: {
     patient: null,
     diagnosis: 'vault:v1:encrypted-diagnosis',
+    treatment: 'vault:v1:encrypted-treatment',
     notes: 'vault:v1:encrypted-notes',
     medications: 'vault:v1:encrypted-medications',
     visitDate: new Date('2024-01-15'),
@@ -135,8 +142,9 @@ const openBaoTestData = {
   
   // Sample encrypted record with OpenBao format
   sampleOpenBaoRecord: {
-    patientId: null, // Will be set in tests
+    patient: null, // Will be set in tests
     diagnosis: 'vault:v1:8J+YguKdjO+7vcO3w7Y8Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8=',
+    treatment: 'vault:v1:ZW5jcnlwdGVkLXRyZWF0bWVudC1kYXRh',
     notes: 'vault:v1:4oCcUGF0aWVudCBzaG93cyBzaWducyBvZiBpbXByb3ZlbWVudOKAnQ==',
     medications: 'vault:v1:WyJJYnVwcm9mZW4iLCAiQW1veGljaWxsaW4iXQ==',
     visitDate: new Date('2024-01-15'),

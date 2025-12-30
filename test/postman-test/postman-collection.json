@@ -168,7 +168,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"New Patient\",\n  \"email\": \"new.patient@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Patient\",\n  \"phone\": \"555-0105\",\n  \"address\": \"101 Test Road\",\n  \"dateOfBirth\": \"1995-05-20\",\n  \"gender\": \"Male\"\n}"
+              "raw": "{\n  \"name\": \"New Patient\",\n  \"email\": \"new.patient@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Patient\",\n  \"phone\": \"555-0105\",\n  \"address\": \"101 Test Road\",\n  \"dateOfBirth\": \"1995-05-20\",\n  \"gender\": \"Male\",\n  \"assignedProviderId\": \"{{provider_id}}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/users/register",
@@ -191,7 +191,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"New Provider\",\n  \"email\": \"new.provider@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Provider\",\n  \"phone\": \"555-0106\",\n  \"address\": \"202 Test Avenue\"\n}"
+              "raw": "{\n  \"name\": \"New Provider\",\n  \"email\": \"new.provider@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Provider\",\n  \"phone\": \"555-0106\",\n  \"address\": \"202 Test Avenue\",\n  \"providerId\": \"PROV-002\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/users/register",
@@ -237,7 +237,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Another Patient\",\n  \"email\": \"another.patient@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Patient\",\n  \"phone\": \"555-0108\",\n  \"address\": \"404 Test Circle\"\n}"
+              "raw": "{\n  \"name\": \"Another Patient\",\n  \"email\": \"another.patient@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Patient\",\n  \"phone\": \"555-0108\",\n  \"address\": \"404 Test Circle\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"gender\": \"Female\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/users/register",

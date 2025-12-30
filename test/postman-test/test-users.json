@@ -8,7 +8,8 @@
       "phone": "1234567890",
       "address": "123 Admin St",
       "dateOfBirth": "1980-01-01",
-      "gender": "Male"
+      "gender": "Male",
+      "adminId": "ADMIN-001"
     },
     "manager": {
       "name": "Manager User",
@@ -18,7 +19,8 @@
       "phone": "1234567891",
       "address": "123 Manager St",
       "dateOfBirth": "1985-01-01",
-      "gender": "Female"
+      "gender": "Female",
+      "managerId": "MGR-001"
     },
     "provider": {
       "name": "Dr. Provider",
@@ -69,7 +71,9 @@
       "requester_role": "Employee",
       "target_role": "Patient",
       "expected_result": "allowed",
-      "status_code": 201
+      "status_code": 201,
+      "required_fields": ["name", "email", "password", "role", "phone", "address", "dateOfBirth", "gender"],
+      "optional_fields": ["assignedProviderId"]
     },
     {
       "test_name": "Employee cannot register Provider",
@@ -77,28 +81,40 @@
       "target_role": "Provider",
       "expected_result": "forbidden",
       "status_code": 403,
-      "expected_message": "Not allowed to register this Provider"
+      "expected_message": "Not allowed to register this Provider",
+      "required_fields": ["name", "email", "password", "role", "providerId"]
     },
     {
       "test_name": "Manager can register Employee",
       "requester_role": "Manager",
       "target_role": "Employee",
       "expected_result": "allowed",
-      "status_code": 201
+      "status_code": 201,
+      "required_fields": ["name", "email", "password", "role", "employeeId"]
     },
     {
       "test_name": "Manager can register Provider",
       "requester_role": "Manager",
       "target_role": "Provider",
       "expected_result": "allowed",
-      "status_code": 201
+      "status_code": 201,
+      "required_fields": ["name", "email", "password", "role", "providerId"]
     },
     {
       "test_name": "Admin can register Manager",
       "requester_role": "Admin",
       "target_role": "Manager",
       "expected_result": "allowed",
-      "status_code": 201
+      "status_code": 201,
+      "required_fields": ["name", "email", "password", "role", "managerId"]
+    },
+    {
+      "test_name": "Admin can register Admin",
+      "requester_role": "Admin",
+      "target_role": "Admin",
+      "expected_result": "allowed",
+      "status_code": 201,
+      "required_fields": ["name", "email", "password", "role", "adminId"]
     },
     {
       "test_name": "Provider cannot register Patient",
@@ -122,7 +138,7 @@
       "target_role": "Patient",
       "is_self": true,
       "allowed_fields": ["phone", "address"],
-      "forbidden_fields": ["name", "email", "dateOfBirth", "gender"]
+      "forbidden_fields": ["name", "email", "dateOfBirth", "gender", "assignedProviderId", "employeeId", "providerId", "managerId", "adminId"]
     },
     {
       "test_name": "Employee can update Patient fields",
@@ -130,7 +146,7 @@
       "target_role": "Patient",
       "is_self": false,
       "allowed_fields": ["name", "email", "phone", "address", "dateOfBirth", "gender", "assignedProviderId"],
-      "forbidden_fields": ["employeeId", "providerId", "managerId"]
+      "forbidden_fields": ["employeeId", "providerId", "managerId", "adminId"]
     },
     {
       "test_name": "Manager can update Employee",
@@ -138,7 +154,31 @@
       "target_role": "Employee",
       "is_self": false,
       "allowed_fields": ["name", "email", "phone", "address", "employeeId"],
-      "forbidden_fields": ["providerId", "managerId", "adminId"]
+      "forbidden_fields": ["providerId", "managerId", "adminId", "assignedProviderId"]
+    },
+    {
+      "test_name": "Manager can update Provider",
+      "requester_role": "Manager",
+      "target_role": "Provider",
+      "is_self": false,
+      "allowed_fields": ["name", "email", "phone", "address", "providerId", "assignedPatients"],
+      "forbidden_fields": ["employeeId", "managerId", "adminId", "assignedProviderId"]
+    },
+    {
+      "test_name": "Admin can update Manager",
+      "requester_role": "Admin",
+      "target_role": "Manager",
+      "is_self": false,
+      "allowed_fields": ["name", "email", "phone", "address", "managerId"],
+      "forbidden_fields": ["employeeId", "providerId", "adminId", "assignedProviderId", "assignedPatients"]
+    },
+    {
+      "test_name": "Admin can update Admin",
+      "requester_role": "Admin",
+      "target_role": "Admin",
+      "is_self": true,
+      "allowed_fields": ["name", "email", "phone", "address", "adminId"],
+      "forbidden_fields": ["employeeId", "providerId", "managerId", "assignedProviderId", "assignedPatients"]
     },
     {
       "test_name": "Admin can update all roles",

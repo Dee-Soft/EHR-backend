@@ -26,7 +26,9 @@
         "target_role": "Patient",
         "expected": "allowed",
         "status_code": 201,
-        "description": "Employee should be able to register new Patients"
+        "description": "Employee should be able to register new Patients",
+        "required_fields": ["name", "email", "password", "role", "phone", "address", "dateOfBirth", "gender"],
+        "optional_fields": ["assignedProviderId"]
       },
       {
         "id": "REG-002",
@@ -37,7 +39,8 @@
         "expected": "forbidden",
         "status_code": 403,
         "error_message": "Not allowed to register this Provider",
-        "description": "Employee should NOT be able to register Providers"
+        "description": "Employee should NOT be able to register Providers",
+        "required_fields": ["name", "email", "password", "role", "providerId"]
       },
       {
         "id": "REG-003",
@@ -47,7 +50,8 @@
         "target_role": "Employee",
         "expected": "allowed",
         "status_code": 201,
-        "description": "Manager should be able to register new Employees"
+        "description": "Manager should be able to register new Employees",
+        "required_fields": ["name", "email", "password", "role", "employeeId"]
       },
       {
         "id": "REG-004",
@@ -57,7 +61,8 @@
         "target_role": "Provider",
         "expected": "allowed",
         "status_code": 201,
-        "description": "Manager should be able to register new Providers"
+        "description": "Manager should be able to register new Providers",
+        "required_fields": ["name", "email", "password", "role", "providerId"]
       },
       {
         "id": "REG-005",
@@ -67,20 +72,33 @@
         "target_role": "Manager",
         "expected": "allowed",
         "status_code": 201,
-        "description": "Admin should be able to register new Managers"
+        "description": "Admin should be able to register new Managers",
+        "required_fields": ["name", "email", "password", "role", "managerId"]
       },
       {
         "id": "REG-006",
+        "name": "Admin registers Admin (Allowed)",
+        "requester": "Admin",
+        "action": "register",
+        "target_role": "Admin",
+        "expected": "allowed",
+        "status_code": 201,
+        "description": "Admin should be able to register new Admins",
+        "required_fields": ["name", "email", "password", "role", "adminId"]
+      },
+      {
+        "id": "REG-007",
         "name": "Provider registers Patient (Forbidden)",
         "requester": "Provider",
         "action": "register",
         "target_role": "Patient",
         "expected": "forbidden",
         "status_code": 403,
-        "description": "Provider should NOT be able to register anyone"
+        "description": "Provider should NOT be able to register anyone",
+        "required_fields": ["name", "email", "password", "role", "dateOfBirth", "gender"]
       },
       {
-        "id": "REG-007",
+        "id": "REG-008",
         "name": "Patient self-registration attempt (Forbidden)",
         "requester": "Patient",
         "action": "register",
