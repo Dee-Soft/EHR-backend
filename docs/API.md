@@ -127,9 +127,22 @@ Register a new user (RBAC-controlled).
   "phone": "123-456-7890",
   "address": "456 Oak Ave",
   "dateOfBirth": "1990-01-01",
-  "gender": "Female"
+  "gender": "Female",
+  "employeeId": "EMP-001",          // Required for Employee role only
+  "providerId": "PROV-001",         // Required for Provider role only
+  "managerId": "MGR-001",           // Required for Manager role only
+  "adminId": "ADMIN-001",           // Required for Admin role only
+  "assignedProviderId": "provider_user_id"  // Optional for Patient role
 }
 ```
+
+**Field Notes:**
+- **Required for all roles:** `name`, `email`, `password`, `role`
+- **Optional for all roles:** `phone`, `address`
+- **Patient-specific:** `dateOfBirth`, `gender`, `assignedProviderId`
+- **Role-specific ID fields:** Only include the ID field that matches the `role` (e.g., `employeeId` for Employee role, `providerId` for Provider role, etc.)
+- **Date format:** `dateOfBirth` should be in ISO 8601 format (YYYY-MM-DD)
+- **Gender options:** `Male`, `Female`, `Other`
 
 ### Update User
 
@@ -281,10 +294,35 @@ if (userRole === 'Admin') {
 | Role | Can Update These Fields (on others) | Can Update These Fields (self) |
 |------|-----------------------------------|-------------------------------|
 | Admin | All fields for all roles | All own fields |
-| Manager | Patient: name, email, phone, address, dateOfBirth, gender, assignedProviderId<br>Employee: name, email, phone, address, employeeId<br>Provider: name, email, phone, address, providerId, assignedPatients | All own fields |
+| Manager | Patient: name, email, phone, address, dateOfBirth, gender, assignedProviderId<br>Employee: name, email, phone, address, employeeId<br>Provider: name, email, phone, address, providerId, assignedPatients<br>Manager: name, email, phone, address, managerId (Admin only)<br>Admin: name, email, phone, address, adminId (Admin only) | All own fields |
 | Employee | Patient: name, email, phone, address, dateOfBirth, gender, assignedProviderId | All own fields |
 | Provider | None (cannot update other users) | All own fields |
 | Patient | None (cannot update other users) | phone, address only |
+
+### User Field Reference
+
+| Field | Type | Required | Role-Specific | Description |
+|-------|------|----------|---------------|-------------|
+| `name` | String | Yes | No | Full name of the user |
+| `email` | String | Yes | No | Unique email address |
+| `password` | String | Yes | No | Password (hashed before storage) |
+| `role` | String | Yes | No | User role: `Patient`, `Provider`, `Employee`, `Manager`, or `Admin` |
+| `phone` | String | No | No | Contact phone number |
+| `address` | String | No | No | Physical address |
+| `dateOfBirth` | Date | No | Patient only | Date of birth (ISO 8601 format) |
+| `gender` | String | No | Patient only | Gender: `Male`, `Female`, or `Other` |
+| `employeeId` | String | Yes* | Employee only | Unique employee identifier (*required for Employee role) |
+| `providerId` | String | Yes* | Provider only | Unique provider identifier (*required for Provider role) |
+| `managerId` | String | Yes* | Manager only | Unique manager identifier (*required for Manager role) |
+| `adminId` | String | Yes* | Admin only | Unique admin identifier (*required for Admin role) |
+| `assignedProviderId` | ObjectId | No | Patient only | Reference to assigned Provider (User ID) |
+| `assignedPatients` | Array[ObjectId] | No | Provider only | Array of assigned Patient IDs |
+
+**Notes:**
+1. Role-specific ID fields (`employeeId`, `providerId`, `managerId`, `adminId`) are only required when creating users of that specific role.
+2. `assignedProviderId` and `assignedPatients` are relationship fields that link Patients to their assigned Providers.
+3. All dates should be in ISO 8601 format (YYYY-MM-DD).
+4. Email addresses must be unique across the system.
 
 ### Patient Record Access Permissions
 

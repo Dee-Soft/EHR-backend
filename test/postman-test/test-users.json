@@ -1,0 +1,152 @@
+{
+  "test_users": {
+    "admin": {
+      "name": "Admin User",
+      "email": "admin@test.com",
+      "password": "Password123!",
+      "role": "Admin",
+      "phone": "1234567890",
+      "address": "123 Admin St",
+      "dateOfBirth": "1980-01-01",
+      "gender": "Male"
+    },
+    "manager": {
+      "name": "Manager User",
+      "email": "manager@test.com",
+      "password": "Password123!",
+      "role": "Manager",
+      "phone": "1234567891",
+      "address": "123 Manager St",
+      "dateOfBirth": "1985-01-01",
+      "gender": "Female"
+    },
+    "provider": {
+      "name": "Dr. Provider",
+      "email": "provider@test.com",
+      "password": "Password123!",
+      "role": "Provider",
+      "phone": "1234567892",
+      "address": "123 Provider St",
+      "dateOfBirth": "1975-01-01",
+      "gender": "Male",
+      "providerId": "PROV-001"
+    },
+    "employee": {
+      "name": "Employee User",
+      "email": "employee@test.com",
+      "password": "Password123!",
+      "role": "Employee",
+      "phone": "1234567893",
+      "address": "123 Employee St",
+      "dateOfBirth": "1990-01-01",
+      "gender": "Female",
+      "employeeId": "EMP-001"
+    },
+    "patient": {
+      "name": "Patient User",
+      "email": "patient@test.com",
+      "password": "Password123!",
+      "role": "Patient",
+      "phone": "1234567894",
+      "address": "123 Patient St",
+      "dateOfBirth": "1995-01-01",
+      "gender": "Male"
+    },
+    "patient2": {
+      "name": "Patient Two",
+      "email": "patient2@test.com",
+      "password": "Password123!",
+      "role": "Patient",
+      "phone": "1234567895",
+      "address": "456 Patient Ave",
+      "dateOfBirth": "1992-06-15",
+      "gender": "Female"
+    }
+  },
+  "registration_test_cases": [
+    {
+      "test_name": "Employee can register Patient",
+      "requester_role": "Employee",
+      "target_role": "Patient",
+      "expected_result": "allowed",
+      "status_code": 201
+    },
+    {
+      "test_name": "Employee cannot register Provider",
+      "requester_role": "Employee",
+      "target_role": "Provider",
+      "expected_result": "forbidden",
+      "status_code": 403,
+      "expected_message": "Not allowed to register this Provider"
+    },
+    {
+      "test_name": "Manager can register Employee",
+      "requester_role": "Manager",
+      "target_role": "Employee",
+      "expected_result": "allowed",
+      "status_code": 201
+    },
+    {
+      "test_name": "Manager can register Provider",
+      "requester_role": "Manager",
+      "target_role": "Provider",
+      "expected_result": "allowed",
+      "status_code": 201
+    },
+    {
+      "test_name": "Admin can register Manager",
+      "requester_role": "Admin",
+      "target_role": "Manager",
+      "expected_result": "allowed",
+      "status_code": 201
+    },
+    {
+      "test_name": "Provider cannot register Patient",
+      "requester_role": "Provider",
+      "target_role": "Patient",
+      "expected_result": "forbidden",
+      "status_code": 403
+    },
+    {
+      "test_name": "Patient cannot register anyone",
+      "requester_role": "Patient",
+      "target_role": "Patient",
+      "expected_result": "forbidden",
+      "status_code": 403
+    }
+  ],
+  "update_test_cases": [
+    {
+      "test_name": "Patient can update own phone and address",
+      "requester_role": "Patient",
+      "target_role": "Patient",
+      "is_self": true,
+      "allowed_fields": ["phone", "address"],
+      "forbidden_fields": ["name", "email", "dateOfBirth", "gender"]
+    },
+    {
+      "test_name": "Employee can update Patient fields",
+      "requester_role": "Employee",
+      "target_role": "Patient",
+      "is_self": false,
+      "allowed_fields": ["name", "email", "phone", "address", "dateOfBirth", "gender", "assignedProviderId"],
+      "forbidden_fields": ["employeeId", "providerId", "managerId"]
+    },
+    {
+      "test_name": "Manager can update Employee",
+      "requester_role": "Manager",
+      "target_role": "Employee",
+      "is_self": false,
+      "allowed_fields": ["name", "email", "phone", "address", "employeeId"],
+      "forbidden_fields": ["providerId", "managerId", "adminId"]
+    },
+    {
+      "test_name": "Admin can update all roles",
+      "requester_role": "Admin",
+      "target_role": "any",
+      "is_self": false,
+      "allowed_fields": "all",
+      "forbidden_fields": "none"
+    }
+  ]
+}

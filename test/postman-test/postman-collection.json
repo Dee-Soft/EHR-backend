@@ -1,0 +1,502 @@
+{
+  "info": {
+    "name": "EHR Backend API Collection",
+    "description": "Complete Postman collection for testing EHR Backend API including RBAC and patient record operations",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login - Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{admin_email}}\",\n  \"password\": \"{{admin_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login as Admin user"
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Manager",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{manager_email}}\",\n  \"password\": \"{{manager_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login as Manager user"
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Employee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{employee_email}}\",\n  \"password\": \"{{employee_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login as Employee user"
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Provider",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{provider_email}}\",\n  \"password\": \"{{provider_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login as Provider user"
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{patient_email}}\",\n  \"password\": \"{{patient_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login as Patient user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "Get current authenticated user information"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "logout"]
+            },
+            "description": "Logout current user"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "RBAC Registration Tests",
+      "item": [
+        {
+          "name": "Employee registers Patient (Allowed)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Patient\",\n  \"email\": \"new.patient@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Patient\",\n  \"phone\": \"555-0105\",\n  \"address\": \"101 Test Road\",\n  \"dateOfBirth\": \"1995-05-20\",\n  \"gender\": \"Male\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/register",
+              "host": ["{{base_url}}"],
+              "path": ["users", "register"]
+            },
+            "description": "Employee should be able to register new Patients"
+          },
+          "response": []
+        },
+        {
+          "name": "Employee registers Provider (Forbidden)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Provider\",\n  \"email\": \"new.provider@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Provider\",\n  \"phone\": \"555-0106\",\n  \"address\": \"202 Test Avenue\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/register",
+              "host": ["{{base_url}}"],
+              "path": ["users", "register"]
+            },
+            "description": "Employee should NOT be able to register Providers"
+          },
+          "response": []
+        },
+        {
+          "name": "Manager registers Employee (Allowed)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Employee\",\n  \"email\": \"new.employee@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Employee\",\n  \"phone\": \"555-0107\",\n  \"address\": \"303 Test Lane\",\n  \"employeeId\": \"EMP-002\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/register",
+              "host": ["{{base_url}}"],
+              "path": ["users", "register"]
+            },
+            "description": "Manager should be able to register new Employees"
+          },
+          "response": []
+        },
+        {
+          "name": "Provider registers Patient (Forbidden)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Another Patient\",\n  \"email\": \"another.patient@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Patient\",\n  \"phone\": \"555-0108\",\n  \"address\": \"404 Test Circle\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/register",
+              "host": ["{{base_url}}"],
+              "path": ["users", "register"]
+            },
+            "description": "Provider should NOT be able to register anyone"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Patient Record Tests",
+      "item": [
+        {
+          "name": "Provider creates record for assigned patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient\": \"{{patient2_id}}\",\n  \"diagnosis\": \"Common cold with mild fever\",\n  \"notes\": \"Patient presented with runny nose, cough, and temperature of 38.2°C. No serious complications observed.\",\n  \"medications\": [\"Paracetamol 500mg every 6 hours\", \"Vitamin C supplements\"],\n  \"visitDate\": \"{{today_date}} {{current_time}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/patient-records",
+              "host": ["{{base_url}}"],
+              "path": ["patient-records"]
+            },
+            "description": "Provider creates medical record for assigned patient"
+          },
+          "response": []
+        },
+        {
+          "name": "Patient tries to create record (Forbidden)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient\": \"{{patient_id}}\",\n  \"diagnosis\": \"Self-diagnosed headache\",\n  \"notes\": \"I have a headache\",\n  \"medications\": [\"Aspirin\"],\n  \"visitDate\": \"{{today_date}} {{current_time}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/patient-records",
+              "host": ["{{base_url}}"],
+              "path": ["patient-records"]
+            },
+            "description": "Patient should NOT be able to create records"
+          },
+          "response": []
+        },
+        {
+          "name": "Patient views own records",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/patient-records/my-records",
+              "host": ["{{base_url}}"],
+              "path": ["patient-records", "my-records"]
+            },
+            "description": "Patient views their own medical records"
+          },
+          "response": []
+        },
+        {
+          "name": "Provider views assigned patient records",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/patient-records/provider/assigned",
+              "host": ["{{base_url}}"],
+              "path": ["patient-records", "provider", "assigned"]
+            },
+            "description": "Provider views records of all assigned patients"
+          },
+          "response": []
+        },
+        {
+          "name": "Get specific record by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/patient-records/{{created_record_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["patient-records", "{{created_record_id}}"]
+            },
+            "description": "Get specific patient record by ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User Update Tests",
+      "item": [
+        {
+          "name": "Patient updates own phone",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"555-9999\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["users", "{{patient_id}}"]
+            },
+            "description": "Patient updates their own phone number (allowed)"
+          },
+          "response": []
+        },
+        {
+          "name": "Patient tries to update own name (Forbidden)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["users", "{{patient_id}}"]
+            },
+            "description": "Patient tries to update their own name (not allowed)"
+          },
+          "response": []
+        },
+        {
+          "name": "Employee updates Patient address",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Updated Patient Address\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["users", "{{patient_id}}"]
+            },
+            "description": "Employee updates Patient's address (allowed)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health Checks",
+      "item": [
+        {
+          "name": "System Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Check overall system health"
+          },
+          "response": []
+        },
+        {
+          "name": "Readiness Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health/ready",
+              "host": ["{{base_url}}"],
+              "path": ["health", "ready"]
+            },
+            "description": "Check system readiness"
+          },
+          "response": []
+        },
+        {
+          "name": "Liveness Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health/live",
+              "host": ["{{base_url}}"],
+              "path": ["health", "live"]
+            },
+            "description": "Check system liveness"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Test script for login response",
+          "pm.test(\"Status code is 200\", function () {",
+          "    pm.response.to.have.status(200);",
+          "});",
+          "",
+          "pm.test(\"Response has success message\", function () {",
+          "    var jsonData = pm.response.json();",
+          "    pm.expect(jsonData.success).to.be.true;",
+          "    pm.expect(jsonData.message).to.include(\"Login successful\");",
+          "});",
+          "",
+          "pm.test(\"Response has user data\", function () {",
+          "    var jsonData = pm.response.json();",
+          "    pm.expect(jsonData.user).to.be.an(\"object\");",
+          "    pm.expect(jsonData.user).to.have.property(\"id\");",
+          "    pm.expect(jsonData.user).to.have.property(\"email\");",
+          "    pm.expect(jsonData.user).to.have.property(\"role\");",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3001/api"
+    }
+  ]
+}

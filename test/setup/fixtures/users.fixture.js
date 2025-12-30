@@ -18,6 +18,7 @@ const testUsers = {
     address: '123 Admin St',
     dateOfBirth: new Date('1980-01-01'),
     gender: 'Male',
+    adminId: 'ADMIN-001',
   },
   
   manager: {
@@ -29,6 +30,7 @@ const testUsers = {
     address: '123 Manager St',
     dateOfBirth: new Date('1985-01-01'),
     gender: 'Female',
+    managerId: 'MGR-001',
   },
   
   provider: {

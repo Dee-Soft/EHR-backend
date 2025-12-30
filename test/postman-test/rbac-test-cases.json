@@ -1,0 +1,328 @@
+{
+  "rbac_overview": {
+    "system_roles": ["Admin", "Manager", "Employee", "Provider", "Patient"],
+    "hierarchy": {
+      "Admin": ["Manager", "Employee", "Provider", "Patient"],
+      "Manager": ["Employee", "Provider", "Patient"],
+      "Employee": ["Patient"],
+      "Provider": [],
+      "Patient": []
+    }
+  },
+  "registration_permissions": {
+    "matrix": {
+      "Patient": ["Employee", "Manager", "Admin"],
+      "Provider": ["Manager", "Admin"],
+      "Employee": ["Manager", "Admin"],
+      "Manager": ["Admin"],
+      "Admin": ["Admin"]
+    },
+    "test_cases": [
+      {
+        "id": "REG-001",
+        "name": "Employee registers Patient (Allowed)",
+        "requester": "Employee",
+        "action": "register",
+        "target_role": "Patient",
+        "expected": "allowed",
+        "status_code": 201,
+        "description": "Employee should be able to register new Patients"
+      },
+      {
+        "id": "REG-002",
+        "name": "Employee registers Provider (Forbidden)",
+        "requester": "Employee",
+        "action": "register",
+        "target_role": "Provider",
+        "expected": "forbidden",
+        "status_code": 403,
+        "error_message": "Not allowed to register this Provider",
+        "description": "Employee should NOT be able to register Providers"
+      },
+      {
+        "id": "REG-003",
+        "name": "Manager registers Employee (Allowed)",
+        "requester": "Manager",
+        "action": "register",
+        "target_role": "Employee",
+        "expected": "allowed",
+        "status_code": 201,
+        "description": "Manager should be able to register new Employees"
+      },
+      {
+        "id": "REG-004",
+        "name": "Manager registers Provider (Allowed)",
+        "requester": "Manager",
+        "action": "register",
+        "target_role": "Provider",
+        "expected": "allowed",
+        "status_code": 201,
+        "description": "Manager should be able to register new Providers"
+      },
+      {
+        "id": "REG-005",
+        "name": "Admin registers Manager (Allowed)",
+        "requester": "Admin",
+        "action": "register",
+        "target_role": "Manager",
+        "expected": "allowed",
+        "status_code": 201,
+        "description": "Admin should be able to register new Managers"
+      },
+      {
+        "id": "REG-006",
+        "name": "Provider registers Patient (Forbidden)",
+        "requester": "Provider",
+        "action": "register",
+        "target_role": "Patient",
+        "expected": "forbidden",
+        "status_code": 403,
+        "description": "Provider should NOT be able to register anyone"
+      },
+      {
+        "id": "REG-007",
+        "name": "Patient self-registration attempt (Forbidden)",
+        "requester": "Patient",
+        "action": "register",
+        "target_role": "Patient",
+        "expected": "forbidden",
+        "status_code": 403,
+        "description": "Patient should NOT be able to register anyone, including themselves"
+      }
+    ]
+  },
+  "update_permissions": {
+    "matrix": {
+      "Patient": {
+        "can_be_updated_by": ["Admin", "Manager", "Employee", "Patient"],
+        "self_update_fields": ["phone", "address"],
+        "other_update_fields": ["name", "email", "phone", "address", "dateOfBirth", "gender", "assignedProviderId"]
+      },
+      "Employee": {
+        "can_be_updated_by": ["Admin", "Manager"],
+        "self_update_fields": "all",
+        "other_update_fields": ["name", "email", "phone", "address", "employeeId"]
+      },
+      "Provider": {
+        "can_be_updated_by": ["Admin", "Manager"],
+        "self_update_fields": "all",
+        "other_update_fields": ["name", "email", "phone", "address", "providerId", "assignedPatients"]
+      },
+      "Manager": {
+        "can_be_updated_by": ["Admin"],
+        "self_update_fields": "all",
+        "other_update_fields": ["name", "email", "phone", "address", "managerId"]
+      },
+      "Admin": {
+        "can_be_updated_by": ["Admin"],
+        "self_update_fields": "all",
+        "other_update_fields": "all"
+      }
+    },
+    "test_cases": [
+      {
+        "id": "UPD-001",
+        "name": "Patient updates own phone (Allowed)",
+        "requester": "Patient",
+        "target": "Patient",
+        "is_self": true,
+        "field": "phone",
+        "expected": "allowed",
+        "status_code": 200,
+        "description": "Patient should be able to update their own phone number"
+      },
+      {
+        "id": "UPD-002",
+        "name": "Patient tries to update own name (Forbidden)",
+        "requester": "Patient",
+        "target": "Patient",
+        "is_self": true,
+        "field": "name",
+        "expected": "forbidden",
+        "status_code": 400,
+        "description": "Patient should NOT be able to update their own name (only phone and address)"
+      },
+      {
+        "id": "UPD-003",
+        "name": "Employee updates Patient address (Allowed)",
+        "requester": "Employee",
+        "target": "Patient",
+        "is_self": false,
+        "field": "address",
+        "expected": "allowed",
+        "status_code": 200,
+        "description": "Employee should be able to update Patient's address"
+      },
+      {
+        "id": "UPD-004",
+        "name": "Employee tries to update Provider (Forbidden)",
+        "requester": "Employee",
+        "target": "Provider",
+        "is_self": false,
+        "field": "phone",
+        "expected": "forbidden",
+        "status_code": 403,
+        "description": "Employee should NOT be able to update Providers"
+      },
+      {
+        "id": "UPD-005",
+        "name": "Manager updates Employee ID (Allowed)",
+        "requester": "Manager",
+        "target": "Employee",
+        "is_self": false,
+        "field": "employeeId",
+        "expected": "allowed",
+        "status_code": 200,
+        "description": "Manager should be able to update Employee's employeeId"
+      },
+      {
+        "id": "UPD-006",
+        "name": "Admin updates Manager (Allowed)",
+        "requester": "Admin",
+        "target": "Manager",
+        "is_self": false,
+        "field": "managerId",
+        "expected": "allowed",
+        "status_code": 200,
+        "description": "Admin should be able to update Manager's managerId"
+      }
+    ]
+  },
+  "record_access_permissions": {
+    "matrix": {
+      "create_record": ["Provider"],
+      "view_own_records": ["Patient"],
+      "view_specific_record": ["Patient", "Provider"],
+      "view_assigned_records": ["Provider"],
+      "view_all_records": []
+    },
+    "test_cases": [
+      {
+        "id": "REC-001",
+        "name": "Provider creates record for assigned patient (Allowed)",
+        "requester": "Provider",
+        "action": "create_record",
+        "patient_assigned": true,
+        "expected": "allowed",
+        "status_code": 201,
+        "description": "Provider should be able to create records for assigned patients"
+      },
+      {
+        "id": "REC-002",
+        "name": "Provider creates record for unassigned patient (Forbidden)",
+        "requester": "Provider",
+        "action": "create_record",
+        "patient_assigned": false,
+        "expected": "forbidden",
+        "status_code": 403,
+        "error_message": "Provider can only create records for assigned patients",
+        "description": "Provider should NOT be able to create records for unassigned patients"
+      },
+      {
+        "id": "REC-003",
+        "name": "Patient tries to create record (Forbidden)",
+        "requester": "Patient",
+        "action": "create_record",
+        "expected": "forbidden",
+        "status_code": 403,
+        "error_message": "Only providers can create patient records",
+        "description": "Patient should NOT be able to create any records"
+      },
+      {
+        "id": "REC-004",
+        "name": "Patient views own records (Allowed)",
+        "requester": "Patient",
+        "action": "view_own_records",
+        "expected": "allowed",
+        "status_code": 200,
+        "description": "Patient should be able to view their own records"
+      },
+      {
+        "id": "REC-005",
+        "name": "Provider views assigned patient's record (Allowed)",
+        "requester": "Provider",
+        "action": "view_specific_record",
+        "patient_assigned": true,
+        "expected": "allowed",
+        "status_code": 200,
+        "description": "Provider should be able to view records of assigned patients"
+      },
+      {
+        "id": "REC-006",
+        "name": "Provider views unassigned patient's record (Forbidden)",
+        "requester": "Provider",
+        "action": "view_specific_record",
+        "patient_assigned": false,
+        "expected": "forbidden",
+        "status_code": 403,
+        "error_message": "Not authorized to view this record",
+        "description": "Provider should NOT be able to view records of unassigned patients"
+      },
+      {
+        "id": "REC-007",
+        "name": "Employee tries to view any record (Forbidden)",
+        "requester": "Employee",
+        "action": "view_specific_record",
+        "expected": "forbidden",
+        "status_code": 403,
+        "description": "Employee should NOT be able to view any patient records"
+      },
+      {
+        "id": "REC-008",
+        "name": "Provider views all assigned records (Allowed)",
+        "requester": "Provider",
+        "action": "view_assigned_records",
+        "expected": "allowed",
+        "status_code": 200,
+        "description": "Provider should be able to view all records of assigned patients"
+      },
+      {
+        "id": "REC-009",
+        "name": "Anyone tries to view all records (Forbidden)",
+        "requester": "any",
+        "action": "view_all_records",
+        "expected": "forbidden",
+        "status_code": 403,
+        "error_message": "Access denied. No role has permission to view all records.",
+        "description": "No role should be able to view all records in the system"
+      }
+    ]
+  },
+  "audit_logging": {
+    "logged_actions": [
+      "CREATE_RECORD",
+      "VIEW_RECORD",
+      "VIEW_RECORDS",
+      "VIEW_ASSIGNED_RECORDS",
+      "REGISTER_USER",
+      "UPDATE_USER",
+      "LOGIN",
+      "LOGOUT"
+    ],
+    "test_verification": [
+      {
+        "action": "CREATE_RECORD",
+        "should_log": true,
+        "description": "Record creation should be logged in audit log"
+      },
+      {
+        "action": "VIEW_RECORD",
+        "should_log": true,
+        "description": "Record viewing should be logged in audit log"
+      },
+      {
+        "action": "UNAUTHORIZED_ACCESS",
+        "should_log": true,
+        "description": "Unauthorized access attempts should be logged"
+      }
+    ]
+  },
+  "testing_workflow": {
+    "phase_1": "Authentication Testing",
+    "phase_2": "Registration RBAC Testing",
+    "phase_3": "Update RBAC Testing",
+    "phase_4": "Record Creation Testing",
+    "phase_5": "Record Access Testing",
+    "phase_6": "Edge Cases and Error Handling"
+  }
+}
