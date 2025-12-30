@@ -29,7 +29,7 @@ const testUsers = [
     role: 'Patient',
     phone: '555-0103',
     address: '789 Test Blvd',
-    dateOfBirth: new Date('1990-01-01'),
+    dateOfBirth: '01-01-1990',
     gender: { type: 'Male' }
   },
   {
@@ -39,7 +39,7 @@ const testUsers = [
     role: 'Patient',
     phone: '555-0104',
     address: '101 Test Lane',
-    dateOfBirth: new Date('1985-05-15'),
+    dateOfBirth: '15-05-1985',
     gender: { type: 'Female' }
   }
 ];

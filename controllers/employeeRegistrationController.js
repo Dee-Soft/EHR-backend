@@ -42,6 +42,36 @@ exports.registerPatient = async (req, res) => {
       return res.status(409).json({ message: 'User already exists' });
     }
 
+    // Validate dateOfBirth format (required for Patient role)
+    if (!dateOfBirth) {
+      return res.status(400).json({ 
+        message: 'dateOfBirth is required for Patient registration' 
+      });
+    }
+
+    // Check if dateOfBirth is in dd-mm-yyyy format
+    const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
+    if (!dateRegex.test(dateOfBirth)) {
+      return res.status(400).json({ 
+        message: 'Invalid dateOfBirth format. Expected dd-mm-yyyy format' 
+      });
+    }
+    
+    // Try to parse the date to ensure it's valid
+    try {
+      const [day, month, year] = dateOfBirth.split('-').map(Number);
+      const testDate = new Date(year, month - 1, day);
+      if (isNaN(testDate.getTime())) {
+        return res.status(400).json({ 
+          message: 'Invalid dateOfBirth. Please provide a valid date in dd-mm-yyyy format' 
+        });
+      }
+    } catch (error) {
+      return res.status(400).json({ 
+        message: 'Invalid dateOfBirth format. Expected dd-mm-yyyy format' 
+      });
+    }
+
     // Create patient user
     const user = new User({
       name, email, password,
@@ -131,6 +161,44 @@ exports.registerPatientsBulk = async (req, res) => {
           results.failed.push({
             email,
             error: 'User already exists'
+          });
+          continue;
+        }
+
+        // Validate dateOfBirth format (required for Patient role)
+        if (!dateOfBirth) {
+          results.failed.push({
+            email,
+            error: 'dateOfBirth is required for Patient registration'
+          });
+          continue;
+        }
+
+        // Check if dateOfBirth is in dd-mm-yyyy format
+        const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
+        if (!dateRegex.test(dateOfBirth)) {
+          results.failed.push({
+            email,
+            error: 'Invalid dateOfBirth format. Expected dd-mm-yyyy format'
+          });
+          continue;
+        }
+        
+        // Try to parse the date to ensure it's valid
+        try {
+          const [day, month, year] = dateOfBirth.split('-').map(Number);
+          const testDate = new Date(year, month - 1, day);
+          if (isNaN(testDate.getTime())) {
+            results.failed.push({
+              email,
+              error: 'Invalid dateOfBirth. Please provide a valid date in dd-mm-yyyy format'
+            });
+            continue;
+          }
+        } catch (error) {
+          results.failed.push({
+            email,
+            error: 'Invalid dateOfBirth format. Expected dd-mm-yyyy format'
           });
           continue;
         }

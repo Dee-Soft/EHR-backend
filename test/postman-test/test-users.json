@@ -7,7 +7,7 @@
       "role": "Admin",
       "phone": "1234567890",
       "address": "123 Admin St",
-      "dateOfBirth": "1980-01-01",
+      "dateOfBirth": "01-01-1980",
       "gender": "Male",
       "adminId": "ADMIN-001"
     },
@@ -18,7 +18,7 @@
       "role": "Manager",
       "phone": "1234567891",
       "address": "123 Manager St",
-      "dateOfBirth": "1985-01-01",
+      "dateOfBirth": "01-01-1985",
       "gender": "Female",
       "managerId": "MGR-001"
     },
@@ -29,7 +29,7 @@
       "role": "Provider",
       "phone": "1234567892",
       "address": "123 Provider St",
-      "dateOfBirth": "1975-01-01",
+      "dateOfBirth": "01-01-1975",
       "gender": "Male",
       "providerId": "PROV-001"
     },
@@ -40,7 +40,7 @@
       "role": "Employee",
       "phone": "1234567893",
       "address": "123 Employee St",
-      "dateOfBirth": "1990-01-01",
+      "dateOfBirth": "01-01-1990",
       "gender": "Female",
       "employeeId": "EMP-001"
     },
@@ -51,7 +51,7 @@
       "role": "Patient",
       "phone": "1234567894",
       "address": "123 Patient St",
-      "dateOfBirth": "1995-01-01",
+      "dateOfBirth": "01-01-1995",
       "gender": "Male"
     },
     "patient2": {
@@ -61,7 +61,7 @@
       "role": "Patient",
       "phone": "1234567895",
       "address": "456 Patient Ave",
-      "dateOfBirth": "1992-06-15",
+      "dateOfBirth": "15-06-1992",
       "gender": "Female"
     }
   },

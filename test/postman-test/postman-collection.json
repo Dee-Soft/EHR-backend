@@ -168,7 +168,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"New Patient\",\n  \"email\": \"new.patient@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Patient\",\n  \"phone\": \"555-0105\",\n  \"address\": \"101 Test Road\",\n  \"dateOfBirth\": \"1995-05-20\",\n  \"gender\": \"Male\",\n  \"assignedProviderId\": \"{{provider_id}}\"\n}"
+              "raw": "{\n  \"name\": \"New Patient\",\n  \"email\": \"new.patient@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Patient\",\n  \"phone\": \"555-0105\",\n  \"address\": \"101 Test Road\",\n  \"dateOfBirth\": \"20-05-1995\",\n  \"gender\": \"Male\",\n  \"assignedProviderId\": \"{{provider_id}}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/users/register",
@@ -237,7 +237,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Another Patient\",\n  \"email\": \"another.patient@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Patient\",\n  \"phone\": \"555-0108\",\n  \"address\": \"404 Test Circle\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"gender\": \"Female\"\n}"
+              "raw": "{\n  \"name\": \"Another Patient\",\n  \"email\": \"another.patient@test.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"Patient\",\n  \"phone\": \"555-0108\",\n  \"address\": \"404 Test Circle\",\n  \"dateOfBirth\": \"01-01-1990\",\n  \"gender\": \"Female\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/users/register",
@@ -265,7 +265,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"patient\": \"{{patient2_id}}\",\n  \"diagnosis\": \"Common cold with mild fever\",\n  \"notes\": \"Patient presented with runny nose, cough, and temperature of 38.2°C. No serious complications observed.\",\n  \"medications\": [\"Paracetamol 500mg every 6 hours\", \"Vitamin C supplements\"],\n  \"visitDate\": \"{{today_date}} {{current_time}}\"\n}"
+              "raw": "{\n  \"patient\": \"{{patient2_id}}\",\n  \"diagnosis\": \"Common cold with mild fever\",\n  \"treatment\": \"Rest, fluids, and symptomatic relief. Advised to stay home until fever subsides.\",\n  \"notes\": \"Patient presented with runny nose, cough, and temperature of 38.2°C. No serious complications observed.\",\n  \"medications\": [\"Paracetamol 500mg every 6 hours\", \"Vitamin C supplements\"],\n  \"visitDate\": \"{{today_date}} {{current_time}}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/patient-records",
@@ -288,7 +288,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"patient\": \"{{patient_id}}\",\n  \"diagnosis\": \"Self-diagnosed headache\",\n  \"notes\": \"I have a headache\",\n  \"medications\": [\"Aspirin\"],\n  \"visitDate\": \"{{today_date}} {{current_time}}\"\n}"
+              "raw": "{\n  \"patient\": \"{{patient_id}}\",\n  \"diagnosis\": \"Self-diagnosed headache\",\n  \"treatment\": \"Rest and hydration\",\n  \"notes\": \"I have a headache\",\n  \"medications\": [\"Aspirin\"],\n  \"visitDate\": \"{{today_date}} {{current_time}}\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/patient-records",

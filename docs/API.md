@@ -126,7 +126,7 @@ Register a new user (RBAC-controlled).
   "role": "Patient",
   "phone": "123-456-7890",
   "address": "456 Oak Ave",
-  "dateOfBirth": "1990-01-01",
+  "dateOfBirth": "01-01-1990",
   "gender": "Female",
   "employeeId": "EMP-001",          // Required for Employee role only
   "providerId": "PROV-001",         // Required for Provider role only
@@ -141,7 +141,7 @@ Register a new user (RBAC-controlled).
 - **Optional for all roles:** `phone`, `address`
 - **Patient-specific:** `dateOfBirth`, `gender`, `assignedProviderId`
 - **Role-specific ID fields:** Only include the ID field that matches the `role` (e.g., `employeeId` for Employee role, `providerId` for Provider role, etc.)
-- **Date format:** `dateOfBirth` should be in ISO 8601 format (YYYY-MM-DD)
+- **Date format:** `dateOfBirth` should be in dd-mm-yyyy format (e.g., 01-01-1990)
 - **Gender options:** `Male`, `Female`, `Other`
 
 ### Update User

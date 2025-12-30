@@ -162,7 +162,7 @@ When registering users, include the appropriate role-specific ID field based on 
   "role": "Patient",
   "phone": "555-0105",
   "address": "101 Test Road",
-  "dateOfBirth": "1995-05-20",
+  "dateOfBirth": "20-05-1995",
   "gender": "Male",
   "assignedProviderId": "{{provider_id}}"  // Optional: assign to a provider
 }
@@ -239,7 +239,7 @@ When registering users, include the appropriate role-specific ID field based on 
   "role": "Patient",
   "phone": "555-0108",
   "address": "404 Test Circle",
-  "dateOfBirth": "1990-01-01",
+  "dateOfBirth": "01-01-1990",
   "gender": "Female"
 }
 ```
@@ -261,6 +261,25 @@ The EHR system uses a dual-key encryption architecture:
 
 For Postman testing, we'll use simplified test data without actual encryption.
 
+### Patient Record Field Requirements
+
+When creating patient records, the following fields are **required**:
+
+| Field | Type | Format | Notes |
+|-------|------|--------|-------|
+| `patient` | String | Patient Object ID | ID of the patient |
+| `diagnosis` | String | - | Medical diagnosis (encrypted) |
+| `treatment` | String | - | Treatment plan (encrypted) |
+| `notes` | String | - | Clinical notes (encrypted) |
+| `medications` | Array | Array of strings | List of medications (encrypted) |
+| `visitDate` | String | `dd-mm-yyyy HH:MM` | Must be today's date |
+
+**Important Validation Rules**:
+1. `visitDate` must be today's date (cannot create records for past/future dates)
+2. All fields are required - missing any field will result in 400 Bad Request
+3. Provider must be assigned to the patient to create records
+4. Only Providers can create patient records
+
 ### Test Case 1: Provider Creating Patient Record (Allowed)
 
 **Prerequisite**: 
@@ -274,6 +293,7 @@ For Postman testing, we'll use simplified test data without actual encryption.
 {
   "patient": "patient_user_id_here", // Use patient2's ID
   "diagnosis": "Common cold with mild fever",
+  "treatment": "Rest, fluids, and symptomatic relief. Advised to stay home until fever subsides.",
   "notes": "Patient presented with runny nose, cough, and temperature of 38.2°C. No serious complications observed.",
   "medications": ["Paracetamol 500mg every 6 hours", "Vitamin C supplements"],
   "visitDate": "30-12-2025 10:30" // Must be today's date
@@ -313,6 +333,7 @@ x-aes-key: <encrypted_frontend_aes_key>
 {
   "patient": "self_id_here",
   "diagnosis": "Self-diagnosed headache",
+  "treatment": "Rest and hydration",
   "notes": "I have a headache",
   "medications": ["Aspirin"],
   "visitDate": "30-12-2025 11:00"

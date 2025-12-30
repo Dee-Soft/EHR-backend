@@ -92,7 +92,7 @@ describe('Integration: Authorization/RBAC', () => {
       phone: '555-0100',
       address: '123 Test St',
       gender: 'Male',
-      dateOfBirth: '1990-01-01'
+      dateOfBirth: '01-01-1990'
     };
 
     const newProvider = {

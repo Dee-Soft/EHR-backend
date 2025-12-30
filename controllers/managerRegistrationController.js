@@ -44,6 +44,32 @@ exports.registerUser = async (req, res) => {
       return res.status(409).json({ message: 'User already exists' });
     }
 
+    // Validate dateOfBirth format if provided (for Patient role)
+    if (role === 'Patient' && dateOfBirth) {
+      // Check if dateOfBirth is in dd-mm-yyyy format
+      const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
+      if (!dateRegex.test(dateOfBirth)) {
+        return res.status(400).json({ 
+          message: 'Invalid dateOfBirth format. Expected dd-mm-yyyy format' 
+        });
+      }
+      
+      // Try to parse the date to ensure it's valid
+      try {
+        const [day, month, year] = dateOfBirth.split('-').map(Number);
+        const testDate = new Date(year, month - 1, day);
+        if (isNaN(testDate.getTime())) {
+          return res.status(400).json({ 
+            message: 'Invalid dateOfBirth. Please provide a valid date in dd-mm-yyyy format' 
+          });
+        }
+      } catch (error) {
+        return res.status(400).json({ 
+          message: 'Invalid dateOfBirth format. Expected dd-mm-yyyy format' 
+        });
+      }
+    }
+
     // Create user object with role-specific fields
     const userData = {
       name, email, password, role,
